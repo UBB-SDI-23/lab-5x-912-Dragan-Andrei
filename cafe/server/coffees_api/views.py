@@ -3,6 +3,8 @@ from coffees_api.models import Coffee
 from coffees_api.serializer import CoffeeSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from blends_api.serializer import BlendSerializer
 from blends_api.models import Blend
@@ -10,6 +12,21 @@ from sales_api.models import Sale
 from sales_api.serializer import SaleSerializer
 
 class Coffees(APIView):
+    @swagger_auto_schema(
+        operation_description="Get a list of all coffees",
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="List of all coffees",
+                schema=CoffeeSerializer(many=True)
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def get(self, request):
         filtered_coffees = Coffee.objects.all()
         coffee_top_price = self.request.query_params.get('min_price')
@@ -19,6 +36,22 @@ class Coffees(APIView):
         serialized_coffees = CoffeeSerializer(filtered_coffees, many=True)
         return Response(serialized_coffees.data)
 
+    @swagger_auto_schema(
+        operation_description="Create a new coffee",
+        request_body=CoffeeSerializer,
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Created coffee",
+                schema=CoffeeSerializer()
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def post(self, request):
         serialized_coffee = CoffeeSerializer(data=request.data)
         if serialized_coffee.is_valid():
@@ -27,6 +60,36 @@ class Coffees(APIView):
         return Response(serialized_coffee.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CoffeeDetail(APIView):
+    @swagger_auto_schema(
+        operation_description="Get a coffee by id",
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Coffee",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'name': openapi.Schema(type=openapi.TYPE_STRING),
+                    'price': openapi.Schema(type=openapi.TYPE_NUMBER),
+                    'blend_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'blend': openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                        'id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                        'name': openapi.Schema(type=openapi.TYPE_STRING),
+                        'roast': openapi.Schema(type=openapi.TYPE_STRING)
+                    }),
+                    'sales': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                        'id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                        'location_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                        'revenue': openapi.Schema(type=openapi.TYPE_NUMBER)
+                    }))
+                })
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def get(self, request, pk):
         try:
             coffee = Coffee.objects.get(pk=pk)
@@ -59,6 +122,22 @@ class CoffeeDetail(APIView):
             },
             status=status.HTTP_400_BAD_REQUEST)
     
+    @swagger_auto_schema(
+        operation_description="Update a coffee by id",
+        request_body=CoffeeSerializer,
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Updated coffee",
+                schema=CoffeeSerializer()
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def put(self, request, pk):
         try:
             coffee = Coffee.objects.get(pk=pk)
@@ -73,6 +152,20 @@ class CoffeeDetail(APIView):
             },
             status=status.HTTP_400_BAD_REQUEST)
     
+    @swagger_auto_schema(
+        operation_description="Delete a coffee by id",
+        responses={
+            status.HTTP_204_NO_CONTENT: openapi.Response(
+                description="Deleted coffee"
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def delete(self, request, pk):
         try:
             coffee = Coffee.objects.get(pk=pk)
@@ -85,6 +178,18 @@ class CoffeeDetail(APIView):
             status=status.HTTP_400_BAD_REQUEST)
         
 class OtherCoffeesByBlends(APIView):
+    @swagger_auto_schema(
+        operation_description="Get all coffees sorted by the number of other coffees that contain the same blend",
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Coffees",
+                schema=openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'name': openapi.Schema(type=openapi.TYPE_STRING),
+                    'coffees with similar blend': openapi.Schema(type=openapi.TYPE_INTEGER)
+                }))
+            )
+        }
+    )
     def get(self, request):
         # show all coffees sorted by the number of other coffees that contain the same blend
         coffees_with_similar_blend = {}

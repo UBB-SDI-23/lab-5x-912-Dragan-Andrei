@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'locations_api',
     'sales_api',
     'django_extensions',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

@@ -3,16 +3,49 @@ from locations_api.models import Location
 from locations_api.serializer import LocationSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from sales_api.models import Sale 
 from sales_api.serializer import SaleSerializer
 
 class Locations(APIView):
+    @swagger_auto_schema(
+        operation_description="Get a list of all locations",
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="List of all locations",
+                schema=LocationSerializer(many=True)
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def get(self, request):
         locations = Location.objects.all()
         serialized_locations = LocationSerializer(locations, many=True)
         return Response(serialized_locations.data)
 
+    @swagger_auto_schema(
+        operation_description="Create a new location",
+        request_body=LocationSerializer,
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Created location",
+                schema=LocationSerializer()
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def post(self, request):
         serialized_locations = LocationSerializer(data=request.data)
         if serialized_locations.is_valid():
@@ -21,6 +54,21 @@ class Locations(APIView):
         return Response(serialized_locations.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class LocationDetail(APIView):
+    @swagger_auto_schema(
+        operation_description="Get a location by id",
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Location",
+                schema=LocationSerializer()
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def get(self, request, pk):
         try:
             location = Location.objects.get(pk=pk)
@@ -46,6 +94,22 @@ class LocationDetail(APIView):
             },
             status=status.HTTP_400_BAD_REQUEST)
     
+    @swagger_auto_schema(
+        operation_description="Update a location by id",
+        request_body=LocationSerializer,
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Updated location",
+                schema=LocationSerializer()
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def put(self, request, pk):
         try:
             location = Location.objects.get(pk=pk)
@@ -60,6 +124,21 @@ class LocationDetail(APIView):
             },
             status=status.HTTP_400_BAD_REQUEST)
     
+    @swagger_auto_schema(
+        operation_description="Delete a location by id",
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Deleted location",
+                schema=LocationSerializer()
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def delete(self, request, pk):
         try:
             location = Location.objects.get(pk=pk)
@@ -73,6 +152,21 @@ class LocationDetail(APIView):
         
 
 class LocationCoffee(APIView):
+    @swagger_auto_schema(
+        operation_description="Get a list of coffees sold at a location",
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="List of coffees sold at a location",
+                schema=SaleSerializer(many=True)
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Response(
+                description="Error message",
+                schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                    'error': openapi.Schema(type=openapi.TYPE_STRING)
+                })
+            )
+        }
+    )
     def post(self, request, pk):
         location = Location.objects.filter(pk=pk).first()
         if not location:
