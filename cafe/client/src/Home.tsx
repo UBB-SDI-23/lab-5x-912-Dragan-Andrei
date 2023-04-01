@@ -1,12 +1,17 @@
+// css
 import './assets/css/home.css'
 
+// images
 import logo from './assets/images/top_part_logo.png'
 import facebook from './assets/images/facebook.png'
 import twitter from './assets/images/twitter.png'
 import instagram from './assets/images/instagram.png'
 import coffee_header from './assets/images/coffee_header.png'
 
-import Navbar from './Navbar'
+// react components
+import HomeNavbar from './ExpandedNavbar'
+
+// utils
 import { useState } from 'react'
 
 const Home = () => {
@@ -22,7 +27,7 @@ const Home = () => {
 
   return (
     <>
-      {isNavbarOpen ? <Navbar openNav={openNav} closeNav={closeNav} /> : null}
+      {isNavbarOpen ? <HomeNavbar openNav={openNav} closeNav={closeNav} /> : null}
 
       <section id="landing_page">
         <div id="gradient_effect"></div>
