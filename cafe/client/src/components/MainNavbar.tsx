@@ -1,24 +1,15 @@
-// material UI
+// material ui
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 
 // css
-import "./assets/css/mainNavbar.css";
+import "../assets/css/mainNavbar.css";
 
 // images
-import simpleLogo from "./assets/images/logo_white_simple_version.png";
-import expandedLogo from "./assets/images/top_part_logo.png";
+import simpleLogo from "../assets/images/logo_white_simple_version.png";
+import expandedLogo from "../assets/images/top_part_logo.png";
 
 // navigation bar pages
 const pages = ["HOME", "MENU", "CONTACT", "LOCATIONS"];
@@ -27,8 +18,8 @@ const pages = ["HOME", "MENU", "CONTACT", "LOCATIONS"];
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-// react component
-import HomeNavbar from "./ExpandedNavbar";
+// react components
+import ExpandedNavbar from "./ExpandedNavbar";
 
 const MainNavbar = () => {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -44,12 +35,13 @@ const MainNavbar = () => {
   return (
     <>
       {isNavbarOpen ? (
-        <HomeNavbar openNav={openNav} closeNav={closeNav} />
+        <ExpandedNavbar openNav={openNav} closeNav={closeNav} />
       ) : null}
 
       <AppBar
         position="static"
-        sx={{ bgcolor: "#be9063", boxShadow: 0, height: "80px" }}
+        sx={{ bgcolor: "#be9063", height: "80px" }}
+        elevation={6}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ height: "80px" }}>
@@ -75,7 +67,7 @@ const MainNavbar = () => {
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <div id="navbar_links">
                 <Link to="/">Home</Link>
-                <Link to="/menu">Menu</Link>
+                <Link to="/coffees">Menu</Link>
                 <Link to="/">About</Link>
                 <Link to="/">Location</Link>
                 <Link to="/">Contact</Link>

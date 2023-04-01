@@ -1,5 +1,5 @@
 // css
-import "./assets/css/expandedNavbar.css";
+import "../assets/css/expandedNavbar.css";
 
 // utils
 import { Link } from "react-router-dom";
@@ -16,7 +16,7 @@ const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
 
       <div id="navbar_links">
         <Link to="/">Home</Link>
-        <Link to="/menu">Menu</Link>
+        <Link to="/coffees">Menu</Link>
         <Link to="/">About</Link>
         <Link to="/">Location</Link>
         <Link to="/">Contact</Link>

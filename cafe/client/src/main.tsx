@@ -7,26 +7,24 @@ import './assets/css/fonts.css';
 
 // utils
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './utils/theme';
 
 // react components
-import Menu from './Menu';
-import Home from './Home';
-
-// change material UI theme
-const theme = createTheme({
-  typography: {
-    fontFamily: 'Quattrocento Sans'
-  },
-});
+import Menu from './components/Menu';
+import Home from './components/Home';
+import DetailedCoffeeItem from './components/DetailedCoffeeItem';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+    <ThemeProvider theme={theme}>
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/menu" element={<Menu />} />
+        <Route path="/coffees" element={<Menu />} />
+        <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
       </Routes>
     </Router>
+    </ThemeProvider>
   </React.StrictMode>,
 )

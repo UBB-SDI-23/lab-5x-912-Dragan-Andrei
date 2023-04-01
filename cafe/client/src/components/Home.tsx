@@ -1,12 +1,12 @@
 // css
-import './assets/css/home.css'
+import '../assets/css/home.css'
 
 // images
-import logo from './assets/images/top_part_logo.png'
-import facebook from './assets/images/facebook.png'
-import twitter from './assets/images/twitter.png'
-import instagram from './assets/images/instagram.png'
-import coffee_header from './assets/images/coffee_header.png'
+import logo from '../assets/images/top_part_logo.png'
+import facebook from '../assets/images/facebook.png'
+import twitter from '../assets/images/twitter.png'
+import instagram from '../assets/images/instagram.png'
+import coffee_header from '../assets/images/coffee_header.png'
 
 // react components
 import HomeNavbar from './ExpandedNavbar'
