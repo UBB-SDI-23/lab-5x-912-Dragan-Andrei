@@ -34,9 +34,9 @@ const Menu = () => {
   // function to get all coffees
   const getCoffees = async () => {
     setLoading(true);
-    
+
     let url = `${BASE_URL_API}/coffees`;
-    Number(minPrice) ? url += "?min_price=" + minPrice : url;
+    Number(minPrice) ? (url += "?min_price=" + minPrice) : url;
 
     const response = await axios.get(url);
     setCoffees(response.data);
@@ -68,17 +68,20 @@ const Menu = () => {
                 value={minPrice ? minPrice : ""}
                 onChange={(e) => setMinPrice(e.target.value)}
               />
-     
             </ListItem>
-            {coffees.map((coffee) => (
-              <ListItem
-                key={coffee.id}
-                sx={{ width: "100%" }}
-                onClick={() => getCoffeeDetails(coffee.id)}
-              >
-                <CoffeeItem coffee={coffee} />
-              </ListItem>
-            ))}
+            {coffees.length === 0 && (
+              <Typography variant="h2">Loading...</Typography>
+            )}
+            {coffees.length > 0 &&
+              coffees.map((coffee) => (
+                <ListItem
+                  key={coffee.id}
+                  sx={{ width: "100%" }}
+                  onClick={() => getCoffeeDetails(coffee.id)}
+                >
+                  <CoffeeItem coffee={coffee} />
+                </ListItem>
+              ))}
           </List>
           <Button
             onClick={() => navigate("/coffees/add")}
