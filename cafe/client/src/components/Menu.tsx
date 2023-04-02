@@ -40,6 +40,7 @@ const Menu = () => {
 
     const response = await axios.get(url);
     setCoffees(response.data);
+    console.log(response.data);
     setLoading(false);
   };
 
