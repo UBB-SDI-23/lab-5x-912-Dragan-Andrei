@@ -40,7 +40,6 @@ const Menu = () => {
 
     const response = await axios.get(url);
     setCoffees(response.data);
-    console.log(response.data);
     setLoading(false);
   };
 
@@ -70,19 +69,15 @@ const Menu = () => {
                 onChange={(e) => setMinPrice(e.target.value)}
               />
             </ListItem>
-            {coffees.length === 0 && (
-              <Typography variant="h2">Loading...</Typography>
-            )}
-            {coffees.length > 0 &&
-              coffees.map((coffee) => (
-                <ListItem
-                  key={coffee.id}
-                  sx={{ width: "100%" }}
-                  onClick={() => getCoffeeDetails(coffee.id)}
-                >
-                  <CoffeeItem coffee={coffee} />
-                </ListItem>
-              ))}
+            {coffees.map((coffee) => (
+              <ListItem
+                key={coffee.id}
+                sx={{ width: "100%" }}
+                onClick={() => getCoffeeDetails(coffee.id)}
+              >
+                <CoffeeItem coffee={coffee} />
+              </ListItem>
+            ))}
           </List>
           <Button
             onClick={() => navigate("/coffees/add")}

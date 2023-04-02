@@ -43,7 +43,7 @@ const EditCoffee = () => {
 
   // function to get all blends
   const getBlends = async () => {
-    const response = await axios.get(`${BASE_URL_API}/blends`);
+    const response = await axios.get(`${BASE_URL_API}/blends/`);
     setBlends(response.data);
   };
 
