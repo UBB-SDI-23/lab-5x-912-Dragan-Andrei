@@ -15,6 +15,7 @@ import Menu from './components/Menu';
 import Home from './components/Home';
 import DetailedCoffeeItem from './components/DetailedCoffeeItem';
 import AddCoffee from './components/AddCoffee';
+import EditCoffee from './components/EditCoffee';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Route path="/" element={<Home />} />
         <Route path="/coffees" element={<Menu />} />
         <Route path="/coffees/add" element={<AddCoffee />} />
+        <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
         <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
       </Routes>
     </Router>

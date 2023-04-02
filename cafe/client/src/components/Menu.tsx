@@ -5,7 +5,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import TextField from "@mui/material/TextField";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // react components
 import MainNavbar from "./MainNavbar";
@@ -27,12 +28,17 @@ import supportImage from "../assets/images/macaroons_v2.png";
 const Menu = () => {
   const [coffees, setCoffees] = useState<Coffee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [minPrice, setMinPrice] = useState<string>("");
   const navigate = useNavigate();
 
   // function to get all coffees
   const getCoffees = async () => {
     setLoading(true);
-    const response = await axios.get(`${BASE_URL_API}/coffees`);
+    
+    let url = `${BASE_URL_API}/coffees`;
+    Number(minPrice) ? url += "?min_price=" + minPrice : url;
+
+    const response = await axios.get(url);
     setCoffees(response.data);
     setLoading(false);
   };
@@ -44,7 +50,7 @@ const Menu = () => {
 
   useEffect(() => {
     getCoffees();
-  }, []);
+  }, [minPrice]);
 
   return (
     <>
@@ -55,6 +61,15 @@ const Menu = () => {
             Our coffees!
           </Typography>
           <List>
+            <ListItem sx={{ width: "100%" }}>
+              <TextField
+                label="Minimum price"
+                variant="standard"
+                value={minPrice ? minPrice : ""}
+                onChange={(e) => setMinPrice(e.target.value)}
+              />
+     
+            </ListItem>
             {coffees.map((coffee) => (
               <ListItem
                 key={coffee.id}

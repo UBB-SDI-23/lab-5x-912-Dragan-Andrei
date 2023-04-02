@@ -33,8 +33,13 @@ const DetailedCoffeeItem = () => {
 
   // function to get a coffee based on id
   const getCoffee = async (id: number) => {
-    const response = await axios.get(`${BASE_URL_API}/coffees/${id}`);
-    setCoffee(response.data);
+    try {
+      const response = await axios.get(`${BASE_URL_API}/coffees/${id}`);
+      setCoffee(response.data);
+    }
+    catch (error) {
+      setError("The coffee could not be loaded! Please try again later.");
+    }
   };
 
   // function to delete a coffee based on id
@@ -100,6 +105,7 @@ const DetailedCoffeeItem = () => {
                       backgroundColor: "#be9063",
                     },
                   }}
+                  onClick = {() => navigate(`edit`)}
                 >
                   Edit
                 </Button>
