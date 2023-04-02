@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import AddIcon from "@mui/icons-material/Add";
 
 // models
 import { Blend } from "../models/Blend";
