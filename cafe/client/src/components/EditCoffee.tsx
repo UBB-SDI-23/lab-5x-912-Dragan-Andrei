@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AddIcon from "@mui/icons-material/Add";
 
 // models
@@ -20,6 +20,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // react components
 import MainNavbar from "./MainNavbar";
 import { Box } from "@mui/material";
+
+// images
+import supportImage from "../assets/images/sweets.png";
 
 const EditCoffee = () => {
   const [name, setName] = useState<string>("");
@@ -221,7 +224,13 @@ const EditCoffee = () => {
             <Typography variant="h2">Loading...</Typography>
           )}
         </Container>
-        <Container></Container>
+        <Container
+          sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}
+        >
+          <Box mt={10} sx={{ textAlign: "center" }}>
+            <img src={supportImage} alt="create coffee" height="600px" />
+          </Box>
+        </Container>
       </Container>
     </>
   );

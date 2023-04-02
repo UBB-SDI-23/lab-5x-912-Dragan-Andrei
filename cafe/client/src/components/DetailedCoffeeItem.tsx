@@ -17,6 +17,7 @@ import { Coffee } from "../models/Coffee";
 
 // react components
 import MainNavbar from "./MainNavbar";
+import WarningModal from "./WarningModal";
 
 // images
 import supportImage1 from "../assets/images/coffee1.png";
@@ -27,6 +28,8 @@ import supportImage4 from "../assets/images/coffee4.png";
 const DetailedCoffeeItem = () => {
   const [coffee, setCoffee] = useState<Coffee>({} as Coffee);
   const [error, setError] = useState<string>("");
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
+
   const id = Number(useParams<{ id: string }>().id);
 
   const navigate = useNavigate();
@@ -36,8 +39,7 @@ const DetailedCoffeeItem = () => {
     try {
       const response = await axios.get(`${BASE_URL_API}/coffees/${id}`);
       setCoffee(response.data);
-    }
-    catch (error) {
+    } catch (error) {
       setError("The coffee could not be loaded! Please try again later.");
     }
   };
@@ -47,14 +49,12 @@ const DetailedCoffeeItem = () => {
     try {
       const respone = await axios.delete(`${BASE_URL_API}/coffees/${id}`);
       if (respone.status === 204) {
-          navigate("/coffees");
-          return;
-      }
-      else {
+        navigate("/coffees");
+        return;
+      } else {
         setError("The coffee could not be deleted! Please try again later.");
       }
-    }
-    catch (error) {
+    } catch (error) {
       setError("The coffee could not be deleted! Please try again later.");
     }
   };
@@ -66,6 +66,13 @@ const DetailedCoffeeItem = () => {
   return (
     <>
       <MainNavbar />
+      {deleteModal && (
+        <WarningModal
+          message="Are you sure you want to delete this coffee?"
+          accept={() => deleteCoffee(coffee.id)}
+          reject={() => setDeleteModal(false)}
+        />
+      )}
       <Container maxWidth="xl" sx={{ display: "flex" }}>
         <Container maxWidth="sm" sx={{ minHeight: "100vh" }}>
           <Typography variant="h1" sx={{ mt: 10, mb: 2 }}>
@@ -105,13 +112,13 @@ const DetailedCoffeeItem = () => {
                       backgroundColor: "#be9063",
                     },
                   }}
-                  onClick = {() => navigate(`edit`)}
+                  onClick={() => navigate(`edit`)}
                 >
                   Edit
                 </Button>
 
                 <Button
-                  onClick={() => deleteCoffee(coffee.id)}
+                  onClick={() => setDeleteModal(true)}
                   variant="outlined"
                   sx={{
                     ml: 3,

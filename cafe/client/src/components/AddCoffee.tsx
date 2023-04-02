@@ -13,11 +13,14 @@ import { Blend } from "../models/Blend";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { BASE_URL_API } from "../utils/constants";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // react components
 import MainNavbar from "./MainNavbar";
 import { Box } from "@mui/material";
+
+// images
+import supportImage from "../assets/images/sweets.png";
 
 const AddCoffee = () => {
   const [name, setName] = useState<string>("");
@@ -55,27 +58,30 @@ const AddCoffee = () => {
 
     // create the coffee object
     const coffee = {
-        name: name,
-        price: Number(price),
-        calories: Number(calories),
-        quantity: Number(quantity),
-        vegan: isVegan,
-        blend_id: blendId
-    }
+      name: name,
+      price: Number(price),
+      calories: Number(calories),
+      quantity: Number(quantity),
+      vegan: isVegan,
+      blend_id: blendId,
+    };
 
     // send the post request
     try {
       const response = await axios.post(`${BASE_URL_API}/coffees/`, coffee);
       if (response.status === 200) {
-          navigate("/coffees");
-          return;
+        navigate("/coffees");
+        return;
       }
-      setError("Something went wrong! Make sure you filled all the fields correctly.");
+      setError(
+        "Something went wrong! Make sure you filled all the fields correctly."
+      );
+    } catch (error) {
+      setError(
+        "Something went wrong! Make sure you filled all the fields correctly."
+      );
     }
-    catch (error) {
-      setError("Something went wrong! Make sure you filled all the fields correctly.")
-    }
-  }
+  };
 
   return (
     <>
@@ -87,8 +93,11 @@ const AddCoffee = () => {
           </Typography>
 
           {error && (
-            <Typography variant="body2" sx={{color: "#e64545", mb: 4, marginLeft: "4px"}}>
-                {error}
+            <Typography
+              variant="body2"
+              sx={{ color: "#e64545", mb: 4, marginLeft: "4px" }}
+            >
+              {error}
             </Typography>
           )}
 
@@ -183,7 +192,13 @@ const AddCoffee = () => {
             <AddIcon sx={{ marginRight: "8px" }} /> Create
           </Button>
         </Container>
-        <Container></Container>
+        <Container
+          sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}
+        >
+          <Box mt={10} sx={{ textAlign: "center" }}>
+            <img src={supportImage} alt="create coffee" height="600px" />
+          </Box>
+        </Container>
       </Container>
     </>
   );
