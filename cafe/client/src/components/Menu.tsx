@@ -35,7 +35,7 @@ const Menu = () => {
   const getCoffees = async () => {
     setLoading(true);
 
-    let url = `${BASE_URL_API}/coffees`;
+    let url = `${BASE_URL_API}/coffees/`;
     Number(minPrice) ? (url += "?min_price=" + minPrice) : url;
 
     const response = await axios.get(url);
