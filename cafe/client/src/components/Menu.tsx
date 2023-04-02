@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 // react components
 import MainNavbar from "./MainNavbar";
@@ -38,7 +40,7 @@ const Menu = () => {
   // navigate to coffee details
   const getCoffeeDetails = (id: number) => {
     navigate(`/coffees/${id}`);
-  }
+  };
 
   useEffect(() => {
     getCoffees();
@@ -54,11 +56,39 @@ const Menu = () => {
           </Typography>
           <List>
             {coffees.map((coffee) => (
-              <ListItem key={coffee.id} sx={{ width: "100%" }} onClick={() => getCoffeeDetails(coffee.id)}>
+              <ListItem
+                key={coffee.id}
+                sx={{ width: "100%" }}
+                onClick={() => getCoffeeDetails(coffee.id)}
+              >
                 <CoffeeItem coffee={coffee} />
               </ListItem>
             ))}
           </List>
+          <Button
+            onClick={() => navigate("/coffees/add")}
+            variant="contained"
+            sx={{
+              mt: 5,
+              color: "#ffffff",
+              fontSize: "16px",
+              fontWeight: "bold",
+              borderRadius: "4px",
+              letterSpacing: "1px",
+              border: "2px solid #333",
+              bgcolor: "#333",
+              boxShadow: 4,
+              transition: "all 0.5s ease-in-out",
+              "&:hover": {
+                boxShadow: 2,
+                border: "2px solid #333",
+                bgcolor: "#be9063",
+                color: "#ffffff",
+              },
+            }}
+          >
+            <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add coffee
+          </Button>
         </Container>
         <Container
           sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}

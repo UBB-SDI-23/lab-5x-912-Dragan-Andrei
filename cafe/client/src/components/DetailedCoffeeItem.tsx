@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { BASE_URL_API } from "../utils/constants";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 // models
 import { Coffee } from "../models/Coffee";
@@ -19,16 +19,39 @@ import { Coffee } from "../models/Coffee";
 import MainNavbar from "./MainNavbar";
 
 // images
-import supportImage from "../assets/images/coffee3.png";
+import supportImage1 from "../assets/images/coffee1.png";
+import supportImage2 from "../assets/images/coffee2.png";
+import supportImage3 from "../assets/images/coffee3.png";
+import supportImage4 from "../assets/images/coffee4.png";
 
 const DetailedCoffeeItem = () => {
   const [coffee, setCoffee] = useState<Coffee>({} as Coffee);
+  const [error, setError] = useState<string>("");
   const id = Number(useParams<{ id: string }>().id);
+
+  const navigate = useNavigate();
 
   // function to get a coffee based on id
   const getCoffee = async (id: number) => {
     const response = await axios.get(`${BASE_URL_API}/coffees/${id}`);
     setCoffee(response.data);
+  };
+
+  // function to delete a coffee based on id
+  const deleteCoffee = async (id: number) => {
+    try {
+      const respone = await axios.delete(`${BASE_URL_API}/coffees/${id}`);
+      if (respone.status === 204) {
+          navigate("/coffees");
+          return;
+      }
+      else {
+        setError("The coffee could not be deleted! Please try again later.");
+      }
+    }
+    catch (error) {
+      setError("The coffee could not be deleted! Please try again later.");
+    }
   };
 
   useEffect(() => {
@@ -42,6 +65,13 @@ const DetailedCoffeeItem = () => {
         <Container maxWidth="sm" sx={{ minHeight: "100vh" }}>
           <Typography variant="h1" sx={{ mt: 10, mb: 2 }}>
             {coffee.name ? coffee.name : "Loading..."}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{ color: "#e64545", marginLeft: "2px" }}
+          >
+            {error}
           </Typography>
 
           {coffee.name && (
@@ -75,6 +105,7 @@ const DetailedCoffeeItem = () => {
                 </Button>
 
                 <Button
+                  onClick={() => deleteCoffee(coffee.id)}
                   variant="outlined"
                   sx={{
                     ml: 3,
@@ -160,7 +191,18 @@ const DetailedCoffeeItem = () => {
           sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}
         >
           <Box mt={10} sx={{ textAlign: "center" }}>
-            <img src={supportImage} alt="coffee" height="600px" />
+            {(coffee.id % 4) + 1 == 1 && (
+              <img src={supportImage1} alt="coffee" height="600px" />
+            )}
+            {(coffee.id % 4) + 1 == 2 && (
+              <img src={supportImage2} alt="coffee" height="600px" />
+            )}
+            {(coffee.id % 4) + 1 == 3 && (
+              <img src={supportImage3} alt="coffee" height="600px" />
+            )}
+            {(coffee.id % 4) + 1 == 4 && (
+              <img src={supportImage4} alt="coffee" height="600px" />
+            )}
           </Box>
         </Container>
       </Container>
