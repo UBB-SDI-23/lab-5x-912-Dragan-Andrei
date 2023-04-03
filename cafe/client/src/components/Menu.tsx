@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 
 // react components
 import MainNavbar from "./MainNavbar";
@@ -29,6 +30,8 @@ const Menu = () => {
   const [coffees, setCoffees] = useState<Coffee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [minPrice, setMinPrice] = useState<string>("");
+  const [isSort, setIsSort] = useState<Boolean>(false);
+
   const navigate = useNavigate();
 
   // function to get all coffees
@@ -43,6 +46,11 @@ const Menu = () => {
     setLoading(false);
   };
 
+  // function to sort the coffees by price
+  const sortCoffees = () => {
+    isSort ? getCoffees() : coffees.sort((a, b) => a.price - b.price);
+  };
+
   // navigate to coffee details
   const getCoffeeDetails = (id: number) => {
     navigate(`/coffees/${id}`);
@@ -50,6 +58,7 @@ const Menu = () => {
 
   useEffect(() => {
     getCoffees();
+    isSort && sortCoffees();
   }, [minPrice]);
 
   return (
@@ -61,14 +70,60 @@ const Menu = () => {
             Our coffees!
           </Typography>
           <List>
-            <ListItem sx={{ width: "100%" }}>
-              <TextField
-                label="Minimum price"
-                variant="standard"
-                value={minPrice ? minPrice : ""}
-                onChange={(e) => setMinPrice(e.target.value)}
-              />
+            <ListItem sx={{ width: "100%", display: "flex" }}>
+              <Box sx={{ width: "100%" }}>
+                <TextField
+                  label="Minimum price"
+                  variant="standard"
+                  value={minPrice ? minPrice : ""}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                />
+              </Box>
+              <Box
+                onClick={() => {
+                  setIsSort(!isSort);
+                  sortCoffees();
+                }}
+                sx={{
+                  display: "flex",
+                  width: "300px",
+                  alignItems: "center",
+                  justifyContent: "right",
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    mr: 1,
+                    fontWeight: "bold",
+                    color: "#333",
+                  }}
+                >
+                  ascending by price{" "}
+                </Typography>
+                <Box
+                  sx={{
+                    width: "24px",
+                    height: "24px",
+                    fontSize: "28px",
+                    transition: "all 0.5s ease-in-out",
+                    borderRadius: "50%",
+                    bgcolor: isSort ? "#be9063" : "#fff",
+                    color: isSort ? "#be9063" : "#333",
+                    border: "3px solid #333",
+                    boxSizing: "border-box",
+                    "&:hover": {
+                      cursor: "pointer",
+                      transform: "translateX(+5px)",
+                    },
+                  }}
+                ></Box>
+              </Box>
             </ListItem>
+
             {coffees.map((coffee) => (
               <ListItem
                 key={coffee.id}
