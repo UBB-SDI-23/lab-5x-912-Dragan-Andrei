@@ -22,13 +22,25 @@ import { Box } from "@mui/material";
 // images
 import supportImage from "../assets/images/sweets.png";
 
+// create a new LocalCoffee objecet model for the add coffee form
+interface LocalCoffee {
+  name: string;
+  price: string;
+  calories: string;
+  quantity: string;
+  vegan: boolean;
+  blend_id: number;
+}
+
 const AddCoffee = () => {
-  const [name, setName] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
-  const [calories, setCalories] = useState<string>("");
-  const [quantity, setQuantity] = useState<string>("");
-  const [isVegan, setIsVegan] = useState<boolean>(false);
-  const [blendId, setBlendId] = useState<number>(0);
+  const [localCoffee, setLocalCoffee] = useState<LocalCoffee>({
+    name: "",
+    price: "",
+    calories: "",
+    quantity: "",
+    vegan: false,
+    blend_id: 0,
+  });
   const [blends, setBlends] = useState<Blend[]>([]);
   const [error, setError] = useState<string>("");
 
@@ -46,29 +58,32 @@ const AddCoffee = () => {
 
   const addCoffee = async () => {
     if (
-      name === "" ||
-      price === "" ||
-      calories === "" ||
-      quantity === "" ||
-      blendId === undefined
+      localCoffee.name === "" ||
+      localCoffee.price === "" ||
+      localCoffee.calories === "" ||
+      localCoffee.quantity === "" ||
+      localCoffee.blend_id === undefined
     ) {
       setError("Please complete all fields!");
       return;
     }
 
-    // create the coffee object
-    const coffee = {
-      name: name,
-      price: Number(price),
-      calories: Number(calories),
-      quantity: Number(quantity),
-      vegan: isVegan,
-      blend_id: blendId,
+    // create the coffee object to send to the server
+    const addedCoffee = {
+      name: localCoffee.name,
+      price: Number(localCoffee.price),
+      calories: Number(localCoffee.calories),
+      quantity: Number(localCoffee.quantity),
+      vegan: localCoffee.vegan,
+      blend_id: localCoffee.blend_id,
     };
 
     // send the post request
     try {
-      const response = await axios.post(`${BASE_URL_API}/coffees/`, coffee);
+      const response = await axios.post(
+        `${BASE_URL_API}/coffees/`,
+        addedCoffee
+      );
       if (response.status === 200) {
         navigate("/coffees");
         return;
@@ -107,8 +122,10 @@ const AddCoffee = () => {
               label="Name"
               variant="outlined"
               sx={{ margin: "12px 4px", width: "100%" }}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={localCoffee.name}
+              onChange={(e) =>
+                setLocalCoffee({ ...localCoffee, name: e.target.value })
+              }
             />
 
             <TextField
@@ -116,8 +133,10 @@ const AddCoffee = () => {
               label="Price"
               variant="outlined"
               sx={{ margin: "12px 4px", width: "30%" }}
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={localCoffee.price}
+              onChange={(e) =>
+                setLocalCoffee({ ...localCoffee, price: e.target.value })
+              }
             />
 
             <TextField
@@ -125,8 +144,10 @@ const AddCoffee = () => {
               label="Calories"
               variant="outlined"
               sx={{ margin: "12px 4px", width: "30%" }}
-              value={calories}
-              onChange={(e) => setCalories(e.target.value)}
+              value={localCoffee.calories}
+              onChange={(e) =>
+                setLocalCoffee({ ...localCoffee, calories: e.target.value })
+              }
             />
 
             <TextField
@@ -134,17 +155,24 @@ const AddCoffee = () => {
               label="Quantity"
               variant="outlined"
               sx={{ margin: "12px 4px", width: "30%" }}
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              value={localCoffee.quantity}
+              onChange={(e) =>
+                setLocalCoffee({ ...localCoffee, quantity: e.target.value })
+              }
             />
 
             <TextField
               sx={{ margin: "12px 6px", width: "30%" }}
               select
               label="Vegan"
-              defaultValue={isVegan ? 1 : 0}
-              value={isVegan ? 1 : 0}
-              onChange={(e) => setIsVegan(Number(e.target.value) === 1)}
+              defaultValue={localCoffee.vegan ? 1 : 0}
+              value={localCoffee.vegan ? 1 : 0}
+              onChange={(e) =>
+                setLocalCoffee({
+                  ...localCoffee,
+                  vegan: Number(e.target.value) === 1,
+                })
+              }
             >
               <MenuItem value={1}>Yes</MenuItem>
               <MenuItem value={0}>No</MenuItem>
@@ -154,9 +182,14 @@ const AddCoffee = () => {
               sx={{ margin: "12px 4px", width: "30%" }}
               select
               label="Blend"
-              defaultValue={blendId}
-              value={blendId}
-              onChange={(e) => setBlendId(Number(e.target.value))}
+              defaultValue={localCoffee.blend_id}
+              value={localCoffee.blend_id}
+              onChange={(e) =>
+                setLocalCoffee({
+                  ...localCoffee,
+                  blend_id: Number(e.target.value),
+                })
+              }
             >
               <MenuItem value={0}>Select a blend</MenuItem>
               {blends.map((blend) => (
