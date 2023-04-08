@@ -4,16 +4,18 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import Autocomplete from "@mui/material/Autocomplete";
 import AddIcon from "@mui/icons-material/Add";
 
 // models
 import { Blend } from "../models/Blend";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { BASE_URL_API } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 // react components
 import MainNavbar from "./MainNavbar";
@@ -43,19 +45,41 @@ const AddCoffee = () => {
   });
   const [blends, setBlends] = useState<Blend[]>([]);
   const [error, setError] = useState<string>("");
+  const [lastGetBlendsCall, setLastGetBlendsCall] = useState<number>(0);
 
   const navigate = useNavigate();
 
-  // function to get all blends
-  const getBlends = async () => {
-    const response = await axios.get(`${BASE_URL_API}/blends/`);
-    setBlends(response.data);
+  // function to get all blends based on the query provided
+  const getBlends = async (blendQuery: string) => {
+    try {
+      const currentLastGetBlendsCall = lastGetBlendsCall;
+      setLastGetBlendsCall((prev) => prev + 1);
+
+      const response = await axios.get(
+        `${BASE_URL_API}/blends/autocomplete?query=${blendQuery}`
+      );
+      const data = await response.data;
+
+      if (currentLastGetBlendsCall === lastGetBlendsCall) setBlends(data);
+    } catch (error) {
+      console.error("Error getting blends: ", error);
+    }
   };
 
+  // debounce the getBlends function to prevent too many requests
+  const debouncedGetBlends = useCallback(debounce(getBlends, 500), []);
   useEffect(() => {
-    getBlends();
+    return () => {
+      debouncedGetBlends.cancel();
+    };
+  }, [debouncedGetBlends]);
+
+  // get some blends when the component mounts
+  useEffect(() => {
+    getBlends("");
   }, []);
 
+  // function that adds a new coffee to the database
   const addCoffee = async () => {
     if (
       localCoffee.name === "" ||
@@ -162,7 +186,7 @@ const AddCoffee = () => {
             />
 
             <TextField
-              sx={{ margin: "12px 6px", width: "30%" }}
+              sx={{ margin: "12px 4px", width: "30%" }}
               select
               label="Vegan"
               defaultValue={localCoffee.vegan ? 1 : 0}
@@ -178,26 +202,24 @@ const AddCoffee = () => {
               <MenuItem value={0}>No</MenuItem>
             </TextField>
 
-            <TextField
-              sx={{ margin: "12px 4px", width: "30%" }}
-              select
-              label="Blend"
-              defaultValue={localCoffee.blend_id}
-              value={localCoffee.blend_id}
-              onChange={(e) =>
-                setLocalCoffee({
-                  ...localCoffee,
-                  blend_id: Number(e.target.value),
-                })
-              }
-            >
-              <MenuItem value={0}>Select a blend</MenuItem>
-              {blends.map((blend) => (
-                <MenuItem key={blend.id} value={blend.id}>
-                  {blend.name}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+              sx={{ margin: "12px 6px", width: "40%", display: "inline-block" }}
+              options={blends}
+              getOptionLabel={(option) => option.name}
+              filterOptions={(x) => x}
+              renderInput={(params) => (
+                <TextField {...params} label="Select a blend" />
+              )}
+              onInputChange={(e, value) => debouncedGetBlends(value)}
+              onChange={(e, value) => {
+                if (value) {
+                  setLocalCoffee({
+                    ...localCoffee,
+                    blend_id: Number(value.id),
+                  });
+                }
+              }}
+            />
           </Box>
 
           <Button

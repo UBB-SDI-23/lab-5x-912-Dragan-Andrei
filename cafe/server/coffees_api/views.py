@@ -16,6 +16,13 @@ class Coffees(APIView):
 
     @swagger_auto_schema(
         operation_description="Get a list of all coffees",
+        manual_parameters=[
+            openapi.Parameter(
+                'min_price',
+                openapi.IN_QUERY,
+                'Get a list of all coffees with price greater than min_price',
+                type=openapi.TYPE_STRING),
+        ],
         responses={
             status.HTTP_200_OK:
             openapi.Response(description="List of all coffees",

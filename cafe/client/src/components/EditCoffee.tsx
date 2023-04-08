@@ -4,17 +4,18 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import Autocomplete from "@mui/material/Autocomplete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 // models
 import { Blend } from "../models/Blend";
-import { Coffee } from "../models/Coffee";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { BASE_URL_API } from "../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
+import { debounce } from "lodash";
 
 // react components
 import MainNavbar from "./MainNavbar";
@@ -45,39 +46,57 @@ const EditCoffee = () => {
 
   const [blends, setBlends] = useState<Blend[]>([]);
   const [error, setError] = useState<string>("");
-  const [coffee, setCoffee] = useState<Coffee>({} as Coffee);
   const [loading, setLoading] = useState<boolean>(true);
+  const [lastGetBlendsCall, setLastGetBlendsCall] = useState<number>(0);
 
   const id = Number(useParams<{ id: string }>().id);
 
   const navigate = useNavigate();
 
-  // function to get all blends
-  const getBlends = async () => {
-    const response = await axios.get(`${BASE_URL_API}/blends/`);
-    setBlends(response.data);
+  // function to get all blends based on the query provided
+  const getBlends = async (blendQuery: string) => {
+    try {
+      const currentLastGetBlendsCall = lastGetBlendsCall;
+      setLastGetBlendsCall((prev) => prev + 1);
+
+      const response = await axios.get(
+        `${BASE_URL_API}/blends/autocomplete?query=${blendQuery}`
+      );
+      const data = await response.data;
+
+      if (currentLastGetBlendsCall === lastGetBlendsCall) setBlends(data);
+    } catch (error) {
+      console.error("Error getting blends: ", error);
+    }
   };
+
+  // debounce the getBlends function to prevent too many requests
+  const debouncedGetBlends = useCallback(debounce(getBlends, 500), []);
+  useEffect(() => {
+    return () => {
+      debouncedGetBlends.cancel();
+    };
+  }, [debouncedGetBlends]);
 
   // function to get a coffee based on id
   const getCoffee = async (id: number) => {
     setLoading(true);
     const response = await axios.get(`${BASE_URL_API}/coffees/${id}`);
-    setCoffee(response.data);
-
+    const data = await response.data;
     setLocalCoffee({
-      name: response.data.name,
-      price: response.data.price.toString(),
-      calories: response.data.calories.toString(),
-      quantity: response.data.quantity.toString(),
-      vegan: response.data.vegan,
-      blend_id: response.data.blend.id,
+      name: data.name,
+      price: data.price.toString(),
+      calories: data.calories.toString(),
+      quantity: data.quantity.toString(),
+      vegan: data.vegan,
+      blend_id: data.blend.id,
     });
 
     setLoading(false);
   };
 
   useEffect(() => {
-    getBlends();
+    getBlends("");
   }, []);
 
   useEffect(() => {
@@ -192,7 +211,7 @@ const EditCoffee = () => {
                 />
 
                 <TextField
-                  sx={{ margin: "12px 6px", width: "30%" }}
+                  sx={{ margin: "12px 4px", width: "30%" }}
                   select
                   label="Vegan"
                   defaultValue={localCoffee.vegan ? 1 : 0}
@@ -208,26 +227,28 @@ const EditCoffee = () => {
                   <MenuItem value={0}>No</MenuItem>
                 </TextField>
 
-                <TextField
-                  sx={{ margin: "12px 4px", width: "30%" }}
-                  select
-                  label="Blend"
-                  defaultValue={localCoffee.blend_id}
-                  value={localCoffee.blend_id}
-                  onChange={(e) =>
-                    setLocalCoffee({
-                      ...localCoffee,
-                      blend_id: Number(e.target.value),
-                    })
-                  }
-                >
-                  <MenuItem value={0}>Select a blend</MenuItem>
-                  {blends.map((blend) => (
-                    <MenuItem key={blend.id} value={blend.id}>
-                      {blend.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                <Autocomplete
+                  sx={{
+                    margin: "12px 6px",
+                    width: "40%",
+                    display: "inline-block",
+                  }}
+                  options={blends}
+                  getOptionLabel={(option) => option.name}
+                  filterOptions={(x) => x}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select a blend" />
+                  )}
+                  onInputChange={(e, value) => debouncedGetBlends(value)}
+                  onChange={(e, value) => {
+                    if (value) {
+                      setLocalCoffee({
+                        ...localCoffee,
+                        blend_id: Number(value.id),
+                      });
+                    }
+                  }}
+                />
               </Box>
 
               <Button
