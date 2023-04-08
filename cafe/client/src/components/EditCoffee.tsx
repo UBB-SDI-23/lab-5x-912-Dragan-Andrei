@@ -253,7 +253,7 @@ const EditCoffee = () => {
                     options={blends}
                     getOptionLabel={(option) => option.name}
                     filterOptions={(x) => x}
-                    defaultValue={defaultBlend ? defaultBlend : null}
+                    defaultValue={defaultBlend}
                     renderInput={(params) => (
                       <TextField {...params} label="Select a blend" />
                     )}
