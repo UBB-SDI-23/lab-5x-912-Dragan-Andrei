@@ -203,6 +203,7 @@ const AddCoffee = () => {
             </TextField>
 
             <Autocomplete
+              disableClearable={true}
               sx={{ margin: "12px 6px", width: "40%", display: "inline-block" }}
               options={blends}
               getOptionLabel={(option) => option.name}
