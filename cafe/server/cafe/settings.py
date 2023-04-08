@@ -48,22 +48,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
-}
-
-SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {
-        "basic": {
-            "type": "basic"
-        }
-    },
-    "SECURITY_REQUIREMENTS": [{
-        "basic": []
-    }]
-}
+SWAGGER_SETTINGS = {'USE_SESSION_AUTH': False}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
