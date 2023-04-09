@@ -11,8 +11,18 @@ from blends_api.models import Blend
 from sales_api.models import Sale
 from sales_api.serializer import SaleSerializer
 
+from rest_framework.pagination import PageNumberPagination
+
+
+class CoffeePagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+    page_query_param = 'p'
+
 
 class Coffees(APIView):
+    pagination_class = CoffeePagination
 
     @swagger_auto_schema(
         operation_description="Get a list of all coffees",
@@ -37,14 +47,21 @@ class Coffees(APIView):
                                  }))
         })
     def get(self, request):
-        filtered_coffees = Coffee.objects.all()
+        filtered_coffees = Coffee.objects.all().order_by('-id')
         coffee_top_price = self.request.query_params.get('min_price')
         if coffee_top_price is not None:
             filtered_coffees = filtered_coffees.filter(
                 price__gt=coffee_top_price)
 
-        serialized_coffees = CoffeeSerializer(filtered_coffees, many=True)
-        return Response(serialized_coffees.data)
+        if self.request.query_params.get('sort'):
+            filtered_coffees = filtered_coffees.order_by('price')
+
+        paginator = CoffeePagination()
+        paginated_coffees = paginator.paginate_queryset(
+            filtered_coffees, request)
+        serialized_coffees = CoffeeSerializer(paginated_coffees, many=True)
+
+        return paginator.get_paginated_response(serialized_coffees.data)
 
     @swagger_auto_schema(
         operation_description="Create a new coffee",

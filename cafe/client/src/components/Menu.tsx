@@ -7,7 +7,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
 // react components
 import MainNavbar from "./MainNavbar";
@@ -31,6 +32,9 @@ const Menu = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [minPrice, setMinPrice] = useState<string>("");
   const [isSort, setIsSort] = useState<Boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalEntries, setTotalEntries] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -38,18 +42,31 @@ const Menu = () => {
   const getCoffees = async () => {
     setLoading(true);
 
-    let url = `${BASE_URL_API}/coffees/`;
-    Number(minPrice) ? (url += "?min_price=" + minPrice) : url;
+    let url = `${BASE_URL_API}/coffees`;
+    Number(minPrice)
+      ? (url += "?min_price=" + minPrice + "&p=" + page)
+      : (url += "?p=" + page);
+
+    isSort && (url += "&sort=true");
 
     const response = await axios.get(url);
-    setCoffees(response.data);
+    const data = response.data;
+    setCoffees(data.results);
+    setTotalEntries(data.count);
     setLoading(false);
   };
 
-  // function to sort the coffees by price
-  const sortCoffees = () => {
-    isSort ? getCoffees() : coffees.sort((a, b) => a.price - b.price);
+  const changePage = (value: number) => {
+    if (value === -1 && page > 1) setPage((prev) => prev - 1);
+    else if (value === 1 && pageSize * page < totalEntries)
+      setPage((prev) => prev + 1);
   };
+
+  // function to sort the coffees by price
+  useEffect(() => {
+    if (page === 1) getCoffees();
+    else setPage(1);
+  }, [isSort]);
 
   // navigate to coffee details
   const getCoffeeDetails = (id: number) => {
@@ -58,8 +75,7 @@ const Menu = () => {
 
   useEffect(() => {
     getCoffees();
-    isSort && sortCoffees();
-  }, [minPrice]);
+  }, [minPrice, page, pageSize]);
 
   return (
     <>
@@ -82,7 +98,6 @@ const Menu = () => {
               <Box
                 onClick={() => {
                   setIsSort(!isSort);
-                  sortCoffees();
                 }}
                 sx={{
                   display: "flex",
@@ -134,6 +149,22 @@ const Menu = () => {
               </ListItem>
             ))}
           </List>
+          <Box
+            sx={{
+              display: "flex",
+              margin: "4px 16px",
+              justifyContent: "right",
+            }}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "32px", color: "#be9063", marginRight: "8px" }}
+              onClick={() => changePage(-1)}
+            ></ArrowCircleLeftIcon>
+            <ArrowCircleRightIcon
+              sx={{ fontSize: "32px", color: "#be9063" }}
+              onClick={() => changePage(+1)}
+            ></ArrowCircleRightIcon>
+          </Box>
           <Button
             onClick={() => navigate("/coffees/add")}
             variant="contained"
