@@ -151,6 +151,43 @@ const AddCoffee = () => {
                 setLocalCoffee({ ...localCoffee, name: e.target.value })
               }
             />
+            <TextField
+              sx={{ margin: "12px 4px", width: "30%" }}
+              select
+              label="Vegan"
+              defaultValue={localCoffee.vegan ? 1 : 0}
+              value={localCoffee.vegan ? 1 : 0}
+              onChange={(e) =>
+                setLocalCoffee({
+                  ...localCoffee,
+                  vegan: Number(e.target.value) === 1,
+                })
+              }
+            >
+              <MenuItem value={1}>Yes</MenuItem>
+              <MenuItem value={0}>No</MenuItem>
+            </TextField>
+
+            <Autocomplete
+              disableClearable={true}
+              sx={{ margin: "12px 6px", width: "60%", display: "inline-block" }}
+              options={blends}
+              getOptionLabel={(option) => option.name}
+              filterOptions={(x) => x}
+              renderInput={(params) => (
+                <TextField {...params} label="Select a blend" />
+              )}
+              onInputChange={(e, value) => debouncedGetBlends(value)}
+              onChange={(e, value) => {
+                if (value) {
+                  setLocalCoffee({
+                    ...localCoffee,
+                    blend_id: Number(value.id),
+                  });
+                }
+              }}
+              disablePortal
+            />
 
             <TextField
               id="outlined-basic"
@@ -183,43 +220,6 @@ const AddCoffee = () => {
               onChange={(e) =>
                 setLocalCoffee({ ...localCoffee, quantity: e.target.value })
               }
-            />
-
-            <TextField
-              sx={{ margin: "12px 4px", width: "30%" }}
-              select
-              label="Vegan"
-              defaultValue={localCoffee.vegan ? 1 : 0}
-              value={localCoffee.vegan ? 1 : 0}
-              onChange={(e) =>
-                setLocalCoffee({
-                  ...localCoffee,
-                  vegan: Number(e.target.value) === 1,
-                })
-              }
-            >
-              <MenuItem value={1}>Yes</MenuItem>
-              <MenuItem value={0}>No</MenuItem>
-            </TextField>
-
-            <Autocomplete
-              disableClearable={true}
-              sx={{ margin: "12px 6px", width: "40%", display: "inline-block" }}
-              options={blends}
-              getOptionLabel={(option) => option.name}
-              filterOptions={(x) => x}
-              renderInput={(params) => (
-                <TextField {...params} label="Select a blend" />
-              )}
-              onInputChange={(e, value) => debouncedGetBlends(value)}
-              onChange={(e, value) => {
-                if (value) {
-                  setLocalCoffee({
-                    ...localCoffee,
-                    blend_id: Number(value.id),
-                  });
-                }
-              }}
             />
           </Box>
 
