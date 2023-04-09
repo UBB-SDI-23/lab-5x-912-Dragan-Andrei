@@ -3,12 +3,11 @@ from faker import Faker
 fake = Faker()
 
 with open('populateLocations.sql', 'w') as f:
-    # delete all the existing records and foreign key relations
-    print('DELETE FROM sales_api_sale;', file=f)
-    print('DELETE FROM locations_api_location;', file=f)
+    # delete all the existing records
+    print('TRUNCATE TABLE locations_api_location RESTART IDENTITY CASCADE;',
+          file=f)
 
     generated_name_set = set()
-
     # generate new records to insert
     for i in range(1000):
         if (i % 100 == 0):

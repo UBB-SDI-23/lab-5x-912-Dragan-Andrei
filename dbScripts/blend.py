@@ -3,20 +3,17 @@ from faker import Faker
 fake = Faker()
 
 with open('populateBlends.sql', 'w') as f:
-    # delete all the existing records and foreign key relations
-    print('DELETE FROM sales_api_sale;', file=f)
-    print('DELETE FROM coffees_api_coffee;', file=f)
-    print('DELETE FROM blends_api_blend;', file=f)
+    # delete all the existing records
+    print('TRUNCATE TABLE blends_api_blend RESTART IDENTITY CASCADE;', file=f)
 
     generated_name_set = set()
-
     # generate new records to insert
-    for i in range(10000):
+    for i in range(1000):
         if (i % 100 == 0):
-            print(f'Generated {i * 100} records')
+            print(f'Generated {i * 1000} records')
 
         values = []
-        for j in range(100):
+        for j in range(1000):
             # generate a new fake name that has a length between 1 and 50
             name = fake.name()[:10] + " Blend"
             if name in generated_name_set:

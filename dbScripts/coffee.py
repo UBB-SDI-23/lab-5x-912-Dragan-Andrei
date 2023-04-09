@@ -3,20 +3,11 @@ from faker import Faker
 fake = Faker()
 
 with open('populateCoffees.sql', 'w') as f:
-    # delete all the existing records and foreign key relations
-    print('DELETE FROM sales_api_sale;', file=f)
-    print('DELETE FROM coffees_api_coffee;', file=f)
-
-    # create a temporary table that stores the blend ids
-    print(
-        'CREATE TABLE temp_blend_ids (temp_id SERIAL PRIMARY KEY, blend_id INT);',
-        file=f)
-    print(
-        'INSERT INTO temp_blend_ids (blend_id) (SELECT id FROM blends_api_blend);',
-        file=f)
+    # delete all the existing records
+    print('TRUNCATE TABLE coffees_api_coffee RESTART IDENTITY CASCADE;',
+          file=f)
 
     generated_name_set = set()
-
     # generate new records to insert
     for i in range(1000):
         if (i % 100 == 0):
@@ -45,16 +36,13 @@ with open('populateCoffees.sql', 'w') as f:
             # generate a fake vegan value
             vegan = fake.boolean()
 
-            # generate a fake blend_id
-            temp_blend_id = fake.random_int(min=1, max=1000000)
+            # generate a random blend_id
+            blend_id = fake.random_int(min=1, max=1000000)
 
             values.append(
-                f'(\'{name}\', {price}, {calories}, {quantity}, {vegan}, (SELECT blend_id FROM temp_blend_ids WHERE temp_id = {temp_blend_id}))'
+                f'(\'{name}\', {price}, {calories}, {quantity}, {vegan}, {blend_id})'
             )
 
         print(
             f'INSERT INTO coffees_api_coffee (name, price, calories, quantity, vegan, blend_id_id) VALUES {", ".join(values)};',
             file=f)
-
-    # drop the temporary table
-    print('DROP TABLE temp_blend_ids;', file=f)
