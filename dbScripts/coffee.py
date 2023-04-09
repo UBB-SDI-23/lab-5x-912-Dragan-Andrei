@@ -18,16 +18,16 @@ with open('populateCoffees.sql', 'w') as f:
     generated_name_set = set()
 
     # generate new records to insert
-    for i in range(1):
+    for i in range(1000):
         if (i % 100 == 0):
-            print(f'Generated {i * 100} records')
+            print(f'Generated {i * 1000} records')
 
         values = []
-        for j in range(20):
+        for j in range(1000):
             # generate a new fake name that has a length between 1 and 50
             name = fake.name()[:10] + " Coffee"
             if name in generated_name_set:
-                name += f"- {i * 10000 + j} limited edition"
+                name += f"- {i * 1000 + j} limited edition"
             else:
                 generated_name_set.add(name)
             name = name.replace("'", "''")
