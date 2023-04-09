@@ -26,11 +26,6 @@ with open('populateCoffees.sql', 'w') as f:
         for j in range(1000):
             # generate a new fake name that has a length between 1 and 50
             name = fake.name()[:10] + " Coffee"
-            if name in generated_name_set:
-                name += f"- {i * 1000 + j} limited edition"
-            else:
-                generated_name_set.add(name)
-            name = name.replace("'", "''")
 
             # generate a fake price that is between 1 and 10
             price = fake.pyfloat(left_digits=2,
@@ -50,8 +45,11 @@ with open('populateCoffees.sql', 'w') as f:
             # generate a fake vegan value
             vegan = fake.boolean()
 
+            # generate a fake blend_id
+            temp_blend_id = fake.random_int(min=1, max=1000000)
+
             values.append(
-                f'(\'{name}\', {price}, {calories}, {quantity}, {vegan}, (SELECT blend_id FROM temp_blend_ids ORDER BY RANDOM() LIMIT 1))'
+                f'(\'{name}\', {price}, {calories}, {quantity}, {vegan}, (SELECT blend_id FROM temp_blend_ids WHERE temp_id = {temp_blend_id}))'
             )
 
         print(
