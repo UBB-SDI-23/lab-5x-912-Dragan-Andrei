@@ -10,7 +10,7 @@ with open('populateLocations.sql', 'w') as f:
     generated_name_set = set()
     # generate new records to insert
     for i in range(1000):
-        if (i % 100 == 0):
+        if (i % 10 == 0):
             print(f'Generated {i * 1000} records')
 
         values = []
@@ -34,8 +34,12 @@ with open('populateLocations.sql', 'w') as f:
             profit = fake.random_int(min=0, max=100000)
 
             # generate a fake description
-            description = fake.paragraphs(nb=2)
-            description = description.replace("'", "''")
+            no_words = 0
+            description = ""
+            while no_words < 90:
+                text = fake.text()
+                no_words += len(text.split())
+                description += text
 
             values.append(
                 f'(\'{name}\', \'{address}\', \'{city}\', \'{postal_code}\', {profit}, \'{description}\')'
