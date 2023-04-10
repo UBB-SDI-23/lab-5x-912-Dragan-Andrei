@@ -29,7 +29,6 @@ with open('populateSales.sql', 'w') as f:
     for i in range(10000):
         if (i % 1000 == 0):
             print(f'Generated {i * 10000} records')
-            print(f'PRINT({i * 10000} records generated)', file=f)
 
         # generate a random coffee_id
         coffee_id = fake.random_int(min=i * 100 + 1, max=(i + 1) * 100)
