@@ -35,6 +35,7 @@ with open('populateLocations.sql', 'w') as f:
 
             # generate a fake description
             description = fake.paragraphs(nb=2)
+            description = description.replace("'", "''")
 
             values.append(
                 f'(\'{name}\', \'{address}\', \'{city}\', \'{postal_code}\', {profit}, \'{description}\')'
