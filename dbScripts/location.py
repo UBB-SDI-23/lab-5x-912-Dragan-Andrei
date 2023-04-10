@@ -33,10 +33,13 @@ with open('populateLocations.sql', 'w') as f:
             # generate a fake profit that is between 0 and 100000
             profit = fake.random_int(min=0, max=100000)
 
+            # generate a fake description
+            description = fake.paragraphs(nb=2)
+
             values.append(
-                f'(\'{name}\', \'{address}\', \'{city}\', \'{postal_code}\', {profit})'
+                f'(\'{name}\', \'{address}\', \'{city}\', \'{postal_code}\', {profit}, \'{description}\')'
             )
 
         print(
-            f'INSERT INTO locations_api_location (name, address, city, postal_code, profit) VALUES {", ".join(values)};',
+            f'INSERT INTO locations_api_location (name, address, city, postal_code, profit, description) VALUES {", ".join(values)};',
             file=f)
