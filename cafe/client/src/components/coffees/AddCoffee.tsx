@@ -7,6 +7,9 @@ import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import AddIcon from "@mui/icons-material/Add";
 
+// css
+import "../../assets/css/coffees/addCoffee.css";
+
 // models
 import { Blend } from "../../models/Blend";
 
@@ -16,6 +19,7 @@ import axios from "axios";
 import { BASE_URL_API } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
+import BadWords from "bad-words";
 
 // react components
 import MainNavbar from "../MainNavbar";
@@ -34,6 +38,26 @@ interface LocalCoffee {
   blend_id: number;
 }
 
+// create an error object model
+interface LocalError {
+  generic: string;
+  name: string;
+  price: string;
+  calories: string;
+  quantity: string;
+  blend: string;
+}
+
+// create a model for the touched fields
+interface TouchedFields {
+  name: boolean;
+  price: boolean;
+  calories: boolean;
+  quantity: boolean;
+  vegan: boolean;
+  blend: boolean;
+}
+
 const AddCoffee = () => {
   const [localCoffee, setLocalCoffee] = useState<LocalCoffee>({
     name: "",
@@ -43,8 +67,26 @@ const AddCoffee = () => {
     vegan: false,
     blend_id: 0,
   });
+
+  const [touchedFields, setTouchedFields] = useState<TouchedFields>({
+    name: false,
+    price: false,
+    calories: false,
+    quantity: false,
+    vegan: false,
+    blend: false,
+  });
+
+  const [localError, setLocalError] = useState<LocalError>({
+    generic: "",
+    name: "",
+    price: "",
+    calories: "",
+    quantity: "",
+    blend: "",
+  });
+
   const [blends, setBlends] = useState<Blend[]>([]);
-  const [error, setError] = useState<string>("");
   const [lastGetBlendsCall, setLastGetBlendsCall] = useState<number>(0);
 
   const navigate = useNavigate();
@@ -55,14 +97,15 @@ const AddCoffee = () => {
       const currentLastGetBlendsCall = lastGetBlendsCall;
       setLastGetBlendsCall((prev) => prev + 1);
 
-      const response = await axios.get(
-        `${BASE_URL_API}/blends/autocomplete?query=${blendQuery}`
-      );
+      const response = await axios.get(`${BASE_URL_API}/blends/autocomplete?query=${blendQuery}`);
       const data = await response.data;
 
       if (currentLastGetBlendsCall === lastGetBlendsCall) setBlends(data);
     } catch (error) {
-      console.error("Error getting blends: ", error);
+      setLocalError((prevError) => ({
+        ...prevError,
+        blend: "Error fetching blends",
+      }));
     }
   };
 
@@ -79,18 +122,146 @@ const AddCoffee = () => {
     getBlends("");
   }, []);
 
+  // every time the localCoffee state changes, validate the data
+  useEffect(() => {
+    validateCoffeeData();
+  }, [localCoffee]);
+
+  // function to validate the coffee data
+  const validateCoffeeData = () => {
+    // validate the name
+    if (localCoffee.name === "") {
+      setLocalError((prevError) => ({
+        ...prevError,
+        name: "Name is required",
+      }));
+    } else if (localCoffee.name.length > 50) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        name: "Name cannot be longer than 50 characters",
+      }));
+    } else if (new BadWords().isProfane(localCoffee.name)) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        name: "Name cannot contain profanity",
+      }));
+    } else {
+      setLocalError((prevError) => ({
+        ...prevError,
+        name: "",
+      }));
+    }
+
+    // validate the price
+    if (localCoffee.price === "") {
+      setLocalError((prevError) => ({
+        ...prevError,
+        price: "Price is required",
+      }));
+    } else if (!Number(localCoffee.price)) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        price: "Price must be a number",
+      }));
+    } else if (Number(localCoffee.price) < 0) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        price: "Price cannot be negative",
+      }));
+    } else {
+      setLocalError((prevError) => ({
+        ...prevError,
+        price: "",
+      }));
+    }
+
+    // validate the calories
+    if (localCoffee.calories === "") {
+      setLocalError((prevError) => ({
+        ...prevError,
+        calories: "Calories is required",
+      }));
+    } else if (!Number(localCoffee.calories)) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        calories: "Calories must be a number",
+      }));
+    } else if (!Number.isInteger(Number(localCoffee.calories))) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        calories: "Calories must be an integer",
+      }));
+    } else if (Number(localCoffee.calories) < 0) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        calories: "Calories cannot be negative",
+      }));
+    } else if (Number(localCoffee.calories) > 1000) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        calories: "Calories cannot be greater than 1000",
+      }));
+    } else {
+      setLocalError((prevError) => ({
+        ...prevError,
+        calories: "",
+      }));
+    }
+
+    // validate the quantity
+    if (localCoffee.quantity === "") {
+      setLocalError((prevError) => ({
+        ...prevError,
+        quantity: "Quantity is required",
+      }));
+    } else if (!Number(localCoffee.quantity)) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        quantity: "Quantity must be a number",
+      }));
+    } else if (Number(localCoffee.quantity) < 0) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        quantity: "Quantity cannot be negative",
+      }));
+    } else {
+      setLocalError((prevError) => ({
+        ...prevError,
+        quantity: "",
+      }));
+    }
+
+    // validate the blend
+    if (localCoffee.blend_id === 0) {
+      setLocalError((prevError) => ({
+        ...prevError,
+        blend: "Blend is required",
+      }));
+    } else {
+      setLocalError((prevError) => ({
+        ...prevError,
+        blend: "",
+      }));
+    }
+  };
+
   // function that adds a new coffee to the database
   const addCoffee = async () => {
-    if (
-      localCoffee.name === "" ||
-      localCoffee.price === "" ||
-      localCoffee.calories === "" ||
-      localCoffee.quantity === "" ||
-      localCoffee.blend_id === undefined
-    ) {
-      setError("Please complete all fields!");
-      return;
-    }
+    // touch all the fields so that the errors show up
+    setTouchedFields((prevTouched) => ({
+      ...prevTouched,
+      name: true,
+      price: true,
+      calories: true,
+      quantity: true,
+      blend: true,
+    }));
+
+    // validate the data
+    validateCoffeeData();
+
+    // if there are any errors, return
+    if (localError.name !== "" || localError.price !== "" || localError.calories !== "" || localError.quantity !== "" || localError.blend !== "") return;
 
     // create the coffee object to send to the server
     const addedCoffee = {
@@ -104,21 +275,53 @@ const AddCoffee = () => {
 
     // send the post request
     try {
-      const response = await axios.post(
-        `${BASE_URL_API}/coffees/`,
-        addedCoffee
-      );
+      const response = await axios.post(`${BASE_URL_API}/coffees/`, addedCoffee);
       if (response.status === 200) {
         navigate("/coffees");
         return;
       }
-      setError(
-        "Something went wrong! Make sure you filled all the fields correctly."
-      );
-    } catch (error) {
-      setError(
-        "Something went wrong! Make sure you filled all the fields correctly."
-      );
+
+      // if the response is not 200, then something went wrong
+      setLocalError((prevError) => ({
+        ...prevError,
+        generic: "Something went wrong! Make sure you filled all the fields correctly.",
+      }));
+    } catch (error: any) {
+      if (error.response.data) {
+        if (error.response.data.name) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            name: error.response.data.name,
+          }));
+          setLocalCoffee((prevCoffee) => ({ ...prevCoffee, name: "" }));
+        }
+        if (error.response.data.price) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            price: error.response.data.price,
+          }));
+          setLocalCoffee((prevCoffee) => ({ ...prevCoffee, price: "" }));
+        }
+        if (error.response.data.calories) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            calories: error.response.data.calories,
+          }));
+          setLocalCoffee((prevCoffee) => ({ ...prevCoffee, calories: "" }));
+        }
+        if (error.response.data.quantity) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            quantity: error.response.data.quantity,
+          }));
+          setLocalCoffee((prevCoffee) => ({ ...prevCoffee, quantity: "" }));
+        }
+      } else {
+        setLocalError((prevError) => ({
+          ...prevError,
+          generic: "Something went wrong! Make sure you filled all the fields correctly.",
+        }));
+      }
     }
   };
 
@@ -131,38 +334,40 @@ const AddCoffee = () => {
             Let's create a new coffee!
           </Typography>
 
-          {error && (
-            <Typography
-              variant="body2"
-              sx={{ color: "#e64545", mb: 4, marginLeft: "4px" }}
-            >
-              {error}
+          {localError.generic && (
+            <Typography variant="body2" sx={{ color: "#e64545", mb: 4, marginLeft: "4px" }}>
+              {localError.generic}
             </Typography>
           )}
 
           <Box>
             <TextField
-              id="outlined-basic"
               label="Name"
               variant="outlined"
-              sx={{ margin: "12px 4px", width: "100%" }}
+              sx={{ margin: "12px 0px", width: "96%" }}
               value={localCoffee.name}
-              onChange={(e) =>
-                setLocalCoffee({ ...localCoffee, name: e.target.value })
+              onChange={(e) => setLocalCoffee((prevCoffee) => ({ ...prevCoffee, name: e.target.value }))}
+              error={localError.name && touchedFields.name ? true : false}
+              onBlur={(e) =>
+                setTouchedFields((prevTouched) => ({
+                  ...prevTouched,
+                  name: true,
+                }))
               }
+              helperText={localError.name && touchedFields.name && localError.name}
             />
             <TextField
-              sx={{ margin: "12px 4px", width: "30%" }}
               select
               label="Vegan"
               defaultValue={localCoffee.vegan ? 1 : 0}
               value={localCoffee.vegan ? 1 : 0}
               onChange={(e) =>
-                setLocalCoffee({
-                  ...localCoffee,
+                setLocalCoffee((prevCoffee) => ({
+                  ...prevCoffee,
                   vegan: Number(e.target.value) === 1,
-                })
+                }))
               }
+              className="vegan-field"
             >
               <MenuItem value={1}>Yes</MenuItem>
               <MenuItem value={0}>No</MenuItem>
@@ -170,87 +375,100 @@ const AddCoffee = () => {
 
             <Autocomplete
               disableClearable={true}
-              sx={{ margin: "12px 6px", width: "60%", display: "inline-block" }}
               options={blends}
               getOptionLabel={(option) => option.name}
               filterOptions={(x) => x}
               renderInput={(params) => (
-                <TextField {...params} label="Select a blend" />
+                <TextField
+                  {...params}
+                  error={localError.blend && touchedFields.blend ? true : false}
+                  onBlur={(e) =>
+                    setTouchedFields((prevTouched) => ({
+                      ...prevTouched,
+                      blend: true,
+                    }))
+                  }
+                  helperText={localError.blend && touchedFields.blend && localError.blend}
+                  label="Select a blend"
+                />
               )}
               onInputChange={(e, value) => debouncedGetBlends(value)}
               onChange={(e, value) => {
                 if (value) {
-                  setLocalCoffee({
-                    ...localCoffee,
+                  setLocalCoffee((prevCoffee) => ({
+                    ...prevCoffee,
                     blend_id: Number(value.id),
-                  });
+                  }));
                 }
               }}
               disablePortal
+              className="autocomplete-blend"
             />
 
             <TextField
-              id="outlined-basic"
               label="Price"
               variant="outlined"
-              sx={{ margin: "12px 4px", width: "30%" }}
               value={localCoffee.price}
-              onChange={(e) =>
-                setLocalCoffee({ ...localCoffee, price: e.target.value })
+              onChange={(e) => setLocalCoffee((prevCoffee) => ({ ...prevCoffee, price: e.target.value }))}
+              className="price-field"
+              error={localError.price && touchedFields.price ? true : false}
+              onBlur={(e) =>
+                setTouchedFields((prevTouched) => ({
+                  ...prevTouched,
+                  price: true,
+                }))
               }
+              helperText={localError.price && touchedFields.price && localError.price}
             />
 
             <TextField
-              id="outlined-basic"
               label="Calories"
               variant="outlined"
-              sx={{ margin: "12px 4px", width: "30%" }}
               value={localCoffee.calories}
-              onChange={(e) =>
-                setLocalCoffee({ ...localCoffee, calories: e.target.value })
+              onChange={(e) => setLocalCoffee((prevCoffee) => ({ ...prevCoffee, calories: e.target.value }))}
+              className="calories-field"
+              error={localError.calories && touchedFields.calories ? true : false}
+              onBlur={(e) =>
+                setTouchedFields((prevTouched) => ({
+                  ...prevTouched,
+                  calories: true,
+                }))
               }
+              helperText={localError.calories && touchedFields.calories && localError.calories}
             />
 
             <TextField
-              id="outlined-basic"
               label="Quantity"
               variant="outlined"
-              sx={{ margin: "12px 4px", width: "30%" }}
               value={localCoffee.quantity}
-              onChange={(e) =>
-                setLocalCoffee({ ...localCoffee, quantity: e.target.value })
+              onChange={(e) => setLocalCoffee((prevCoffee) => ({ ...prevCoffee, quantity: e.target.value }))}
+              className="quantity-field"
+              error={localError.quantity && touchedFields.quantity ? true : false}
+              onBlur={(e) =>
+                setTouchedFields((prevTouched) => ({
+                  ...prevTouched,
+                  quantity: true,
+                }))
               }
+              helperText={localError.quantity && touchedFields.quantity && localError.quantity}
             />
           </Box>
 
           <Button
             onClick={() => addCoffee()}
             variant="contained"
+            className="create-button"
             sx={{
-              margin: "16px 6px",
-              color: "#ffffff",
-              fontSize: "16px",
-              fontWeight: "bold",
-              borderRadius: "4px",
-              letterSpacing: "1px",
-              border: "2px solid #333",
-              bgcolor: "#333",
               boxShadow: 4,
-              transition: "all 0.5s ease-in-out",
               "&:hover": {
                 boxShadow: 2,
-                border: "2px solid #333",
-                bgcolor: "#be9063",
-                color: "#ffffff",
               },
             }}
           >
-            <AddIcon sx={{ marginRight: "8px" }} /> Create
+            <AddIcon sx={{ mr: "8px" }} /> Create
           </Button>
         </Container>
-        <Container
-          sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}
-        >
+        <Container sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}>
           <Box mt={10} sx={{ textAlign: "center" }}>
             <img src={supportImage} alt="create coffee" height="600px" />
           </Box>

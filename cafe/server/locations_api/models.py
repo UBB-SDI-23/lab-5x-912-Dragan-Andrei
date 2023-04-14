@@ -6,12 +6,12 @@ from django.core.exceptions import ValidationError
 def postal_code_length(value):
     if len(value) != 5:
         raise ValidationError(
-            'postal code should have a fixed length of 5 digits')
+            'Postal code should have a fixed length of 5 characters.')
 
 
 def validate_no_profanity(value):
     if better_profanity.profanity.contains_profanity(value):
-        raise ValidationError('no profanity allowed', params={'value': value})
+        raise ValidationError('No profanity allowed!', params={'value': value})
 
 
 # Create your models here.

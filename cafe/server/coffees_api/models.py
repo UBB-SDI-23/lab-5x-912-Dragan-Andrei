@@ -6,20 +6,20 @@ from django.core.exceptions import ValidationError
 
 def validate_positive(value):
     if value < 0:
-        raise ValidationError('%(value)s is not a positive number',
+        raise ValidationError('%(value)s is not a positive number.',
                               params={'value': value})
 
 
 def validate_calories(value):
     if (value > 1000):
         raise ValidationError(
-            '%(value)s calories is too many calories - a coffee with that many calories cannot be sold',
+            'A coffee with that many calories cannot be sold.',
             params={'value': value})
 
 
 def validate_no_profanity(value):
     if better_profanity.profanity.contains_profanity(value):
-        raise ValidationError('no profanity allowed', params={'value': value})
+        raise ValidationError('No profanity allowed!', params={'value': value})
 
 
 # Create your models here.

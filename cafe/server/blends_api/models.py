@@ -5,13 +5,14 @@ from django.core.exceptions import ValidationError
 
 def validate_blend_level(value):
     if value < 1 or value > 5:
-        raise ValidationError('strength level should be between 1 and 5',
-                              params={'value': value})
+        raise ValidationError(
+            'Strength level should be an integer between 1 and 5.',
+            params={'value': value})
 
 
 def validate_no_profanity(value):
     if better_profanity.profanity.contains_profanity(value):
-        raise ValidationError('no profanity allowed', params={'value': value})
+        raise ValidationError('No profanity allowed!', params={'value': value})
 
 
 # Create your models here.

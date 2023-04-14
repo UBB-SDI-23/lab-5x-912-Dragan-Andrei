@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#be9063',
+      main: "#be9063",
     },
   },
   typography: {
@@ -46,6 +46,7 @@ export const theme = createTheme({
     },
 
     body2: {
+      // for errors
       fontFamily: "Quattrocento Sans",
       fontSize: "16px",
       fontWeight: "semibold",
