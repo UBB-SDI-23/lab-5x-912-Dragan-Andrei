@@ -8,22 +8,22 @@ import Button from "@mui/material/Button";
 // utils
 import { useState } from "react";
 import { useEffect } from "react";
-import { BASE_URL_API } from "../utils/constants";
+import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 // models
-import { Coffee } from "../models/Coffee";
+import { Coffee } from "../../models/Coffee";
 
 // react components
-import MainNavbar from "./MainNavbar";
-import WarningModal from "./WarningModal";
+import MainNavbar from "../MainNavbar";
+import WarningModal from "../WarningModal";
 
 // images
-import supportImage1 from "../assets/images/coffee1.png";
-import supportImage2 from "../assets/images/coffee2.png";
-import supportImage3 from "../assets/images/coffee3.png";
-import supportImage4 from "../assets/images/coffee4.png";
+import supportImage1 from "../../assets/images/coffee1.png";
+import supportImage2 from "../../assets/images/coffee2.png";
+import supportImage3 from "../../assets/images/coffee3.png";
+import supportImage4 from "../../assets/images/coffee4.png";
 
 const DetailedCoffeeItem = () => {
   const [coffee, setCoffee] = useState<Coffee>({} as Coffee);

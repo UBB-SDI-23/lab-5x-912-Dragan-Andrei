@@ -8,21 +8,21 @@ import Autocomplete from "@mui/material/Autocomplete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 // models
-import { Blend } from "../models/Blend";
+import { Blend } from "../../models/Blend";
 
 // utils
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { BASE_URL_API } from "../utils/constants";
+import { BASE_URL_API } from "../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { debounce } from "lodash";
 
 // react components
-import MainNavbar from "./MainNavbar";
+import MainNavbar from "../MainNavbar";
 import { Box } from "@mui/material";
 
 // images
-import supportImage from "../assets/images/sweets.png";
+import supportImage from "../../assets/images/sweets.png";
 
 // create a new LocalCoffee objecet model for the edit coffee form
 interface LocalCoffee {

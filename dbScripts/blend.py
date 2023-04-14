@@ -23,11 +23,11 @@ with open('populateBlends.sql', 'w') as f:
             name = name.replace("'", "''")
 
             # generate a fake description that has a length between 1 and 1000
-            description = fake.text()[:30]
+            description = fake.text()
             description = description.replace("'", "''")
 
             # generate a fake country of origin that has a length between 1 and 50
-            country_of_origin = fake.country()[:10]
+            country_of_origin = fake.country()
             country_of_origin = country_of_origin.replace("'", "''")
 
             # generate a fake level that is between 1 and 5

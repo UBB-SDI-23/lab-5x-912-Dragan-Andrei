@@ -11,21 +11,21 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
 // react components
-import MainNavbar from "./MainNavbar";
+import MainNavbar from "../MainNavbar";
 import CoffeeItem from "./CoffeeItem";
 
 // utils
 import { useState } from "react";
 import { useEffect } from "react";
-import { BASE_URL_API } from "../utils/constants";
+import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // models
-import { Coffee } from "../models/Coffee";
+import { Coffee } from "../../models/Coffee";
 
 // images
-import supportImage from "../assets/images/macaroons_v2.png";
+import supportImage from "../../assets/images/macaroons_v2.png";
 
 const Menu = () => {
   const [coffees, setCoffees] = useState<Coffee[]>([]);

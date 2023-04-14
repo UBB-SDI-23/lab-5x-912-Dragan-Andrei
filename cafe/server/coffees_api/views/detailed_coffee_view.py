@@ -7,91 +7,16 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
 from blends_api.serializer import BlendSerializer
-from blends_api.models import Blend
 from sales_api.models import Sale
 from sales_api.serializer import SaleSerializer
 
-from rest_framework.pagination import PageNumberPagination
-
-
-class CoffeePagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 10
-    page_query_param = 'p'
-
-
-class Coffees(APIView):
-    pagination_class = CoffeePagination
-
-    @swagger_auto_schema(
-        operation_description="Get a list of all coffees",
-        manual_parameters=[
-            openapi.Parameter(
-                'min_price',
-                openapi.IN_QUERY,
-                'Get a list of all coffees with price greater than min_price',
-                type=openapi.TYPE_STRING),
-        ],
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="List of all coffees",
-                             schema=CoffeeSerializer(many=True)),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
-    def get(self, request):
-        filtered_coffees = Coffee.objects.all().order_by('-id')
-        coffee_top_price = self.request.query_params.get('min_price')
-        if coffee_top_price is not None:
-            filtered_coffees = filtered_coffees.filter(
-                price__gt=coffee_top_price)
-
-        if self.request.query_params.get('sort'):
-            filtered_coffees = filtered_coffees.order_by('price')
-
-        paginator = CoffeePagination()
-        paginated_coffees = paginator.paginate_queryset(
-            filtered_coffees, request)
-        serialized_coffees = CoffeeSerializer(paginated_coffees, many=True)
-
-        return paginator.get_paginated_response(serialized_coffees.data)
-
-    @swagger_auto_schema(
-        operation_description="Create a new coffee",
-        request_body=CoffeeSerializer,
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="Created coffee",
-                             schema=CoffeeSerializer()),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
-    def post(self, request):
-        serialized_coffee = CoffeeSerializer(data=request.data)
-        if serialized_coffee.is_valid():
-            serialized_coffee.save()
-            return Response(serialized_coffee.data)
-        return Response(serialized_coffee.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
+from sales_api.sales_pagination import SalePagination
 
 
 class CoffeeDetail(APIView):
 
     @swagger_auto_schema(
-        operation_description="Get a coffee by id",
+        operation_description="Get coffee by id",
         responses={
             status.HTTP_200_OK:
             openapi.Response(
@@ -161,9 +86,11 @@ class CoffeeDetail(APIView):
             # get the referenced blend (the 1-to-many relation)
             serialized_blend = BlendSerializer(coffee.blend_id)
 
-            # get the referenced entries inside the many-to-many relation between coffees and locations
-            sales = Sale.objects.filter(coffee_id=pk)
-            serialized_sales = SaleSerializer(sales, many=True)
+            # get the paginated referenced sales
+            sales = Sale.objects.filter(coffee_id=pk).order_by("-id")
+            paginator = SalePagination()
+            paginated_sales = paginator.paginate_queryset(sales, request)
+            serialized_sales = SaleSerializer(paginated_sales, many=True)
 
             # get the attributes of the coffee object
             serialized_coffee_data = serialized_coffee.data
@@ -180,8 +107,12 @@ class CoffeeDetail(APIView):
 
             return Response(serialized_coffee_data)
         except:
-            return Response({'error': 'Coffee does not exist'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {
+                    'error':
+                    'The coffee does not exist or there was an error receiving the related information for the coffee'
+                },
+                status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         operation_description="Update a coffee by id",
@@ -234,56 +165,3 @@ class CoffeeDetail(APIView):
         except:
             return Response({'error': 'Coffee does not exist'},
                             status=status.HTTP_400_BAD_REQUEST)
-
-
-class OtherCoffeesByBlends(APIView):
-
-    @swagger_auto_schema(
-        operation_description=
-        "Get all coffees sorted by the number of other coffees that contain the same blend",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(
-                description="Coffees",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_ARRAY,
-                    items=openapi.Schema(
-                        type=openapi.TYPE_OBJECT,
-                        properties={
-                            'name':
-                            openapi.Schema(type=openapi.TYPE_STRING),
-                            'coffees with similar blend':
-                            openapi.Schema(type=openapi.TYPE_INTEGER)
-                        })))
-        })
-    def get(self, request):
-        # show all coffees sorted by the number of other coffees that contain the same blend
-        coffees_with_similar_blend = {}
-
-        for blend in Blend.objects.all():
-            coffees_data = Coffee.objects.filter(blend_id=blend)
-            for coffee in coffees_data:
-                serialized_coffee = CoffeeSerializer(coffee)
-                coffees_with_similar_blend[
-                    serialized_coffee.data['id']] = len(coffees_data) - 1
-
-        answer = []
-        for coffee in Coffee.objects.all():
-            serialized_coffee = CoffeeSerializer(coffee)
-
-            if coffees_with_similar_blend[serialized_coffee.data['id']]:
-                answer.append({
-                    'name':
-                    serialized_coffee.data['name'],
-                    'coffees with similar blend':
-                    coffees_with_similar_blend[serialized_coffee.data['id']]
-                })
-            else:
-                answer.append({
-                    'name': serialized_coffee.data['name'],
-                    'coffees with similar blend': 0
-                })
-
-        answer.sort(key=lambda x: x['coffees with similar blend'],
-                    reverse=True)
-        return Response(answer)

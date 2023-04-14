@@ -19,11 +19,11 @@ with open('populateLocations.sql', 'w') as f:
             name = fake.name()[:10] + " Coffee Shop"
 
             # generate a fake address that has a length between 1 and 1000
-            address = fake.address()[:30]
+            address = fake.address()
             address = address.replace("'", "''")
 
             # generate a fake city that has a length between 1 and 50
-            city = fake.city()[:10]
+            city = fake.city()
             city = city.replace("'", "''")
 
             # generate a fake postal code that has a length of 5

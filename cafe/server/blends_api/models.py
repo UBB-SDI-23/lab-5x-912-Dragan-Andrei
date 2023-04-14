@@ -12,6 +12,6 @@ def validate_blend_level(value):
 class Blend(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=1000)
-    country_of_origin = models.CharField(max_length=50)
+    country_of_origin = models.CharField(max_length=1000)
     level = models.IntegerField(validators=[validate_blend_level])
     in_stock = models.BooleanField()

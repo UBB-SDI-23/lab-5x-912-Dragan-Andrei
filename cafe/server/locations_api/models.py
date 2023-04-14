@@ -12,7 +12,7 @@ def postal_code_length(value):
 class Location(models.Model):
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=1000)
-    city = models.CharField(max_length=50)
+    city = models.CharField(max_length=1000)
     postal_code = models.CharField(max_length=50,
                                    validators=[postal_code_length])
     profit = models.FloatField()

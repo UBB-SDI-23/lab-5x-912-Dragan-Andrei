@@ -1,34 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
 // css
-import './assets/css/index.css';
-import './assets/css/fonts.css';
+import "./assets/css/index.css";
+import "./assets/css/fonts.css";
 
 // utils
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material';
-import { theme } from './utils/theme';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./utils/theme";
 
 // react components
-import Menu from './components/Menu';
-import Home from './components/Home';
-import DetailedCoffeeItem from './components/DetailedCoffeeItem';
-import AddCoffee from './components/AddCoffee';
-import EditCoffee from './components/EditCoffee';
+import Menu from "./components/coffees/Menu";
+import Home from "./components/Home";
+import DetailedCoffeeItem from "./components/coffees/DetailedCoffeeItem";
+import AddCoffee from "./components/coffees/AddCoffee";
+import EditCoffee from "./components/coffees/EditCoffee";
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/coffees" element={<Menu />} />
-        <Route path="/coffees/add" element={<AddCoffee />} />
-        <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
-        <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/coffees" element={<Menu />} />
+          <Route path="/coffees/add" element={<AddCoffee />} />
+          <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
+          <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
