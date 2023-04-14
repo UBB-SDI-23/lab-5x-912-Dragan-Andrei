@@ -1,3 +1,4 @@
+import better_profanity
 from django.db import models
 from blends_api.models import Blend
 from django.core.exceptions import ValidationError
@@ -9,11 +10,24 @@ def validate_positive(value):
                               params={'value': value})
 
 
+def validate_calories(value):
+    if (value > 1000):
+        raise ValidationError(
+            '%(value)s calories is too many calories - a coffee with that many calories cannot be sold',
+            params={'value': value})
+
+
+def validate_no_profanity(value):
+    if better_profanity.profanity.contains_profanity(value):
+        raise ValidationError('no profanity allowed', params={'value': value})
+
+
 # Create your models here.
 class Coffee(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, validators=[validate_no_profanity])
     price = models.FloatField(validators=[validate_positive])
-    calories = models.IntegerField(validators=[validate_positive])
+    calories = models.IntegerField(
+        validators=[validate_positive, validate_calories])
     quantity = models.FloatField(validators=[validate_positive])
     vegan = models.BooleanField()
     blend_id = models.ForeignKey(Blend,
