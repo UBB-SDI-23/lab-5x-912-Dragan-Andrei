@@ -37,6 +37,22 @@ export const theme = createTheme({
       color: "#333333",
     },
 
+    h5: {
+      fontFamily: "Quattrocento Sans",
+      fontSize: "20px",
+      fontWeight: "bold",
+      color: "#333333",
+      lineHeight: "1",
+    },
+
+    h6: {
+      fontFamily: "Quattrocento Sans",
+      fontSize: "16px",
+      fontWeight: "bold",
+      color: "#333333",
+      lineHeight: "1",
+    },
+
     body1: {
       fontFamily: "Quattrocento Sans",
       fontSize: "16px",

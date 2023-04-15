@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 // objects
-import { Coffee } from "../models/Coffee";
+import { Coffee } from "../../models/Coffee";
 
 const CoffeeItem = ({ coffee }: { coffee: Coffee }) => {
   return (
