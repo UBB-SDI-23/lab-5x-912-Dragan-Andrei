@@ -28,8 +28,19 @@ import { Coffee } from "../../models/Coffee";
 // images
 import supportImage from "../../assets/images/macaroons_v2.png";
 
+// create local coffee object
+interface LocalCoffee {
+  id: number;
+  name: string;
+  price: number;
+  calories: number;
+  quantity: number;
+  vegan: boolean;
+  blend_id: number;
+}
+
 const Menu = () => {
-  const [coffees, setCoffees] = useState<Coffee[]>([]);
+  const [coffees, setCoffees] = useState<LocalCoffee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [minPrice, setMinPrice] = useState<string>("");
   const [isSort, setIsSort] = useState<Boolean>(false);
