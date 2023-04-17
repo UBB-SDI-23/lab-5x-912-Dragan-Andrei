@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Switch from "@mui/material/Switch";
 
 // css
 import "../../assets/css/coffees/menu.css";
@@ -22,11 +23,8 @@ import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// models
-import { Coffee } from "../../models/Coffee";
-
 // images
-import supportImage from "../../assets/images/macaroons_v2.png";
+import supportImage from "../../assets/images/coffees.jpg";
 
 // create local coffee object
 interface LocalCoffee {
@@ -72,7 +70,7 @@ const Menu = () => {
     setLoading(false);
   };
 
-  // everytime the sort state changes, reorder the coffees
+  // everytime the sort state / page size changes, reset the coffee pagination
   useEffect(() => {
     if (page === 1) getCoffees();
     else setPage(1);
@@ -93,32 +91,24 @@ const Menu = () => {
   return (
     <>
       <MainNavbar />
-      <Container maxWidth="xl" sx={{ display: "flex", paddingBottom: "32px" }}>
-        <Container sx={{ minHeight: "calc(100vh)" }}>
-          <Typography variant="h1" sx={{ mt: 10, mb: 5 }}>
+      <Container className="coffees-content-container">
+        <Container className="coffees-content" sx={{ minHeight: "calc(100vh)" }}>
+          <Typography className="coffees-big-header" variant="h1" sx={{ mt: 10, mb: 5 }}>
             Our coffees!
           </Typography>
-          <List>
-            <ListItem sx={{ width: "100%", display: "flex" }}>
-              <Box sx={{ width: "100%" }}>
-                <TextField label="Minimum price" variant="standard" value={minPrice ? minPrice : ""} onChange={(e) => setMinPrice(e.target.value)} />
+          <List className="coffees-list">
+            <ListItem className="coffees-filter-section">
+              <Box sx={{ width: "200px" }}>
+                <TextField label="Minimum price" variant="outlined" value={minPrice ? minPrice : ""} onChange={(e) => setMinPrice(e.target.value)} />
               </Box>
               <Box
-                className="sort-button"
+                className="coffees-sort-button"
                 onClick={() => {
                   setIsSort(!isSort);
                 }}
               >
-                <Typography variant="h6" mr="8px">
-                  ascending by price{" "}
-                </Typography>
-                <Box
-                  className="sort-icon"
-                  sx={{
-                    bgcolor: isSort ? "#be9063" : "#fff",
-                    color: isSort ? "#be9063" : "#333",
-                  }}
-                ></Box>
+                <Switch checked={!!isSort} onChange={() => setIsSort(!isSort)} sx={{ alignItems: "center" }} />
+                <Typography variant="h6">sort by price</Typography>
               </Box>
             </ListItem>
 
@@ -129,12 +119,12 @@ const Menu = () => {
             )}
             {!loading &&
               coffees.map((coffee) => (
-                <ListItem key={coffee.id} sx={{ width: "100%" }} onClick={() => getCoffeeDetails(coffee.id)}>
+                <ListItem key={coffee.id} sx={{ width: "100%", padding: "8px 0" }} onClick={() => getCoffeeDetails(coffee.id)}>
                   <CoffeeItem coffee={coffee} />
                 </ListItem>
               ))}
           </List>
-          <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} />
+          <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="coffees" />
           <Button
             className="add-coffee-button"
             onClick={() => navigate("/coffees/add")}
@@ -150,9 +140,9 @@ const Menu = () => {
             <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add coffee
           </Button>
         </Container>
-        <Container sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}>
-          <Box mt={20} sx={{ textAlign: "center" }}>
-            <img src={supportImage} alt="macaroons" height="600px" />
+        <Container className="coffees-support-image">
+          <Box mt={10} sx={{ textAlign: "center" }}>
+            <img src={supportImage} alt="image with some tasty coffees made by us" />
           </Box>
         </Container>
       </Container>

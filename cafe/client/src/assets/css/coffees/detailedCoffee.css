@@ -1,0 +1,79 @@
+.coffee-content-container {
+  display: flex !important;
+  max-width: 1600px !important;
+  padding-bottom: 40px !important;
+}
+
+.coffee-content {
+  width: 75% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.coffee-support-image {
+  display: flex !important;
+  margin: 0 0 !important;
+  height: fit-content !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.coffee-support-image img {
+  max-height: 650px !important;
+  width: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+.edit-coffee-button {
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  border: 2px solid #333 !important;
+  background-color: #333 !important;
+  transition: all 0.5s ease-in-out !important;
+}
+.edit-coffee-button:hover {
+  background-color: #be9063 !important;
+}
+
+.delete-coffee-button {
+  color: #333 !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  border: 2px solid #333 !important;
+  box-sizing: border-box !important;
+  transition: all 0.5s ease-in-out !important;
+}
+.delete-coffee-button:hover {
+  border: 2px solid #333 !important;
+  background-color: #be9063 !important;
+  color: #fff !important;
+}
+
+@media (max-width: 1000px) {
+  .coffee-content-container {
+    display: block !important;
+    height: fit-content !important;
+  }
+
+  .coffee-content {
+    max-width: 700px !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  .coffee-support-image {
+    margin-top: 0 !important;
+  }
+
+  .coffee-support-image img {
+    width: calc(100% - 32px) !important;
+    max-width: 400px !important;
+    height: auto !important;
+  }
+}

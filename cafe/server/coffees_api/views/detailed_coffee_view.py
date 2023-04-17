@@ -103,7 +103,8 @@ class CoffeeDetail(APIView):
             for sale in serialized_sales.data:
                 sale['revenue'] = round(sale['revenue'], 2)
                 del sale['coffee_id']
-            serialized_coffee_data['sales'] = serialized_sales.data
+            serialized_coffee_data['sales'] = paginator.get_paginated_response(
+                serialized_sales.data).data
 
             return Response(serialized_coffee_data)
         except:

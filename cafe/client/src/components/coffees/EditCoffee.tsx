@@ -26,7 +26,7 @@ import MainNavbar from "../MainNavbar";
 import { Box } from "@mui/material";
 
 // images
-import supportImage from "../../assets/images/sweets.png";
+import supportImage from "../../assets/images/edit_coffee.jpg";
 
 // create a new LocalCoffee objecet model for the edit coffee form
 interface LocalCoffee {
@@ -372,9 +372,9 @@ const EditCoffee = () => {
   return (
     <>
       <MainNavbar />
-      <Container maxWidth="xl" sx={{ display: { lg: "flex" } }}>
-        <Container maxWidth="sm" sx={{ minHeight: "100vh", marginLeft: "0" }}>
-          <Typography variant="h1" sx={{ mt: 10, mb: 2 }}>
+      <Container className="create-coffee-content-container">
+        <Container className="create-coffee-content" sx={{ minHeight: "calc(100vh - 160px)" }}>
+          <Typography variant="h1" className="create-coffee-big-header" sx={{ mt: 10, mb: 2 }}>
             Edit coffee!
           </Typography>
 
@@ -385,7 +385,7 @@ const EditCoffee = () => {
           )}
 
           {!loading ? (
-            <Box>
+            <Box className="create-coffee-fields">
               <TextField
                 label="Name"
                 variant="outlined"
@@ -508,7 +508,7 @@ const EditCoffee = () => {
           <Button
             onClick={() => editCoffee()}
             variant="contained"
-            className="create-button"
+            className="create-coffee-button"
             sx={{
               boxShadow: 4,
               "&:hover": {
@@ -519,9 +519,9 @@ const EditCoffee = () => {
             <ModeEditIcon sx={{ mr: "8px" }} /> Edit
           </Button>
         </Container>
-        <Container sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}>
+        <Container className="create-coffee-support-image">
           <Box mt={10} sx={{ textAlign: "center" }}>
-            <img src={supportImage} alt="create coffee" height="600px" />
+            <img src={supportImage} alt="edit coffee" height="600px" />
           </Box>
         </Container>
       </Container>

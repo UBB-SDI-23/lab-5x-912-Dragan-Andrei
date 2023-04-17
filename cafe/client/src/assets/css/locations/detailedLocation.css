@@ -1,0 +1,104 @@
+.location-content-container {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+}
+
+.location-content {
+  width: 40% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.location-sales {
+  width: calc(100% - 32px) !important;
+  max-width: 1600px !important;
+  padding-bottom: 40px !important;
+  margin: 80px auto 0 auto !important;
+}
+
+.location-support-image {
+  position: relative;
+  display: flex !important;
+  width: 55% !important;
+  height: auto !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  margin: 64px 0 0 0 !important;
+}
+
+.location-support-image img {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  display: block !important;
+  margin: 0 auto !important;
+  min-height: 650px !important;
+  height: calc(100% + 64px) !important;
+  width: auto !important;
+}
+
+.edit-location-button {
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  border: 2px solid #333 !important;
+  background-color: #333 !important;
+  transition: all 0.5s ease-in-out !important;
+}
+.edit-location-button:hover {
+  background-color: #be9063 !important;
+}
+
+.delete-location-button {
+  color: #333 !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  border: 2px solid #333 !important;
+  box-sizing: border-box !important;
+  transition: all 0.5s ease-in-out !important;
+}
+.delete-location-button:hover {
+  border: 2px solid #333 !important;
+  background-color: #be9063 !important;
+  color: #fff !important;
+}
+
+@media (max-width: 1000px) {
+  .location-content-container {
+    display: block !important;
+    height: fit-content !important;
+  }
+
+  .location-content {
+    max-width: 700px !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  .location-support-image {
+    padding: 0 !important;
+    margin-top: 16px !important;
+    width: 100vw !important;
+    height: fit-content !important;
+    transform: translateX(-24px);
+  }
+
+  .location-support-image img {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .location-sales {
+    width: calc(100% - 64px) !important;
+    max-width: 700px !important;
+    margin-top: 0 !important;
+  }
+}

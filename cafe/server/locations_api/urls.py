@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path
-from locations_api.views import Locations, LocationDetail, LocationCoffee
+from .views.detailed_location_view import LocationDetail
+from .views.location_sales_view import LocationCoffee
+from .views.locations_view import Locations
 
 # Create the url endpoints for the location API
 urlpatterns = [

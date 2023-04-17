@@ -18,7 +18,7 @@ const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
         <Link to="/">Home</Link>
         <Link to="/coffees">Menu</Link>
         <Link to="/">About</Link>
-        <Link to="/">Location</Link>
+        <Link to="/locations">Locations</Link>
         <Link to="/">Contact</Link>
       </div>
 

@@ -1,23 +1,47 @@
-.sort-button {
+.coffees-content-container {
   display: flex !important;
-  width: 300px !important;
-  align-items: center !important;
-  justify-content: right !important;
+  max-width: 1600px !important;
+  padding-bottom: 40px !important;
 }
-.sort-button:hover {
+
+.coffees-content {
+  width: 75% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.coffees-filter-section {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 0 !important;
+  margin-bottom: 24px;
+}
+
+.coffees-sort-button {
+  display: block !important;
+  width: 100px !important;
+  align-items: right !important;
+  justify-content: right !important;
+  text-align: right !important;
+}
+.coffees-sort-button:hover {
   cursor: pointer !important;
 }
 
-.sort-icon {
-  width: 24px !important;
-  height: 24px !important;
-  border: 3px solid #333 !important;
-  border-radius: 50% !important;
-  box-sizing: border-box !important;
-  transition: all 0.1s ease-in-out !important;
+.coffees-support-image {
+  display: flex !important;
+  margin: 0 0 !important;
+  height: fit-content !important;
+  flex-direction: column !important;
+  justify-content: center !important;
 }
-.sort-icon:hover {
-  cursor: pointer !important;
+
+.coffees-support-image img {
+  width: 75% !important;
+  height: auto !important;
+  display: block !important;
+  box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.6) !important;
+  margin: 0 auto !important;
 }
 
 .add-coffee-button {
@@ -29,9 +53,35 @@
   border: 2px solid #333 !important;
   background-color: #333 !important;
   transition: "all 0.5s ease-in-out" !important;
+  margin-top: 0 !important;
 }
 .add-coffee-button:hover {
   border: 2px solid #333 !important;
   background-color: #be9063 !important;
   color: #fff !important;
+}
+
+@media (max-width: 1000px) {
+  .coffees-content-container {
+    display: block !important;
+  }
+
+  .coffees-list {
+    max-width: 600px !important;
+    margin: 0 auto !important;
+  }
+
+  .coffees-content {
+    max-width: 700px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .coffees-support-image img {
+    display: none !important;
+  }
+
+  .coffees-support-image {
+    display: none !important;
+  }
 }

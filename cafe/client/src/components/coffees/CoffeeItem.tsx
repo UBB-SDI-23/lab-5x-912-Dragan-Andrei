@@ -27,8 +27,8 @@ const CoffeeItem = ({ coffee }: { coffee: LocalCoffee }) => {
 
   const getBlendUsage = async () => {
     setLoading(true);
-    const blend_id = coffee.blend_id;
-    const response = await axios.get(`${BASE_URL_API}/blends/${blend_id}`);
+    const blendId = coffee.blend_id;
+    const response = await axios.get(`${BASE_URL_API}/blends/${blendId}`);
     const data = await response.data;
     setBlendUsage(data.coffees.length);
     setLoading(false);
@@ -40,16 +40,23 @@ const CoffeeItem = ({ coffee }: { coffee: LocalCoffee }) => {
   return (
     <Box className="coffee-item-container">
       <Box className="coffee-item">
-        <Typography variant="h4">{coffee.name}</Typography>
+        <Typography className="coffee-item-text" variant="h4">
+          {coffee.name}
+          <span>
+            <Box className="coffee-item-line" mx={2}></Box>
+          </span>
+        </Typography>
         <Box className="coffee-item-line" mx={2}></Box>
-        <Typography variant="h4">{coffee.price}$</Typography>
+        <Typography className="coffee-item-text coffee-item-text-left" variant="h4">
+          {coffee.price}$
+        </Typography>
       </Box>
       {!loading ? (
-        <Typography className="sub-header" variant="body1">
+        <Typography className="coffee-sub-header" variant="body1">
           Blend popularity: used for {blendUsage} coffee(s)!
         </Typography>
       ) : (
-        <Typography className="sub-header" variant="body1">
+        <Typography className="coffee-sub-header" variant="body1">
           Blend popularity: used for ... coffee(s)!
         </Typography>
       )}

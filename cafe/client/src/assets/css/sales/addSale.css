@@ -1,0 +1,79 @@
+.create-sale-content-container {
+  display: flex !important;
+  max-width: 1600px !important;
+  padding-bottom: 40px !important;
+}
+
+.create-sale-content {
+  width: 75% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.create-sale-support-image {
+  display: flex !important;
+  margin: 0 0 !important;
+  height: fit-content !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.create-sale-support-image img {
+  width: 75% !important;
+  height: auto !important;
+  display: block !important;
+  box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.6) !important;
+  margin: 0 auto !important;
+}
+
+.create-sale-button {
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  border: 2px solid #333 !important;
+  background-color: #333 !important;
+  transition: "all 0.5s ease-in-out" !important;
+  margin: 16px 0 0 0 !important;
+}
+.create-sale-button:hover {
+  border: 2px solid #333 !important;
+  background-color: #be9063 !important;
+  color: #fff !important;
+}
+
+.autocomplete-coffee {
+  margin: 12px 0 !important;
+  width: 100% !important;
+  display: inline-block !important;
+}
+
+.sold-coffees-field {
+  margin: 12px 0 !important;
+  width: 100% !important;
+}
+
+@media (max-width: 1000px) {
+  .create-sale-content-container {
+    display: block !important;
+  }
+
+  .create-sale-content {
+    max-width: 700px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .create-sale-support-image img {
+    display: none !important;
+  }
+
+  .create-sale-support-image {
+    display: none !important;
+  }
+
+  .create-sale-fields {
+    text-align: left !important;
+  }
+}

@@ -34,25 +34,16 @@ const MainNavbar = () => {
 
   return (
     <>
-      {isNavbarOpen ? (
-        <ExpandedNavbar openNav={openNav} closeNav={closeNav} />
-      ) : null}
+      {isNavbarOpen ? <ExpandedNavbar openNav={openNav} closeNav={closeNav} /> : null}
 
-      <AppBar
-        position="static"
-        sx={{ bgcolor: "#be9063", height: "80px" }}
-        elevation={6}
-      >
+      <AppBar position="static" sx={{ bgcolor: "#be9063", height: "80px" }} elevation={6}>
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ height: "80px" }}>
             <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
               <img src={simpleLogo} alt="logo" height="30px" />
             </Box>
 
-            <Box
-              sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-              onClick={openNav}
-            >
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }} onClick={openNav}>
               <div id="open_nav" onClick={() => openNav()}>
                 <div id="line1"></div>
                 <div id="line2"></div>
@@ -69,7 +60,7 @@ const MainNavbar = () => {
                 <Link to="/">Home</Link>
                 <Link to="/coffees">Menu</Link>
                 <Link to="/">About</Link>
-                <Link to="/">Location</Link>
+                <Link to="/locations">Locations</Link>
                 <Link to="/">Contact</Link>
               </div>
             </Box>

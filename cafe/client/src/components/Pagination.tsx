@@ -16,9 +16,10 @@ interface PaginationProps {
   totalEntries: number;
   setPage: any;
   setPageSize: any;
+  entityName: string;
 }
 
-const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize }: PaginationProps) => {
+const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entityName }: PaginationProps) => {
   // function to handle page navigation
   const changePage = (value: number) => {
     if (value === -1 && page > 1) setPage((prev: number) => prev - 1);
@@ -122,6 +123,7 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize }: Pagi
             <>
               {Array.from(Array(Math.ceil(totalEntries / pageSize)).keys()).map((item) => (
                 <Typography
+                  key={item}
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
                     Number(target.innerHTML) && setPage(Number(target.innerHTML));
@@ -143,15 +145,15 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize }: Pagi
           </Typography>
           <TextField
             select
-            variant="outlined"
+            variant="standard"
             defaultValue={pageSize}
             value={pageSize}
             onChange={(e) => setPageSize(+e.target.value)}
             className="page-size-textbox"
           >
-            <MenuItem value={10}>10 coffees</MenuItem>
-            <MenuItem value={15}>15 coffees</MenuItem>
-            <MenuItem value={20}>20 coffees</MenuItem>
+            <MenuItem value={10}>10 {entityName}</MenuItem>
+            <MenuItem value={15}>15 {entityName}</MenuItem>
+            <MenuItem value={20}>20 {entityName}</MenuItem>
           </TextField>
         </Box>
       </Box>

@@ -5,6 +5,9 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
+// css
+import "../../assets/css/coffees/detailedCoffee.css";
+
 // utils
 import { useState } from "react";
 import { useEffect } from "react";
@@ -67,22 +70,15 @@ const DetailedCoffeeItem = () => {
     <>
       <MainNavbar />
       {deleteModal && (
-        <WarningModal
-          message="Are you sure you want to delete this coffee?"
-          accept={() => deleteCoffee(coffee.id)}
-          reject={() => setDeleteModal(false)}
-        />
+        <WarningModal message="Are you sure you want to delete this coffee?" accept={() => deleteCoffee(coffee.id)} reject={() => setDeleteModal(false)} />
       )}
-      <Container maxWidth="xl" sx={{ display: "flex" }}>
-        <Container maxWidth="sm" sx={{ minHeight: "100vh" }}>
+      <Container className="coffee-content-container" sx={{ minHeight: "100vh" }}>
+        <Container className="coffee-content">
           <Typography variant="h1" sx={{ mt: 10, mb: 2 }}>
             {coffee.name ? coffee.name : "Loading..."}
           </Typography>
 
-          <Typography
-            variant="body2"
-            sx={{ color: "#e64545", marginLeft: "2px" }}
-          >
+          <Typography variant="body2" sx={{ color: "#e64545", marginLeft: "2px" }}>
             {error}
           </Typography>
 
@@ -96,20 +92,12 @@ const DetailedCoffeeItem = () => {
                 }}
               >
                 <Button
+                  className="edit-coffee-button"
                   variant="contained"
                   sx={{
-                    color: "#ffffff",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    borderRadius: "4px",
-                    letterSpacing: "1px",
-                    border: "2px solid #333",
-                    bgcolor: "#333",
                     boxShadow: 4,
-                    transition: "all 0.5s ease-in-out",
                     "&:hover": {
                       boxShadow: 2,
-                      backgroundColor: "#be9063",
                     },
                   }}
                   onClick={() => navigate(`edit`)}
@@ -118,24 +106,14 @@ const DetailedCoffeeItem = () => {
                 </Button>
 
                 <Button
+                  className="delete-coffee-button"
                   onClick={() => setDeleteModal(true)}
                   variant="outlined"
                   sx={{
                     ml: 3,
-                    color: "#333333",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    borderRadius: "4px",
-                    letterSpacing: "1px",
-                    border: "2px solid #333",
-                    boxSizing: "border-box",
                     boxShadow: 4,
-                    transition: "all 0.5s ease-in-out",
                     "&:hover": {
                       boxShadow: 2,
-                      border: "2px solid #333",
-                      bgcolor: "#be9063",
-                      color: "#ffffff",
                     },
                   }}
                 >
@@ -184,9 +162,7 @@ const DetailedCoffeeItem = () => {
                 <Typography ml={2} variant="h3">
                   {coffee.blend.name}
                   <Typography mt={1} variant="body1">
-                    {coffee.blend.description} Originally from{" "}
-                    {coffee.blend.country_of_origin}, having a strngth level of{" "}
-                    {coffee.blend.level}.
+                    {coffee.blend.description} Originally from {coffee.blend.country_of_origin}, having a strngth level of {coffee.blend.level}.
                   </Typography>
 
                   <Box mt={1} sx={{ display: "flex" }}>
@@ -200,22 +176,12 @@ const DetailedCoffeeItem = () => {
             </>
           )}
         </Container>
-        <Container
-          sx={{ display: { md: "none", sm: "none", xs: "none", lg: "block" } }}
-        >
+        <Container className="coffee-support-image">
           <Box mt={10} sx={{ textAlign: "center" }}>
-            {(coffee.id % 4) + 1 == 1 && (
-              <img src={supportImage1} alt="coffee" height="600px" />
-            )}
-            {(coffee.id % 4) + 1 == 2 && (
-              <img src={supportImage2} alt="coffee" height="600px" />
-            )}
-            {(coffee.id % 4) + 1 == 3 && (
-              <img src={supportImage3} alt="coffee" height="600px" />
-            )}
-            {(coffee.id % 4) + 1 == 4 && (
-              <img src={supportImage4} alt="coffee" height="600px" />
-            )}
+            {(coffee.id % 4) + 1 == 1 && <img src={supportImage1} alt="coffee" height="600px" />}
+            {(coffee.id % 4) + 1 == 2 && <img src={supportImage2} alt="coffee" height="600px" />}
+            {(coffee.id % 4) + 1 == 3 && <img src={supportImage3} alt="coffee" height="600px" />}
+            {(coffee.id % 4) + 1 == 4 && <img src={supportImage4} alt="coffee" height="600px" />}
           </Box>
         </Container>
       </Container>
