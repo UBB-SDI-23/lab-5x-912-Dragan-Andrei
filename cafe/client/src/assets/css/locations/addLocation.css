@@ -1,0 +1,89 @@
+.create-location-content-container {
+  display: flex !important;
+  max-width: 1600px !important;
+  padding-bottom: 40px !important;
+}
+
+.create-location-content {
+  width: 75% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.create-location-support-image {
+  display: flex !important;
+  margin: 0 0 !important;
+  height: fit-content !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.create-location-support-image img {
+  width: 75% !important;
+  height: auto !important;
+  display: block !important;
+  box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.6) !important;
+  margin: 0 auto !important;
+}
+
+.create-location-button {
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  border: 2px solid #333 !important;
+  background-color: #333 !important;
+  transition: "all 0.5s ease-in-out" !important;
+  margin: 16px 0 0 0 !important;
+}
+.create-location-button:hover {
+  border: 2px solid #333 !important;
+  background-color: #be9063 !important;
+  color: #fff !important;
+}
+
+.city-field {
+  margin: 12px 0 !important;
+  width: calc(32% - 4px) !important;
+  margin-right: 4px !important;
+}
+
+.postal-code-field {
+  margin: 12px 4px !important;
+  width: calc(32% - 8px) !important;
+}
+
+.profit-field {
+  margin: 12px 0px !important;
+  width: calc(32% - 4px) !important;
+  margin-left: 4px !important;
+}
+
+.description-field {
+  margin: 12px 0 !important;
+}
+
+@media (max-width: 1000px) {
+  .create-location-content-container {
+    display: block !important;
+  }
+
+  .create-location-content {
+    max-width: 700px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .create-location-support-image img {
+    display: none !important;
+  }
+
+  .create-location-support-image {
+    display: none !important;
+  }
+
+  .create-location-fields {
+    text-align: left !important;
+  }
+}

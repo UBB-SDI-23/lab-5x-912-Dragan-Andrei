@@ -9,6 +9,7 @@
   width: 40% !important;
   padding: 0 !important;
   text-align: left !important;
+  min-height: 600px !important;
 }
 
 .location-sales {
@@ -79,6 +80,7 @@
     max-width: 700px !important;
     width: 100% !important;
     text-align: left !important;
+    min-height: 0px !important;
   }
 
   .location-support-image {

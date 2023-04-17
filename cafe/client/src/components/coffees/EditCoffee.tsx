@@ -321,11 +321,12 @@ const EditCoffee = () => {
     // send the put request
     try {
       const response = await axios.put(`${BASE_URL_API}/coffees/${id}`, updatedCoffee);
-      if (response.status === 200) {
+      if (response.status >= 200 && response.status < 300) {
         navigate("/coffees");
         return;
       }
-      // if the response is not 200, then something went wrong
+
+      // if the response is not a successful one, then something went wrong
       setLocalError((prevError) => ({
         ...prevError,
         generic: "Something went wrong! Make sure you filled all the fields correctly.",

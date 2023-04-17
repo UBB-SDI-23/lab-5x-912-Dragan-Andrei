@@ -3,11 +3,8 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Switch from "@mui/material/Switch";
 
 // css
 import "../../assets/css/sales/salesMenu.css";

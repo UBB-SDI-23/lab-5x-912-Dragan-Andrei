@@ -17,6 +17,8 @@ import DetailedCoffeeItem from "./components/coffees/DetailedCoffeeItem";
 import AddCoffee from "./components/coffees/AddCoffee";
 import EditCoffee from "./components/coffees/EditCoffee";
 import AddSale from "./components/sales/AddSale";
+import AddLocation from "./components/locations/AddLocation";
+import EditLocation from "./components/locations/EditLocation";
 
 import LocationsMenu from "./components/locations/LocationsMenu";
 import DetailedLocationItem from "./components/locations/DetailedLocationItem";
@@ -32,6 +34,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
           <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
           <Route path="/locations" element={<LocationsMenu />} />
+          <Route path="/locations/add" element={<AddLocation />} />
+          <Route path="/locations/:id/edit/" element={<EditLocation />} />
           <Route path="/locations/:id" element={<DetailedLocationItem />} />
           <Route path="/locations/:id/add" element={<AddSale />} />
         </Routes>

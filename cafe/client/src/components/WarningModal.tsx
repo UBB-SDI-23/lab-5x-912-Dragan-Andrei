@@ -26,7 +26,7 @@ const WarningModal = ({ message, accept, reject }: WarningModalProps) => {
           color: "#333333",
           borderRadius: "8px",
           width: "calc(100% - 32px)",
-          maxWidth: "400px",
+          maxWidth: "300px",
           textAlign: "center",
         }}
       >
