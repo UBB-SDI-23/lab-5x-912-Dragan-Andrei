@@ -8,9 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from sales_api.models import Sale
 from locations_api.models import Location
-
-from django.db import connection
-from sales_api.sales_pagination import SalePagination
+from locations_api.location_pagination import LocationPagination
 
 
 class SalesByLocation(APIView):
@@ -44,12 +42,20 @@ class SalesByLocation(APIView):
         })
     def get(self, request):
         # order the locations by their average number of sold coffees sold per sale
-        cursor = connection.cursor()
-        sql_query = "SELECT locations.name, AVG(sales.sold_coffees) AS avg_sell FROM locations_api_location locations INNER JOIN sales_api_sale sales ON locations.id = sales.location_id_id GROUP BY locations.name ORDER BY avg_sell DESC"
-        cursor.execute(sql_query)
-        rows = cursor.fetchall()
-        answer = [dict(zip(['name', 'avg_sell'], row)) for row in rows]
+        # cursor = connection.cursor()
+        # sql_query = "SELECT name, avg_sell FROM (SELECT location_id_id, AVG(sold_coffees) AS avg_sell FROM sales_api_sale GROUP BY location_id_id) subquery INNER JOIN locations_api_location ON subquery.location_id_id = locations_api_location.id ORDER BY avg_sell DESC"
+        # cursor.execute(sql_query)
+        # rows = cursor.fetchall()
+        # answer = [dict(zip(['name', 'avg_sell'], row)) for row in rows]
+        locations = Location.objects.all().order_by('-id')
+        count = locations.count()
+        paginator = LocationPagination()
+        paginated_locations = paginator.paginate_queryset(locations, request)
 
-        paginator = SalePagination()
-        return paginator.get_paginated_response(
-            paginator.paginate_queryset(answer, request))
+        answer = []
+        for location in paginated_locations:
+            avg_sell = location.sale_set.aggregate(
+                avg_sell=Avg('sold_coffees'))['avg_sell']
+            answer.append({'name': location.name, 'avg_sell': avg_sell})
+
+        return Response({'results': answer, 'count': count})
