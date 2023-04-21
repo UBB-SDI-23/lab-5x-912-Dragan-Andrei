@@ -24,11 +24,13 @@ import AddLocation from "./components/locations/AddLocation";
 import EditLocation from "./components/locations/EditLocation";
 import LocationsMenu from "./components/locations/LocationsMenu";
 import DetailedLocationItem from "./components/locations/DetailedLocationItem";
+import SalesByLocation from "./components/locations/SalesByLocation";
 
 import BlendsMenu from "./components/blends/BlendsMenu";
 import DetailedBlendItem from "./components/blends/DetailedBlendItem";
 import AddBlend from "./components/blends/AddBlend";
 import EditBlend from "./components/blends/EditBlend";
+import CountriesByBlends from "./components/blends/CountriesByBlends";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -47,11 +49,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Route path="/locations/:id/edit/" element={<EditLocation />} />
           <Route path="/locations/:id" element={<DetailedLocationItem />} />
           <Route path="/locations/:id/add" element={<AddSale />} />
+          <Route path="/locations/sales-by-location" element={<SalesByLocation />} />
 
           <Route path="/blends" element={<BlendsMenu />} />
           <Route path="/blends/:id" element={<DetailedBlendItem />} />
           <Route path="/blends/add" element={<AddBlend />} />
           <Route path="/blends/:id/edit" element={<EditBlend />} />
+          <Route path="/blends/country" element={<CountriesByBlends />} />
         </Routes>
       </Router>
     </ThemeProvider>

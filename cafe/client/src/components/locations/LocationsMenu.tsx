@@ -78,8 +78,11 @@ const LocationsMenu = () => {
       <MainNavbar />
       <Container className="locations-content-container">
         <Container className="locations-content" sx={{ minHeight: "calc(100vh)" }}>
-          <Typography className="locations-big-header" variant="h1" sx={{ mt: 10, mb: 5 }}>
+          <Typography className="locations-big-header" variant="h1" sx={{ mt: 10, mb: 0 }}>
             Where can you find us!
+          </Typography>
+          <Typography className="locations-small-header" variant="body2" sx={{ mb: 5, mt: 2 }} onClick={() => navigate("sales-by-location")}>
+            See how well our top locations performed!
           </Typography>
           <List className="locations-list">
             {loading && (

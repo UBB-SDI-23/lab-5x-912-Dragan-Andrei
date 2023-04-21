@@ -1,0 +1,118 @@
+.stat-content-container {
+  display: flex !important;
+  max-width: 1600px !important;
+  padding-bottom: 40px !important;
+}
+
+.stat-content {
+  width: 75% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.stat-support-image {
+  display: flex !important;
+  margin: 0 0 !important;
+  height: fit-content !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.stat-support-image img {
+  width: 75% !important;
+  height: auto !important;
+  display: block !important;
+  box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.6) !important;
+  margin: 0 auto !important;
+}
+
+.stat-item {
+  display: flex !important;
+  width: 100% !important;
+  box-shadow: none !important;
+  transition: all 0.5s ease-in-out !important;
+}
+
+.stat-item-text {
+  display: flex !important;
+  flex-direction: row !important;
+  max-width: 50% !important;
+}
+
+.stat-item-text-left {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: end !important;
+}
+
+.stat-item-text span {
+  font-size: 20px !important;
+  font-weight: normal !important;
+  display: flex !important;
+}
+
+.stat-item-text span .stat-item-line {
+  margin-left: 8px !important;
+  margin-right: 0 !important;
+}
+
+.stat-item-line {
+  flex-grow: 1 !important;
+  flex-shrink: 0 !important;
+  flex-basis: 0 !important;
+  min-width: 10px !important;
+  border-bottom: 2px dashed #333 !important;
+  transform: translateY(-8px) !important;
+  margin: 0 8px 0 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: end !important;
+}
+
+.stat-item-container:hover {
+  padding: 16px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.stat-sub-header {
+  color: #be9063 !important;
+  margin-top: 4px !important;
+}
+
+@media (max-width: 500px) {
+  .stat-item-line {
+    transform: translateY(-6px) !important;
+  }
+
+  .stat-item-text {
+    font-size: 20px !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .stat-content-container {
+    display: block !important;
+  }
+
+  .stat-list {
+    max-width: 600px !important;
+    margin: 0 auto !important;
+  }
+
+  .stat-content {
+    max-width: 700px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .stat-support-image img {
+    display: none !important;
+  }
+
+  .stat-support-image {
+    display: none !important;
+  }
+}

@@ -43,6 +43,19 @@
   color: #fff !important;
 }
 
+.locations-small-header {
+  width: fit-content !important;
+  font-size: 20px !important;
+  color: #333 !important;
+  padding-bottom: 2px !important;
+  border-bottom: 2px solid #333 !important;
+  transition: 0.2s ease-in-out !important;
+}
+.locations-small-header:hover {
+  cursor: pointer !important;
+  color: #be9063 !important;
+}
+
 @media (max-width: 1000px) {
   .locations-content-container {
     display: block !important;
@@ -57,6 +70,10 @@
     max-width: 700px !important;
     width: 100% !important;
     text-align: center !important;
+  }
+
+  .locations-small-header {
+    margin: 16px auto 32px auto !important;
   }
 
   .locations-support-image img {

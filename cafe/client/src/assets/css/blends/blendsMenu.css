@@ -43,6 +43,19 @@
   color: #fff !important;
 }
 
+.blends-small-header {
+  width: fit-content !important;
+  font-size: 20px !important;
+  color: #333 !important;
+  padding-bottom: 2px !important;
+  border-bottom: 2px solid #333 !important;
+  transition: 0.2s ease-in-out !important;
+}
+.blends-small-header:hover {
+  cursor: pointer !important;
+  color: #be9063 !important;
+}
+
 @media (max-width: 1000px) {
   .blends-content-container {
     display: block !important;
@@ -51,6 +64,10 @@
   .blends-list {
     max-width: 600px !important;
     margin: 0 auto !important;
+  }
+
+  .blends-small-header {
+    margin: 16px auto 32px auto !important;
   }
 
   .blends-content {

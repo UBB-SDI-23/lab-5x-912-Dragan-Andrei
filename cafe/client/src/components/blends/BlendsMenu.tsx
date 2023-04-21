@@ -78,8 +78,11 @@ const BlendsMenu = () => {
       <MainNavbar />
       <Container className="blends-content-container">
         <Container className="blends-content" sx={{ minHeight: "calc(100vh)" }}>
-          <Typography className="blends-big-header" variant="h1" sx={{ mt: 10, mb: 5 }}>
+          <Typography className="blends-big-header" variant="h1" sx={{ mt: 10, mb: 0 }}>
             Our blends!
+          </Typography>
+          <Typography className="blends-small-header" variant="body2" sx={{ mb: 5, mt: 2 }} onClick={() => navigate("country")}>
+            See from where our blends come from!
           </Typography>
           <List className="blends-list">
             {loading && (
