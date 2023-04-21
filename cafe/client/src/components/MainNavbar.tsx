@@ -61,7 +61,7 @@ const MainNavbar = () => {
                 <Link to="/coffees">Menu</Link>
                 <Link to="/">About</Link>
                 <Link to="/locations">Locations</Link>
-                <Link to="/">Contact</Link>
+                <Link to="/blends">Blends</Link>
               </div>
             </Box>
           </Toolbar>

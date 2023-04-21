@@ -51,7 +51,7 @@ const DetailedCoffeeItem = () => {
   const deleteCoffee = async (id: number) => {
     try {
       const respone = await axios.delete(`${BASE_URL_API}/coffees/${id}`);
-      if (respone.status === 204) {
+      if (respone.status >= 200 && respone.status < 300) {
         navigate("/coffees");
         return;
       } else {

@@ -19,7 +19,7 @@ const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
         <Link to="/coffees">Menu</Link>
         <Link to="/">About</Link>
         <Link to="/locations">Locations</Link>
-        <Link to="/">Contact</Link>
+        <Link to="/blends">Blends</Link>
       </div>
 
       <div id="close_button" onClick={closeNav}>

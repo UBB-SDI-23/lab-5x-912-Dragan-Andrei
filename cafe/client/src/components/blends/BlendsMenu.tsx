@@ -8,11 +8,11 @@ import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // css
-import "../../assets/css/locations/locationsMenu.css";
+import "../../assets/css/blends/blendsMenu.css";
 
 // react components
 import MainNavbar from "../MainNavbar";
-import LocationItem from "./LocationItem";
+import BlendItem from "./BlendItem";
 import Pagination from "../Pagination";
 
 // utils
@@ -22,13 +22,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // images
-import supportImage from "../../assets/images/location.jpg";
+import supportImage from "../../assets/images/blends.jpg";
 
 // objects
-import { Location } from "../../models/Location";
+import { Blend } from "../../models/Blend";
 
-const LocationsMenu = () => {
-  const [locations, setLocations] = useState<Location[]>([]);
+const BlendsMenu = () => {
+  const [blends, setBlends] = useState<Blend[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
@@ -39,65 +39,65 @@ const LocationsMenu = () => {
 
   const navigate = useNavigate();
 
-  // function to get all locations
-  const getLocations = async () => {
+  // function to get all blends
+  const getBlends = async () => {
     setLoading(true);
     const currentFetchCall = lastFetchCall;
 
-    let url = `${BASE_URL_API}/locations?page_size=${pageSize}`;
+    let url = `${BASE_URL_API}/blends?page_size=${pageSize}`;
     url += "&p=" + page;
 
     setLastFetchCall((prev) => prev + 1);
     const response = await axios.get(url);
     const data = await response.data;
     if (currentFetchCall === lastFetchCall) {
-      setLocations(data.results);
+      setBlends(data.results);
       setTotalEntries(data.count);
     }
     setLoading(false);
   };
 
-  // everytime the page size changes, reset the page to 1 and fetch the locations if needed
+  // everytime the page size changes, reset the page to 1 and fetch the blends if needed
   useEffect(() => {
-    if (page === 1) getLocations();
+    if (page === 1) getBlends();
     else setPage(1);
   }, [pageSize]);
 
-  // navigator to a clicked location
-  const getLocationDetails = (id: number) => {
-    navigate(`/locations/${id}`);
+  // navigator to a clicked blend
+  const getBlendDetails = (id: number) => {
+    navigate(`/blends/${id}`);
   };
 
-  // everytime the content of the selected page / the page size changes, fetch the locations
+  // everytime the content of the selected page / the page size changes, fetch the blends
   useEffect(() => {
-    getLocations();
+    getBlends();
   }, [page, pageSize]);
 
   return (
     <>
       <MainNavbar />
-      <Container className="locations-content-container">
-        <Container className="locations-content" sx={{ minHeight: "calc(100vh)" }}>
-          <Typography className="locations-big-header" variant="h1" sx={{ mt: 10, mb: 5 }}>
-            Where can you find us!
+      <Container className="blends-content-container">
+        <Container className="blends-content" sx={{ minHeight: "calc(100vh)" }}>
+          <Typography className="blends-big-header" variant="h1" sx={{ mt: 10, mb: 5 }}>
+            Our blends!
           </Typography>
-          <List className="locations-list">
+          <List className="blends-list">
             {loading && (
               <Typography variant="h2" ml="8px">
                 Loading...
               </Typography>
             )}
             {!loading &&
-              locations.map((location) => (
-                <ListItem key={location.id} sx={{ width: "100%", padding: "16px 0" }} onClick={() => getLocationDetails(location.id)}>
-                  <LocationItem location={location} />
+              blends.map((blend) => (
+                <ListItem key={blend.id} sx={{ width: "100%", padding: "16px 0" }} onClick={() => getBlendDetails(blend.id)}>
+                  <BlendItem blend={blend} />
                 </ListItem>
               ))}
           </List>
-          <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="locations" />
+          <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="blends" />
           <Button
-            className="add-location-button"
-            onClick={() => navigate("/locations/add")}
+            className="add-blend-button"
+            onClick={() => navigate("/blends/add")}
             variant="contained"
             sx={{
               mt: 5,
@@ -107,12 +107,12 @@ const LocationsMenu = () => {
               },
             }}
           >
-            <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add location
+            <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add blend
           </Button>
         </Container>
-        <Container className="locations-support-image">
+        <Container className="blends-support-image">
           <Box mt={10} sx={{ textAlign: "center" }}>
-            <img src={supportImage} alt="image with one of our beautiful cafe" />
+            <img src={supportImage} alt="image with some of our tasty blends" />
           </Box>
         </Container>
       </Container>
@@ -120,4 +120,4 @@ const LocationsMenu = () => {
   );
 };
 
-export default LocationsMenu;
+export default BlendsMenu;

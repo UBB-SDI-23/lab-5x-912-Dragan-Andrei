@@ -9,6 +9,8 @@ from rest_framework import status
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+from blends_api.blend_pagination import BlendPagination
+
 
 class Blends(APIView):
 
@@ -28,9 +30,11 @@ class Blends(APIView):
                                  }))
         })
     def get(self, request):
-        blends = Blend.objects.all()
-        serialized_blends = BlendSerializer(blends, many=True)
-        return Response(serialized_blends.data)
+        blends = Blend.objects.all().order_by('-id')
+        paginator = BlendPagination()
+        paginated_blends = paginator.paginate_queryset(blends, request)
+        serialized_blends = BlendSerializer(paginated_blends, many=True)
+        return paginator.get_paginated_response(serialized_blends.data)
 
     @swagger_auto_schema(
         operation_description="Create a new blend",
