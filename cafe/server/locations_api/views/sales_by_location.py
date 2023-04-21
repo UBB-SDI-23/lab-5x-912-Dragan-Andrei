@@ -9,6 +9,7 @@ from drf_yasg.utils import swagger_auto_schema
 from sales_api.models import Sale
 from locations_api.models import Location
 from locations_api.location_pagination import LocationPagination
+from locations_api.serializer import LocationSerializer
 
 
 class SalesByLocation(APIView):
