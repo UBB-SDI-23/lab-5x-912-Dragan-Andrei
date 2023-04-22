@@ -30,9 +30,14 @@ class Locations(APIView):
         locations = Location.objects.all().order_by('-id')
         paginator = LocationPagination()
         paginated_locations = paginator.paginate_queryset(locations, request)
+
         serialized_locations = LocationSerializer(paginated_locations,
                                                   many=True)
-        return paginator.get_paginated_response(serialized_locations.data)
+        return Response({
+            'count': paginated_locations.paginator.count,
+            'current_page': paginated_locations.number,
+            'results': serialized_locations.data,
+        })
 
     @swagger_auto_schema(
         operation_description="Create a new location",

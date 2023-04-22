@@ -42,7 +42,6 @@ class SalesByLocation(APIView):
         })
     def get(self, request):
         locations = Location.objects.all().order_by('-id')
-        count = locations.count()
         paginator = LocationPagination()
         paginated_locations = paginator.paginate_queryset(locations, request)
 
@@ -52,4 +51,8 @@ class SalesByLocation(APIView):
                 avg_sell=Avg('sold_coffees'))['avg_sell']
             answer.append({'name': location.name, 'avg_sell': avg_sell})
 
-        return Response({'results': answer, 'count': count})
+        return Response({
+            'count': paginated_locations.paginator.count,
+            'current_page': paginated_locations.number,
+            'results': answer,
+        })
