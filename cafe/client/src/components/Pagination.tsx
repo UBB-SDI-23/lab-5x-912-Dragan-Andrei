@@ -9,6 +9,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // css
 import "../assets/css/pagination.css";
 
+// utils
+import { useEffect, useState } from "react";
+
 // Pagination component props
 interface PaginationProps {
   page: number;
@@ -26,117 +29,96 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entity
     else if (value === 1 && pageSize * page < totalEntries) setPage((prev: number) => prev + 1);
   };
 
+  // page indexes
+  const [startIdx, setStartIdx] = useState<number[]>([]);
+  const [endIdx, setEndIdx] = useState<number[]>([]);
+  const [interIdx, setInterIdx] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (Math.ceil(totalEntries / pageSize) >= 11) {
+      setStartIdx([1, 2, 3, 4, 5]);
+      setEndIdx([
+        Math.ceil(totalEntries / pageSize) - 4,
+        Math.ceil(totalEntries / pageSize) - 3,
+        Math.ceil(totalEntries / pageSize) - 2,
+        Math.ceil(totalEntries / pageSize) - 1,
+        Math.ceil(totalEntries / pageSize),
+      ]);
+
+      let localInterIdx = [];
+
+      if (page <= Math.min(Math.ceil(totalEntries / pageSize) - 4)) {
+        for (let i = Math.max(5, page - 6); i <= Math.min(Math.ceil(totalEntries / pageSize) - 6, page); i++) {
+          localInterIdx.push(i);
+        }
+      }
+
+      for (let i = page + 1; i <= Math.min(Math.ceil(totalEntries / pageSize) - 6, page + 4); i++) {
+        localInterIdx.push(i);
+      }
+
+      setInterIdx(localInterIdx);
+    } else {
+      setInterIdx(Array.from(Array(Math.ceil(totalEntries / pageSize)).keys()));
+    }
+  }, [page, pageSize, totalEntries]);
+
   return (
     <>
       <Box className="pagination-container">
         <Box className="page-selector">
           <ChevronLeftIcon className="change-page-arrow" onClick={() => changePage(-1)}></ChevronLeftIcon>
-          {Math.ceil(totalEntries / pageSize) >= 8 ? (
+
+          {startIdx.length > 0 && (
             <>
-              <Typography
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                }}
-                className={page === 1 ? "page-number selected-page" : "page-number"}
-                variant="h5"
-              >
-                1
-              </Typography>
-
-              <Typography
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                }}
-                className={page >= 5 ? "page-number" : page === 2 ? "page-number selected-page no-hover" : "page-number"}
-                variant="h5"
-              >
-                {page >= 5 ? "..." : 2}
-              </Typography>
-
-              <Typography
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                }}
-                className={page === 3 ? "page-number selected-page" : "page-number"}
-                variant="h5"
-              >
-                {page >= 5 && page <= Math.ceil(totalEntries / pageSize) - 4 ? page - 1 : page < 5 ? 3 : Math.ceil(totalEntries / pageSize) - 4}
-              </Typography>
-
-              <Typography
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                }}
-                className={
-                  page === 4 || page === Math.ceil(totalEntries / pageSize) - 3 || (page >= 5 && page <= Math.ceil(totalEntries / pageSize) - 4)
-                    ? "page-number selected-page"
-                    : "page-number"
-                }
-                variant="h5"
-              >
-                {page >= 5 && page <= Math.ceil(totalEntries / pageSize) - 4 ? page : page < 5 ? 4 : Math.ceil(totalEntries / pageSize) - 3}
-              </Typography>
-
-              <Typography
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                }}
-                className={page === Math.ceil(totalEntries / pageSize) - 2 ? "page-number selected-page" : "page-number"}
-                variant="h5"
-              >
-                {page >= 5 && page <= Math.ceil(totalEntries / pageSize) - 4 ? page + 1 : page < 5 ? 5 : Math.ceil(totalEntries / pageSize) - 2}
-              </Typography>
-
-              <Typography
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                }}
-                className={
-                  page + 3 < Math.ceil(totalEntries / pageSize)
-                    ? "page-number"
-                    : page === Math.ceil(totalEntries / pageSize) - 1
-                    ? "page-number selected-page"
-                    : "page-number"
-                }
-                variant="h5"
-              >
-                {page + 3 < Math.ceil(totalEntries / pageSize) ? "..." : Math.ceil(totalEntries / pageSize) - 1}
-              </Typography>
-              <Typography
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                }}
-                className={page === Math.ceil(totalEntries / pageSize) ? "page-number selected-page" : "page-number"}
-                variant="h5"
-              >
-                {Math.ceil(totalEntries / pageSize)}
-              </Typography>
-            </>
-          ) : (
-            <>
-              {Array.from(Array(Math.ceil(totalEntries / pageSize)).keys()).map((item) => (
-                <Typography
-                  key={item}
-                  onClick={(e) => {
-                    const target = e.target as HTMLElement;
-                    Number(target.innerHTML) && setPage(Number(target.innerHTML));
-                  }}
-                  className={page === item + 1 ? "page-number selected-page" : "page-number"}
-                  variant="h5"
-                >
-                  {item + 1}
+              {startIdx.map((idx) => (
+                <Typography variant="h5" key={idx} className={page === idx ? "page-number selected-page" : "page-number"} onClick={() => setPage(idx)}>
+                  {idx.toString()}
                 </Typography>
               ))}
             </>
           )}
 
+          {interIdx.length > 0 ? (
+            <>
+              {interIdx[0] > 6 && (
+                <Typography variant="h5" className="page-number">
+                  ...
+                </Typography>
+              )}
+              {interIdx.map((idx) => (
+                <>
+                  <Typography
+                    variant="h5"
+                    key={idx}
+                    className={page === idx + 1 ? "page-number selected-page" : "page-number"}
+                    onClick={() => setPage(idx + 1)}
+                  >
+                    {(idx + 1).toString()}
+                  </Typography>
+                </>
+              ))}
+              {interIdx[interIdx.length - 1] < Math.ceil(totalEntries / pageSize) - 6 && (
+                <Typography variant="h5" className="page-number">
+                  ...
+                </Typography>
+              )}
+            </>
+          ) : (
+            <Typography variant="h5" className="page-number">
+              ...
+            </Typography>
+          )}
+
+          {endIdx.length > 0 && (
+            <>
+              {endIdx.map((idx) => (
+                <Typography variant="h5" key={idx} className={page === idx ? "page-number selected-page" : "page-number"} onClick={() => setPage(idx)}>
+                  {idx.toString()}
+                </Typography>
+              ))}
+            </>
+          )}
           <ChevronRightIcon className="change-page-arrow" onClick={() => changePage(+1)}></ChevronRightIcon>
         </Box>
         <Box className="page-size-selector">
