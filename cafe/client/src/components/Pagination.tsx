@@ -53,8 +53,10 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entity
         }
       }
 
-      for (let i = page + 1; i <= Math.min(Math.ceil(totalEntries / pageSize) - 6, page + 4); i++) {
-        localInterIdx.push(i);
+      if (page > 6) {
+        for (let i = page + 1; i <= Math.min(Math.ceil(totalEntries / pageSize) - 6, page + 4); i++) {
+          localInterIdx.push(i);
+        }
       }
 
       setInterIdx(localInterIdx);
