@@ -3,6 +3,8 @@ from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+# added this to test the feature branch
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Cafe API",
