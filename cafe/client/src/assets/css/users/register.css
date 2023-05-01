@@ -1,0 +1,55 @@
+.register-user-container {
+  max-width: 700px !important;
+  min-height: calc(100vh - 180px) !important;
+  margin: 0 auto !important;
+}
+
+.register-user-content {
+  width: 100% !important;
+  padding: 0 !important;
+  text-align: center !important;
+  margin: 0 !important;
+}
+
+.register-user-big-header {
+  font-size: 80px !important;
+}
+
+.register-user-fields {
+  display: flex !important;
+  flex-direction: column !important;
+  max-width: 400px !important;
+  margin: 64px auto 16px auto !important;
+}
+
+.register-user-field {
+  margin: 12px 0 !important;
+}
+
+.register-user-button {
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  border: 2px solid #333 !important;
+  border-radius: 8px !important;
+  background-color: #333 !important;
+  transition: "all 0.5s ease-in-out" !important;
+  margin: 16px 0 0 0 !important;
+}
+.register-user-button:hover {
+  border: 2px solid #333 !important;
+  background-color: #be9063 !important;
+  color: #fff !important;
+}
+
+.register-user-confirmation-link {
+  text-decoration: underline !important;
+  font-weight: normal !important;
+  max-width: 400px !important;
+  margin: 64px auto 0 auto !important;
+}
+.register-user-confirmation-link:hover {
+  cursor: pointer !important;
+}
