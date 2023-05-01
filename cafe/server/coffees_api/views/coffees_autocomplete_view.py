@@ -6,8 +6,6 @@ from rest_framework import status
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-from coffees_api.coffee_pagination import CoffeePagination
-
 
 class CoffeesAutocomplete(APIView):
 

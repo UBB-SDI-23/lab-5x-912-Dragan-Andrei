@@ -5,30 +5,18 @@ import Typography from "@mui/material/Typography";
 // css
 import "../../assets/css/blends/blendItem.css";
 
-// utils
-import { BASE_URL_API } from "../../utils/constants";
-import axios from "axios";
-import { useEffect, useState } from "react";
+// create a local custom interface for the Blend object
+interface LocalBlend {
+  id: number;
+  name: string;
+  description: string;
+  country_of_origin: string;
+  level: number;
+  in_stock: boolean;
+  used_by: number;
+}
 
-// objects
-import { Blend } from "../../models/Blend";
-
-const BlendItem = ({ blend }: { blend: Blend }) => {
-  const [numberOfCoffees, setNumberOfCoffees] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const getNumberOfCoffees = async () => {
-    setLoading(true);
-    const response = await axios.get(`${BASE_URL_API}/blends/${blend.id}`);
-    const data = await response.data;
-    setNumberOfCoffees(data.coffees.length);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getNumberOfCoffees();
-  }, []);
-
+const BlendItem = ({ blend }: { blend: LocalBlend }) => {
   return (
     <Box className="blend-item-container">
       <Box className="blend-item">
@@ -36,15 +24,9 @@ const BlendItem = ({ blend }: { blend: Blend }) => {
           {blend.name} <span className="blend-sub-header">(strength level of {blend.level})</span>
         </Typography>
       </Box>
-      {!loading ? (
-        <Typography className="location-sub-header" variant="body1">
-          Blend used by {numberOfCoffees} coffee(s)
-        </Typography>
-      ) : (
-        <Typography className="location-sub-header" variant="body1">
-          Blend used by ... coffee(s)
-        </Typography>
-      )}
+      <Typography className="location-sub-header" variant="body1">
+        Blend used by {blend.used_by} coffee(s)
+      </Typography>
     </Box>
   );
 };

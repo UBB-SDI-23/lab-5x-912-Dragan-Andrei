@@ -57,7 +57,9 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entity
 
       setInterIdx(localInterIdx);
     } else {
+      setStartIdx([]);
       setInterIdx(Array.from(Array(Math.ceil(totalEntries / pageSize)).keys()));
+      setEndIdx([]);
     }
   }, [page, pageSize, totalEntries]);
 
@@ -85,16 +87,9 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entity
                 </Typography>
               )}
               {interIdx.map((idx) => (
-                <>
-                  <Typography
-                    variant="h5"
-                    key={idx}
-                    className={page === idx + 1 ? "page-number selected-page" : "page-number"}
-                    onClick={() => setPage(idx + 1)}
-                  >
-                    {(idx + 1).toString()}
-                  </Typography>
-                </>
+                <Typography variant="h5" key={idx} className={page === idx + 1 ? "page-number selected-page" : "page-number"} onClick={() => setPage(idx + 1)}>
+                  {(idx + 1).toString()}
+                </Typography>
               ))}
               {interIdx[interIdx.length - 1] < Math.ceil(totalEntries / pageSize) - 6 && (
                 <Typography variant="h5" className="page-number">
@@ -103,9 +98,11 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entity
               )}
             </>
           ) : (
-            <Typography variant="h5" className="page-number">
-              ...
-            </Typography>
+            totalEntries > 0 && (
+              <Typography variant="h5" className="page-number">
+                ...
+              </Typography>
+            )
           )}
 
           {endIdx.length > 0 && (

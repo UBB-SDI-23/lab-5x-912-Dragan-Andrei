@@ -35,6 +35,7 @@ interface LocalCoffee {
   quantity: number;
   vegan: boolean;
   blend_id: number;
+  blend_count: number;
 }
 
 const Menu = () => {

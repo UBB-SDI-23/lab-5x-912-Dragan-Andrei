@@ -6,41 +6,22 @@ import Typography from "@mui/material/Typography";
 import "../../assets/css/locations/locationItem.css";
 
 // utils
-import { BASE_URL_API } from "../../utils/constants";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-// objects
-import { Location } from "../../models/Location";
-import { Sale } from "../../models/Sale";
+// interface for local custom location object
+interface LocalLocation {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  postal_code: string;
+  profit: number;
+  description: string;
+  total_revenue: number;
+}
 
-const LocationItem = ({ location }: { location: Location }) => {
-  const [locationRevenue, setLocationRevenue] = useState<number>(0);
+const LocationItem = ({ location }: { location: LocalLocation }) => {
   const [loading, setLoading] = useState<boolean>(false);
-
-  const getRevenue = async () => {
-    setLoading(true);
-    let totalRevenue = 0;
-    let url = `${BASE_URL_API}/locations/${location.id}`;
-
-    while (url !== null) {
-      const response = await axios.get(url);
-      const locationData = await response.data;
-
-      if (locationData.sales.results) {
-        locationData.sales.results.forEach((sale: Sale) => {
-          totalRevenue += sale.revenue;
-        });
-      }
-      totalRevenue = Math.round(totalRevenue * 100) / 100;
-      url = locationData.sales.next;
-    }
-    setLocationRevenue(totalRevenue);
-    setLoading(false);
-  };
-  useEffect(() => {
-    getRevenue();
-  }, []);
 
   return (
     <Box className="location-item-container">
@@ -51,7 +32,7 @@ const LocationItem = ({ location }: { location: Location }) => {
       </Box>
       {!loading ? (
         <Typography className="location-sub-header" variant="body1">
-          Generated a revenue of {locationRevenue}$
+          Generated a revenue of {location.total_revenue}$
         </Typography>
       ) : (
         <Typography className="location-sub-header" variant="body1">

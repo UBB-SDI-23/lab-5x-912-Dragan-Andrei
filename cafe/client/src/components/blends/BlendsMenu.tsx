@@ -24,11 +24,19 @@ import { useNavigate } from "react-router-dom";
 // images
 import supportImage from "../../assets/images/blends.jpg";
 
-// objects
-import { Blend } from "../../models/Blend";
+// create a local custom interface for the Blend object
+interface LocalBlend {
+  id: number;
+  name: string;
+  description: string;
+  country_of_origin: string;
+  level: number;
+  in_stock: boolean;
+  used_by: number;
+}
 
 const BlendsMenu = () => {
-  const [blends, setBlends] = useState<Blend[]>([]);
+  const [blends, setBlends] = useState<LocalBlend[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 

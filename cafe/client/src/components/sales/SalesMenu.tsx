@@ -19,19 +19,24 @@ import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// models
-import { Sale } from "../../models/Sale";
+// create a local custom interface for the sale object
+interface LocalSale {
+  id: number;
+  location_id: number;
+  sold_coffees: number;
+  revenue: number;
+  coffee_id: number;
+  coffee_name: string;
+  coffees_sold_worldwide: number;
+}
 
 const SalesMenu = ({ locationId }: { locationId: number }) => {
-  const [sales, setSales] = useState<Sale[]>([]);
-  const [relatedCoffeeNames, setRelatedCoffeeNames] = useState<{ [key: number]: string }>({});
-
+  const [sales, setSales] = useState<LocalSale[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
-
   const [totalEntries, setTotalEntries] = useState<number>(0);
 
   const navigate = useNavigate();
@@ -41,15 +46,15 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
     setLoading(true);
     const currentFetchCall = lastFetchCall;
 
-    let url = `${BASE_URL_API}/locations/${locationId}?page_size=${pageSize}`;
+    let url = `${BASE_URL_API}/sales/all?location_id=${locationId}&page_size=${pageSize}`;
     url += "&p=" + page;
 
     setLastFetchCall((prev) => prev + 1);
     const response = await axios.get(url);
     const data = await response.data;
     if (currentFetchCall === lastFetchCall) {
-      setSales(data.sales.results);
-      setTotalEntries(data.sales.count);
+      setSales(data.results);
+      setTotalEntries(data.count);
     }
 
     setLoading(false);
@@ -65,20 +70,6 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
   useEffect(() => {
     getSales();
   }, [page, pageSize]);
-
-  // function to get the name of a related coffee for a certain sale
-  const getRelatedCoffeeName = async (coffeeId: number) => {
-    const response = await axios.get(`${BASE_URL_API}/coffees/${coffeeId}`);
-    const data = await response.data;
-    setRelatedCoffeeNames((prev) => ({ ...prev, [coffeeId]: data.name }));
-  };
-  useEffect(() => {
-    if (sales) {
-      sales.forEach((sale: Sale) => {
-        !relatedCoffeeNames[sale.coffee_id] && getRelatedCoffeeName(sale.coffee_id);
-      });
-    }
-  }, [sales]);
 
   return (
     <>

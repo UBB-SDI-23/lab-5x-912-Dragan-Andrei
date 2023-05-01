@@ -12,11 +12,11 @@ from sales_api.serializer import SaleSerializer
 class LocationCoffee(APIView):
 
     @swagger_auto_schema(
-        operation_description="Add a new sale to a location",
+        operation_description="Add a new sale to a selected location",
         responses={
             status.HTTP_200_OK:
             openapi.Response(
-                description="Sales for a certain location and coffee",
+                description="Added coffee sale to selected location",
                 schema=SaleSerializer(many=True)),
             status.HTTP_400_BAD_REQUEST:
             openapi.Response(description="Error message",

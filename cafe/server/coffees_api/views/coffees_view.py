@@ -1,11 +1,13 @@
 from rest_framework.views import APIView
-from coffees_api.models import Coffee
-from coffees_api.serializer import CoffeeSerializer
+
 from rest_framework.response import Response
 from rest_framework import status
+
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+from coffees_api.models import Coffee
+from coffees_api.serializer import CoffeeSerializer
 from coffees_api.coffee_pagination import CoffeePagination
 
 
@@ -18,7 +20,7 @@ class Coffees(APIView):
             openapi.Parameter(
                 'min_price',
                 openapi.IN_QUERY,
-                'Get a list of all coffees with price greater than min_price',
+                'List of all coffess with price greater than min_price',
                 type=openapi.TYPE_STRING),
         ],
         responses={
@@ -35,6 +37,20 @@ class Coffees(APIView):
                                  }))
         })
     def get(self, request):
+        # get the page number and page size from the query params
+        page = int(request.query_params.get('p', 1))
+        page_size = int(request.query_params.get('page_size', 10))
+
+        # calculate the offset and limit
+        offset = (page - 1) * page_size
+        limit = page_size
+
+        # add the offset and limit to the request object as query params
+        request.query_params._mutable = True
+        request.query_params['offset'] = offset
+        request.query_params['limit'] = limit
+
+        # get the coffees
         filtered_coffees = Coffee.objects.all().order_by('-id')
         coffee_top_price = self.request.query_params.get('min_price')
         if coffee_top_price is not None:
@@ -48,6 +64,11 @@ class Coffees(APIView):
         paginated_coffees = paginator.paginate_queryset(
             filtered_coffees, request)
         serialized_coffees = CoffeeSerializer(paginated_coffees, many=True)
+
+        # check by how many coffees the blend is used
+        for coffee in serialized_coffees.data:
+            coffee['blend_count'] = Coffee.objects.filter(
+                blend_id=coffee['id']).count()
 
         return paginator.get_paginated_response(serialized_coffees.data)
 

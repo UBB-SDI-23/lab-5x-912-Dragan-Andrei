@@ -1,5 +1,8 @@
 from rest_framework.views import APIView
+
 from locations_api.models import Location
+from sales_api.models import Sale
+
 from locations_api.serializer import LocationSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -27,16 +30,35 @@ class Locations(APIView):
                                  }))
         })
     def get(self, request):
-        paginator = LocationPagination()
-        locations = Location.objects.all()
-        paginated_locations = paginator.paginate_queryset(locations, request)
+        # get the page number and page size from the query params
+        page = int(request.query_params.get('p', 1))
+        page_size = int(request.query_params.get('page_size', 10))
 
+        # calculate the offset and limit
+        offset = (page - 1) * page_size
+        limit = page_size
+
+        # add the offset and limit to the request object as query params
+        request.query_params._mutable = True
+        request.query_params['offset'] = offset
+        request.query_params['limit'] = limit
+
+        # get the locations
+        locations = Location.objects.all().order_by('-id')
+        paginator = LocationPagination()
+        paginated_locations = paginator.paginate_queryset(locations, request)
         serialized_locations = LocationSerializer(paginated_locations,
                                                   many=True)
-        return Response({
-            'count': locations.count(),
-            'results': serialized_locations.data
-        })
+
+        # compute the total revenue for each location
+        for location in serialized_locations.data:
+            location['total_revenue'] = 0
+            sales = Sale.objects.filter(location_id=location['id'])
+            for sale in sales:
+                location['total_revenue'] += sale.revenue
+            location['total_revenue'] = round(location['total_revenue'], 2)
+
+        return paginator.get_paginated_response(serialized_locations.data)
 
     @swagger_auto_schema(
         operation_description="Create a new location",

@@ -8,8 +8,6 @@ from rest_framework import status
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.db import connection
 
 

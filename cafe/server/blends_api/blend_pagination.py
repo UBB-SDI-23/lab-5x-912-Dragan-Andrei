@@ -1,8 +1,16 @@
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.response import Response
 
 
-class BlendPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 20
-    page_query_param = 'p'
+class BlendPagination(LimitOffsetPagination):
+    default_limit = 10
+    max_limit = 20
+    limit_query_param = 'limit'
+    offset_query_param = 'offset'
+
+    def get_paginated_response(self, data):
+        return Response({
+            'count': self.count,
+            'page': int(self.offset / self.limit) + 1,
+            'results': data
+        })

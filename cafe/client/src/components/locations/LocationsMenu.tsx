@@ -24,11 +24,20 @@ import { useNavigate } from "react-router-dom";
 // images
 import supportImage from "../../assets/images/location.jpg";
 
-// objects
-import { Location } from "../../models/Location";
+// interface for local custom location object
+interface LocalLocation {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  postal_code: string;
+  profit: number;
+  description: string;
+  total_revenue: number;
+}
 
 const LocationsMenu = () => {
-  const [locations, setLocations] = useState<Location[]>([]);
+  const [locations, setLocations] = useState<LocalLocation[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
