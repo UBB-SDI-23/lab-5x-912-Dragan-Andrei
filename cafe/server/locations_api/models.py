@@ -14,7 +14,6 @@ def validate_no_profanity(value):
         raise ValidationError('No profanity allowed!', params={'value': value})
 
 
-# Create your models here.
 class Location(models.Model):
     name = models.CharField(max_length=50, validators=[validate_no_profanity])
     address = models.CharField(max_length=1000,

@@ -2,10 +2,10 @@
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import AddIcon from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
 
 // css
 import "../../assets/css/sales/addSale.css";
@@ -22,25 +22,24 @@ import { debounce } from "lodash";
 
 // react components
 import MainNavbar from "../MainNavbar";
-import { Box } from "@mui/material";
 
 // images
 import supportImage from "../../assets/images/create_sale.jpg";
 
-// create a new LocalCoffee objecet model for the add coffee form
+// create a local objecet model for the sale to be created
 interface LocalSale {
   coffeeId: number;
   soldCoffees: string;
 }
 
-// create an error object model
+// create a local error object model
 interface LocalError {
   generic: string;
   coffee: string;
   soldCoffees: string;
 }
 
-// create a model for the touched fields
+// create a local model for the touched fields
 interface TouchedFields {
   coffee: boolean;
   soldCoffees: boolean;
@@ -203,9 +202,8 @@ const CreateSale = () => {
         if (error.response.data.sold_coffees) {
           setLocalError((prevError) => ({
             ...prevError,
-            soldCoffees: error.response.sold_coffees.name,
+            soldCoffees: error.response.data.sold_coffees,
           }));
-          setLocalSale((prevSale) => ({ ...prevSale, soldCoffees: "" }));
         } else {
           setLocalError((prevError) => ({
             ...prevError,

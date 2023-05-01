@@ -32,6 +32,9 @@ import AddBlend from "./components/blends/AddBlend";
 import EditBlend from "./components/blends/EditBlend";
 import CountriesByBlends from "./components/blends/CountriesByBlends";
 
+import Register from "./components/users/Register";
+import Confirmation from "./components/users/Confirmation";
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
@@ -56,6 +59,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Route path="/blends/add" element={<AddBlend />} />
           <Route path="/blends/:id/edit" element={<EditBlend />} />
           <Route path="/blends/country" element={<CountriesByBlends />} />
+
+          <Route path="/register" element={<Register />} />
+          <Route path="/register/confirm/:code" element={<Confirmation />} />
         </Routes>
       </Router>
     </ThemeProvider>
