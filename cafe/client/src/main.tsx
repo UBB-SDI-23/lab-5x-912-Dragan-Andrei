@@ -10,6 +10,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./utils/theme";
 
+// context
+import { AuthProvider } from "./context/AuthContext";
+
 // react components
 import Home from "./components/Home";
 
@@ -33,6 +36,7 @@ import EditBlend from "./components/blends/EditBlend";
 import CountriesByBlends from "./components/blends/CountriesByBlends";
 
 import Register from "./components/users/Register";
+import Login from "./components/users/Login";
 import Confirmation from "./components/users/Confirmation";
 
 import NotFound from "./components/NotFound";
@@ -40,34 +44,37 @@ import NotFound from "./components/NotFound";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          <Route path="/coffees" element={<Menu />} />
-          <Route path="/coffees/add" element={<AddCoffee />} />
-          <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
-          <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
+            <Route path="/coffees" element={<Menu />} />
+            <Route path="/coffees/add" element={<AddCoffee />} />
+            <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
+            <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
 
-          <Route path="/locations" element={<LocationsMenu />} />
-          <Route path="/locations/add" element={<AddLocation />} />
-          <Route path="/locations/:id/edit/" element={<EditLocation />} />
-          <Route path="/locations/:id" element={<DetailedLocationItem />} />
-          <Route path="/locations/:id/add" element={<AddSale />} />
-          <Route path="/locations/sales-by-location" element={<SalesByLocation />} />
+            <Route path="/locations" element={<LocationsMenu />} />
+            <Route path="/locations/add" element={<AddLocation />} />
+            <Route path="/locations/:id/edit/" element={<EditLocation />} />
+            <Route path="/locations/:id" element={<DetailedLocationItem />} />
+            <Route path="/locations/:id/add" element={<AddSale />} />
+            <Route path="/locations/sales-by-location" element={<SalesByLocation />} />
 
-          <Route path="/blends" element={<BlendsMenu />} />
-          <Route path="/blends/:id" element={<DetailedBlendItem />} />
-          <Route path="/blends/add" element={<AddBlend />} />
-          <Route path="/blends/:id/edit" element={<EditBlend />} />
-          <Route path="/blends/country" element={<CountriesByBlends />} />
+            <Route path="/blends" element={<BlendsMenu />} />
+            <Route path="/blends/:id" element={<DetailedBlendItem />} />
+            <Route path="/blends/add" element={<AddBlend />} />
+            <Route path="/blends/:id/edit" element={<EditBlend />} />
+            <Route path="/blends/country" element={<CountriesByBlends />} />
 
-          <Route path="/register" element={<Register />} />
-          <Route path="/register/confirm/:code" element={<Confirmation />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register/confirm/:code" element={<Confirmation />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

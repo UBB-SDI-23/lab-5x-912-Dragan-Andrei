@@ -1,6 +1,6 @@
 .activate-user-container {
   max-width: 700px !important;
-  min-height: calc(100vh - 180px) !important;
+  min-height: calc(100vh - 100px) !important;
   margin: 0 auto !important;
   text-align: center !important;
 }

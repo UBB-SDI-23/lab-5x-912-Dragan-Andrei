@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'drf_yasg',
     'rest_framework_simplejwt.token_blacklist',
+    'corsheaders',
     'coffees_api',
     'blends_api',
     'locations_api',

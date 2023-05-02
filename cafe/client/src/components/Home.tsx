@@ -1,35 +1,35 @@
 // css
-import '../assets/css/home.css'
+import "../assets/css/home.css";
 
 // images
-import logo from '../assets/images/top_part_logo.png'
-import facebook from '../assets/images/facebook.png'
-import twitter from '../assets/images/twitter.png'
-import instagram from '../assets/images/instagram.png'
-import coffee_header from '../assets/images/coffee_header.png'
+import logo from "../assets/images/top_part_logo.png";
+import facebook from "../assets/images/facebook.png";
+import twitter from "../assets/images/twitter.png";
+import instagram from "../assets/images/instagram.png";
+import coffee_header from "../assets/images/coffee_header.png";
 
 // react components
-import HomeNavbar from './ExpandedNavbar'
+import ExpandedNavbar from "./ExpandedNavbar";
 
 // utils
-import { useState } from 'react'
+import { useState } from "react";
 
 const Home = () => {
-  const [isNavbarOpen, setIsNavbarOpen] = useState(false)
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
   const openNav = () => {
-    setIsNavbarOpen(true)
-  }
+    setIsNavbarOpen(true);
+  };
 
   const closeNav = () => {
-    setIsNavbarOpen(false)
-  }
+    setIsNavbarOpen(false);
+  };
 
   return (
     <>
-      {isNavbarOpen ? <HomeNavbar openNav={openNav} closeNav={closeNav} /> : null}
+      {isNavbarOpen ? <ExpandedNavbar openNav={openNav} closeNav={closeNav} /> : null}
 
-      <section id="landing_page">
+      <div id="landing_page">
         <div id="gradient_effect"></div>
         <div id="actual_image">
           <div className="actual_image_inside" id="actual_image_inside1"></div>
@@ -52,10 +52,7 @@ const Home = () => {
 
         <div id="landing_text">
           <h1>Welcome</h1>
-          <p>
-            Come experience exceptional coffee, where the finest ingredients are expertly 
-            crafted into rich and flavorful brews, served in a cozy ambiance.
-          </p>
+          <p>Come experience exceptional coffee, where the finest ingredients are expertly crafted into rich and flavorful brews, served in a cozy ambiance.</p>
         </div>
 
         <div onClick={() => openNav()} id="scroll_down">
@@ -97,7 +94,7 @@ const Home = () => {
             <img src={twitter} alt="twitter page" />
           </a>
         </div>
-      </section>
+      </div>
     </>
   );
 };

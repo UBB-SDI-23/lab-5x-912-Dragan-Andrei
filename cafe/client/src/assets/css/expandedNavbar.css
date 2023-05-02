@@ -1,152 +1,194 @@
 #navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 6;
-    width: 100vw;
-    height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  width: 100vw;
+  height: 100vh;
 
-    display: block;
-    transition: .5s all;
-    animation: appear_navbar .5s;
+  display: block;
+  transition: 0.5s all;
+  animation: appear_navbar 0.5s;
 }
 @keyframes appear_navbar {
-    from {height: 0;}
-    to {height: 100vh;}
+  from {
+    height: 0;
+  }
+  to {
+    height: 100vh;
+  }
 }
 
 #navbar #navbar_background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #be9063;
-    opacity: .9;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #be9063;
+  opacity: 0.9;
 }
 
 #navbar #navbar_links {
-    position: absolute;
-    top: calc(50% + 2rem);
-    left: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: calc(50% + 2rem);
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-#navbar #navbar_links a { 
-    font-size: 1.7rem;
-    letter-spacing: 1px;
-    font-weight: bold;
-    color: #ffffff;
+#navbar #navbar_links a {
+  font-size: 1.7rem;
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: #ffffff;
 
-    text-decoration: none;
-    margin: 1.25rem 0;
-    text-align: center;
-    width: 200px;
+  text-decoration: none;
+  margin: 1.25rem 0;
+  text-align: center;
+  width: 200px;
 
-    position: relative;
+  position: relative;
 }
 
 #navbar #navbar_links a:before {
-    content: '';
-    position: absolute;
-    bottom: -.15rem;
-    left: 50%;
-    transform: translateX(-50%);
+  content: "";
+  position: absolute;
+  bottom: -0.15rem;
+  left: 50%;
+  transform: translateX(-50%);
 
-    width: 0;
-    height: 3px;
-    background-color: #ffffff;
+  width: 0;
+  height: 3px;
+  background-color: #ffffff;
 
-    transition: .5s all;
+  transition: 0.5s all;
 }
 
-#navbar #navbar_links a:hover:before {width: 50px;}
+#navbar #navbar_links a:hover:before {
+  width: 50px;
+}
 
 #navbar #navbar_logo {
-    position: absolute;
-    right: 2.5rem;
-    bottom: 2rem;
-    width: 150px;
+  position: absolute;
+  right: 2.5rem;
+  bottom: 2rem;
+  width: 150px;
 }
-#navbar #navbar_logo img {width: 100%;}
+#navbar #navbar_logo img {
+  width: 100%;
+}
 
 #navbar #close_button {
-    position: absolute;
-    top: 2rem;
-    left: 50%;
-    transform: translate(-50%, 0%);
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translate(-50%, 0%);
 
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
 
-    animation: slide_down .5s;
-    transition: .5s all;
+  animation: slide_down 0.5s;
+  transition: 0.5s all;
 }
 @keyframes slide_down {
-    from {transform: translate(-50%, -8rem);}
-    to {transform: translate(-50%, 0);}
+  from {
+    transform: translate(-50%, -8rem);
+  }
+  to {
+    transform: translate(-50%, 0);
+  }
 }
 
 #navbar #close_button #close_navbar_line1 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) rotate(45deg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(45deg);
 
-    width: 30px;
-    height: 3px;
-    background-color: #ffffff;
+  width: 30px;
+  height: 3px;
+  background-color: #ffffff;
 
-    transition: .5s all;
-    animation: increase_width 1s;
+  transition: 0.5s all;
+  animation: increase_width 1s;
 }
 
 #navbar #close_button #close_navbar_line2 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) rotate(-45deg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(-45deg);
 
-    width: 30px;
-    height: 3px;
-    background-color: #ffffff;
+  width: 30px;
+  height: 3px;
+  background-color: #ffffff;
 
-    animation: increase_width .75s;
+  animation: increase_width 0.75s;
 }
 @keyframes increase_width {
-    0% {width: 0;}
-    50% {width: 0%;}
-    100% {width: 30px;}
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 0%;
+  }
+  100% {
+    width: 30px;
+  }
 }
 
-#navbar #close_button:hover {cursor: pointer;}
-#navbar #close_button:hover #close_navbar_line1 {transform: translate(-50%, -50%) rotate(90deg);}
+#navbar #close_button:hover {
+  cursor: pointer;
+}
+#navbar #close_button:hover #close_navbar_line1 {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
 
 #navbar #tilt_screen {
-    position: absolute;
-    top: calc(50% + 2rem);
-    left: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: calc(50% + 2rem);
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    display: none;
-    text-align: center;
+  display: none;
+  text-align: center;
 }
 
 #navbar #tilt_screen h1 {
-    max-width: 400px;
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: normal;
+  max-width: 400px;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: normal;
 }
 #navbar #tilt_screen img {
-    width: 80px;
-    margin: auto;
-    margin-top: 1rem;
+  width: 80px;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+#navbar_links #navbar-action-buttons {
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+#navbar_links #action-button {
+  font-size: 20px !important;
+  letter-spacing: 2px !important;
+  font-weight: bold !important;
+  color: #fff !important;
+  background-color: #333 !important;
+  text-decoration: none !important;
+  width: 130px !important;
+  padding: 12px 0 !important;
+  margin: 20px auto !important;
+}
+#navbar_links #action-button:hover {
+  opacity: 0.85 !important;
 }

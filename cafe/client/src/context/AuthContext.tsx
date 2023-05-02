@@ -1,0 +1,71 @@
+// utils
+import axios from "axios";
+import { createContext, useState, useEffect } from "react";
+import jwt_decode from "jwt-decode";
+import { BASE_URL_API } from "../utils/constants";
+
+const AuthContext = createContext({});
+export default AuthContext;
+
+export const AuthProvider = ({ children }: { children: any }) => {
+  const [authTokens, setAuthTokens] = useState<any | null>(() =>
+    localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens") || "{}") : null
+  );
+  const [user, setUser] = useState<any>(() =>
+    localStorage.getItem("authTokens") ? jwt_decode(JSON.parse(localStorage.getItem("authTokens") || "{access:''}").access) : null
+  );
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const logoutUser = () => {
+    setAuthTokens(null);
+    setUser(null);
+    localStorage.removeItem("authTokens");
+  };
+
+  const updateToken = async () => {
+    if (loading) {
+      setLoading(false);
+    }
+
+    try {
+      const response = await axios.post(`${BASE_URL_API}/token/refresh/`, {
+        refresh: authTokens ? authTokens.refresh : "",
+      });
+      const data = await response.data;
+      const user: any = jwt_decode(data.access);
+
+      if (user.is_active) {
+        setAuthTokens(data);
+        setUser(user);
+        console.log(user);
+        localStorage.setItem("authTokens", JSON.stringify(data));
+      } else {
+        logoutUser();
+      }
+    } catch (error: any) {
+      logoutUser();
+    }
+  };
+
+  useEffect(() => {
+    if (loading) {
+      updateToken();
+    }
+
+    const interval = setInterval(() => {
+      if (authTokens) {
+        updateToken();
+      }
+    }, 1000 * 60 * 4);
+    return () => clearInterval(interval);
+  }, [authTokens, loading]);
+
+  let contextData = {
+    authTokens: authTokens,
+    setAuthTokens: setAuthTokens,
+    user: user,
+    setUser: setUser,
+    logoutUser: logoutUser,
+  };
+  return <AuthContext.Provider value={contextData}>{loading ? null : children}</AuthContext.Provider>;
+};

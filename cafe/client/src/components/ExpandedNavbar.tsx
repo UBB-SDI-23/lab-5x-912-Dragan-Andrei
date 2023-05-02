@@ -2,6 +2,8 @@
 import "../assets/css/expandedNavbar.css";
 
 // utils
+import AuthContext from "../context/AuthContext";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 interface NavbarProps {
@@ -10,6 +12,8 @@ interface NavbarProps {
 }
 
 const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
+  const contextData = useContext<any>(AuthContext);
+
   return (
     <section id="navbar">
       <div id="navbar_background"></div>
@@ -20,6 +24,25 @@ const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
         <Link to="/">About</Link>
         <Link to="/locations">Locations</Link>
         <Link to="/blends">Blends</Link>
+
+        <div id="navbar-action-buttons">
+          {!contextData.authTokens ? (
+            <>
+              <Link id="action-button" to="/register">
+                Register
+              </Link>
+              <Link id="action-button" to="/login">
+                Login
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link id="action-button" to="/" onClick={contextData.logoutUser}>
+                Logout
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
       <div id="close_button" onClick={closeNav}>

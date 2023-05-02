@@ -11,11 +11,9 @@ import "../assets/css/mainNavbar.css";
 import simpleLogo from "../assets/images/logo_white_simple_version.png";
 import expandedLogo from "../assets/images/top_part_logo.png";
 
-// navigation bar pages
-const pages = ["HOME", "MENU", "CONTACT", "LOCATIONS"];
-
 // utils
-import { useState } from "react";
+import AuthContext from "../context/AuthContext";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
 // react components
@@ -23,6 +21,7 @@ import ExpandedNavbar from "./ExpandedNavbar";
 
 const MainNavbar = () => {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  const contextData = useContext<any>(AuthContext);
 
   const openNav = () => {
     setIsNavbarOpen(true);
@@ -37,7 +36,7 @@ const MainNavbar = () => {
       {isNavbarOpen ? <ExpandedNavbar openNav={openNav} closeNav={closeNav} /> : null}
 
       <AppBar position="static" sx={{ bgcolor: "#be9063", height: "80px" }} elevation={6}>
-        <Container maxWidth="xl">
+        <Container id="main-navbar">
           <Toolbar disableGutters sx={{ height: "80px" }}>
             <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
               <img src={simpleLogo} alt="logo" height="30px" />
@@ -62,6 +61,24 @@ const MainNavbar = () => {
                 <Link to="/">About</Link>
                 <Link to="/locations">Locations</Link>
                 <Link to="/blends">Blends</Link>
+              </div>
+              <div id="navbar-action-buttons">
+                {!contextData.authTokens ? (
+                  <>
+                    <Link id="action-button" to="/register">
+                      Register
+                    </Link>
+                    <Link id="action-button" to="/login">
+                      Login
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link id="action-button" to="/" onClick={contextData.logoutUser}>
+                      Logout
+                    </Link>
+                  </>
+                )}
               </div>
             </Box>
           </Toolbar>
