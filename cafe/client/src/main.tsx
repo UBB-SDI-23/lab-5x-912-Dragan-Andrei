@@ -35,6 +35,8 @@ import CountriesByBlends from "./components/blends/CountriesByBlends";
 import Register from "./components/users/Register";
 import Confirmation from "./components/users/Confirmation";
 
+import NotFound from "./components/NotFound";
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
@@ -62,6 +64,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 
           <Route path="/register" element={<Register />} />
           <Route path="/register/confirm/:code" element={<Confirmation />} />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </ThemeProvider>
