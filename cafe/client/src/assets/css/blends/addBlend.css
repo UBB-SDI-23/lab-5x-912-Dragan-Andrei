@@ -12,7 +12,7 @@
 
 .create-blend-support-image {
   display: flex !important;
-  margin: 0 0 !important;
+  margin: 0 !important;
   height: fit-content !important;
   flex-direction: column !important;
   justify-content: center !important;
