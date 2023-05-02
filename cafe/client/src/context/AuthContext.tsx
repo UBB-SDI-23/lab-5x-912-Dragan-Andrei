@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }: { children: any }) => {
     localStorage.getItem("authTokens") ? jwt_decode(JSON.parse(localStorage.getItem("authTokens") || "{access:''}").access) : null
   );
   const [loading, setLoading] = useState<boolean>(true);
+  const [lastRefreshCall, setLastRefreshCall] = useState<number>(0);
 
   const logoutUser = () => {
     setAuthTokens(null);
@@ -26,23 +27,29 @@ export const AuthProvider = ({ children }: { children: any }) => {
     if (loading) {
       setLoading(false);
     }
-
     try {
+      setLastRefreshCall((prev) => prev + 1);
+      const localLastRefreshCall = lastRefreshCall;
+
       const response = await axios.post(`${BASE_URL_API}/token/refresh/`, {
         refresh: authTokens ? authTokens.refresh : "",
       });
+
       const data = await response.data;
       const user: any = jwt_decode(data.access);
+
+      if (localLastRefreshCall !== lastRefreshCall) return;
 
       if (user.is_active) {
         setAuthTokens(data);
         setUser(user);
-        console.log(user);
         localStorage.setItem("authTokens", JSON.stringify(data));
       } else {
+        console.log("here was an error1");
         logoutUser();
       }
     } catch (error: any) {
+      console.log("here was an error2");
       logoutUser();
     }
   };
