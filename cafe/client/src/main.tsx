@@ -13,6 +13,12 @@ import { theme } from "./utils/theme";
 // context
 import { AuthProvider } from "./context/AuthContext";
 
+// routes
+import RegularRoutes from "./components/routes/RegularRoutes";
+import UserRoutes from "./components/routes/UserRoutes";
+import AdminRoutes from "./components/routes/AdminRoutes";
+import ModeratorRoutes from "./components/routes/ModeratorRoutes";
+
 // react components
 import Home from "./components/Home";
 
@@ -50,26 +56,34 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/" element={<Home />} />
 
             <Route path="/coffees" element={<Menu />} />
-            <Route path="/coffees/add" element={<AddCoffee />} />
-            <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
             <Route path="/coffees/:id" element={<DetailedCoffeeItem />} />
 
             <Route path="/locations" element={<LocationsMenu />} />
-            <Route path="/locations/add" element={<AddLocation />} />
-            <Route path="/locations/:id/edit/" element={<EditLocation />} />
             <Route path="/locations/:id" element={<DetailedLocationItem />} />
-            <Route path="/locations/:id/add" element={<AddSale />} />
             <Route path="/locations/sales-by-location" element={<SalesByLocation />} />
 
             <Route path="/blends" element={<BlendsMenu />} />
             <Route path="/blends/:id" element={<DetailedBlendItem />} />
-            <Route path="/blends/add" element={<AddBlend />} />
-            <Route path="/blends/:id/edit" element={<EditBlend />} />
             <Route path="/blends/country" element={<CountriesByBlends />} />
 
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register/confirm/:code" element={<Confirmation />} />
+            <Route element={<RegularRoutes />}>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register/confirm/:code" element={<Confirmation />} />
+            </Route>
+            <Route element={<UserRoutes />}></Route>
+            <Route element={<ModeratorRoutes />}>
+              <Route path="/coffees/add" element={<AddCoffee />} />
+              <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
+
+              <Route path="/locations/add" element={<AddLocation />} />
+              <Route path="/locations/:id/edit/" element={<EditLocation />} />
+              <Route path="/locations/:id/add" element={<AddSale />} />
+
+              <Route path="/blends/add" element={<AddBlend />} />
+              <Route path="/blends/:id/edit" element={<EditBlend />} />
+            </Route>
+            <Route element={<AdminRoutes />}></Route>
 
             <Route path="*" element={<NotFound />} />
           </Routes>
