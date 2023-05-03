@@ -51,15 +51,17 @@ const DetailedCoffeeItem = () => {
   // function to delete a coffee based on id
   const deleteCoffee = async (id: number) => {
     try {
-      const respone = await axios.delete(`${BASE_URL_API}/coffees/${id}`);
-      if (respone.status >= 200 && respone.status < 300) {
-        navigate("/coffees");
-        return;
-      } else {
-        setError("The coffee could not be deleted! Please try again later.");
-      }
-    } catch (error) {
-      setError("The coffee could not be deleted! Please try again later.");
+      await axios.delete(`${BASE_URL_API}/coffees/${id}`, {
+        headers: {
+          Authorization: `Bearer ${contextData.authTokens.access}`,
+        },
+      });
+      navigate("/coffees");
+      return;
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.auth) {
+        setError(error.response.data.auth);
+      } else setError("The coffee could not be deleted! Please try again later.");
     }
   };
 
@@ -106,21 +108,22 @@ const DetailedCoffeeItem = () => {
                   >
                     Edit
                   </Button>
-
-                  <Button
-                    className="delete-coffee-button"
-                    onClick={() => setDeleteModal(true)}
-                    variant="outlined"
-                    sx={{
-                      ml: 3,
-                      boxShadow: 4,
-                      "&:hover": {
-                        boxShadow: 2,
-                      },
-                    }}
-                  >
-                    DELETE
-                  </Button>
+                  {contextData.user.is_superuser && (
+                    <Button
+                      className="delete-coffee-button"
+                      onClick={() => setDeleteModal(true)}
+                      variant="outlined"
+                      sx={{
+                        ml: 3,
+                        boxShadow: 4,
+                        "&:hover": {
+                          boxShadow: 2,
+                        },
+                      }}
+                    >
+                      DELETE
+                    </Button>
+                  )}
                 </Box>
               )}
 

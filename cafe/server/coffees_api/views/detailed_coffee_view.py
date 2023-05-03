@@ -12,6 +12,8 @@ from sales_api.serializer import SaleSerializer
 
 from sales_api.sales_pagination import SalePagination
 
+from helpers.check_user_permission import check_user_permission
+
 
 class CoffeeDetail(APIView):
 
@@ -132,6 +134,13 @@ class CoffeeDetail(APIView):
                                  }))
         })
     def put(self, request, pk):
+        # only admin and moderator can update a coffee
+        if not check_user_permission(request,
+                                     'admin') and not check_user_permission(
+                                         request, 'moderator'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
         try:
             coffee = Coffee.objects.get(pk=pk)
             serialized_coffee = CoffeeSerializer(coffee, data=request.data)
@@ -159,10 +168,16 @@ class CoffeeDetail(APIView):
                                  }))
         })
     def delete(self, request, pk):
+        # only admin can delete a coffee
+        if not check_user_permission(request, 'admin'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
+
         try:
             coffee = Coffee.objects.get(pk=pk)
             coffee.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response({'error': 'Coffee does not exist'},
                             status=status.HTTP_400_BAD_REQUEST)

@@ -10,10 +10,11 @@ from coffees_api.models import Coffee
 from coffees_api.serializer import CoffeeSerializer
 from coffees_api.coffee_pagination import CoffeePagination
 
+from helpers.check_user_permission import check_user_permission
+
 
 class Coffees(APIView):
-    pagination_class = CoffeePagination
-
+    # everyone can see the all the coffees
     @swagger_auto_schema(
         operation_description="Get a list of all coffees",
         manual_parameters=[
@@ -89,9 +90,20 @@ class Coffees(APIView):
                                  }))
         })
     def post(self, request):
+        # only admin and moderator can create a new coffee
+        if not check_user_permission(
+                request, 'moderator') and not check_user_permission(
+                    request, 'admin'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
+
         serialized_coffee = CoffeeSerializer(data=request.data)
         if serialized_coffee.is_valid():
             serialized_coffee.save()
             return Response(serialized_coffee.data)
-        return Response(serialized_coffee.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(
+                serialized_coffee.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )

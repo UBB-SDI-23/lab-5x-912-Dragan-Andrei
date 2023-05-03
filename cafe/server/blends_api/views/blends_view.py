@@ -11,6 +11,8 @@ from blends_api.blend_pagination import BlendPagination
 
 from coffees_api.models import Coffee
 
+from helpers.check_user_permission import check_user_permission
+
 
 class Blends(APIView):
 
@@ -73,6 +75,13 @@ class Blends(APIView):
                                  }))
         })
     def post(self, request):
+        # only admin and moderator can create a new blend
+        if not check_user_permission(
+                request, 'moderator') and not check_user_permission(
+                    request, 'admin'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
         serialized_blends = BlendSerializer(data=request.data)
         if serialized_blends.is_valid():
             serialized_blends.save()

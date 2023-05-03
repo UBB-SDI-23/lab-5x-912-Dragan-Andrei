@@ -11,6 +11,8 @@ from drf_yasg.utils import swagger_auto_schema
 
 from locations_api.location_pagination import LocationPagination
 
+from helpers.check_user_permission import check_user_permission
+
 
 class Locations(APIView):
 
@@ -77,6 +79,14 @@ class Locations(APIView):
                                  }))
         })
     def post(self, request):
+        # only admin and moderator can create a new location
+        if not check_user_permission(
+                request, 'moderator') and not check_user_permission(
+                    request, 'admin'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
+
         serialized_locations = LocationSerializer(data=request.data)
         if serialized_locations.is_valid():
             serialized_locations.save()

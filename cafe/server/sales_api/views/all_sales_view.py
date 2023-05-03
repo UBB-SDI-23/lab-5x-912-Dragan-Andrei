@@ -49,4 +49,7 @@ class Sales(APIView):
             # add the name of the coffee as well
             sale['coffee_name'] = Coffee.objects.get(id=sale['coffee_id']).name
 
+            # round the revenue
+            sale['revenue'] = round(sale['revenue'], 2)
+
         return paginator.get_paginated_response(serialized_sales.data)

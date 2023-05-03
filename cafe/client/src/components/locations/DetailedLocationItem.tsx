@@ -57,15 +57,17 @@ const DetailedLocationItem = () => {
   // function to delete a location based on id
   const deleteLocation = async (id: number) => {
     try {
-      const respone = await axios.delete(`${BASE_URL_API}/locations/${id}`);
-      if (respone.status === 204) {
-        navigate("/locations");
-        return;
-      } else {
-        setError("The location could not be deleted! Please try again later.");
-      }
-    } catch (error) {
-      setError("The location could not be deleted! Please try again later.");
+      await axios.delete(`${BASE_URL_API}/locations/${id}`, {
+        headers: {
+          Authorization: `Bearer ${contextData.authTokens.access}`,
+        },
+      });
+      navigate("/locations");
+      return;
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.auth) {
+        setError(error.response.data.auth);
+      } else setError("The location could not be deleted! Please try again later.");
     }
   };
 
@@ -126,21 +128,22 @@ const DetailedLocationItem = () => {
                     >
                       Edit
                     </Button>
-
-                    <Button
-                      className="delete-location-button"
-                      onClick={() => setDeleteModal(true)}
-                      variant="outlined"
-                      sx={{
-                        ml: 3,
-                        boxShadow: 4,
-                        "&:hover": {
-                          boxShadow: 2,
-                        },
-                      }}
-                    >
-                      DELETE
-                    </Button>
+                    {contextData.user.is_superuser && (
+                      <Button
+                        className="delete-location-button"
+                        onClick={() => setDeleteModal(true)}
+                        variant="outlined"
+                        sx={{
+                          ml: 3,
+                          boxShadow: 4,
+                          "&:hover": {
+                            boxShadow: 2,
+                          },
+                        }}
+                      >
+                        DELETE
+                      </Button>
+                    )}
                   </Box>
                 )}
 
