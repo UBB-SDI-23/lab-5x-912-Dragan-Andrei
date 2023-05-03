@@ -14,7 +14,8 @@ import "../../assets/css/sales/addSale.css";
 import { Coffee } from "../../models/Coffee";
 
 // utils
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 import axios from "axios";
 import { BASE_URL_API } from "../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -67,7 +68,7 @@ const CreateSale = () => {
   const [lastGetCoffeesCall, setLastGetCoffeesCall] = useState<number>(0);
 
   const navigate = useNavigate();
-
+  const contextData = useContext<any>(AuthContext);
   const locationId = Number(useParams<{ id: string }>().id);
 
   // function to get the location based on id
@@ -186,23 +187,24 @@ const CreateSale = () => {
 
     // send the post request
     try {
-      const response = await axios.post(`${BASE_URL_API}/locations/${locationId}/coffees`, addedSale);
-      if (response.status >= 200 && response.status < 300) {
-        navigate(`/locations/${locationId}`);
-        return;
-      }
-
-      // if the response is not a success, then something went wrong
-      setLocalError((prevError) => ({
-        ...prevError,
-        generic: "Something went wrong! Make sure the coffee is not already added for this location.",
-      }));
+      await axios.post(`${BASE_URL_API}/locations/${locationId}/coffees`, addedSale, {
+        headers: {
+          Authorization: `Bearer ${contextData.authTokens.access}`,
+        },
+      });
+      navigate(`/locations/${locationId}`);
+      return;
     } catch (error: any) {
-      if (error.response.data) {
+      if (error.response && error.response.data) {
         if (error.response.data.sold_coffees) {
           setLocalError((prevError) => ({
             ...prevError,
             soldCoffees: error.response.data.sold_coffees,
+          }));
+        } else if (error.response.data.auth) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            generic: error.response.data.auth,
           }));
         } else {
           setLocalError((prevError) => ({

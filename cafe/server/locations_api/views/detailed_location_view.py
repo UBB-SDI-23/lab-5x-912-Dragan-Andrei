@@ -10,6 +10,8 @@ from sales_api.models import Sale
 from sales_api.serializer import SaleSerializer
 from sales_api.sales_pagination import SalePagination
 
+from helpers.check_user_permission import check_user_permission
+
 
 class LocationDetail(APIView):
 
@@ -103,6 +105,14 @@ class LocationDetail(APIView):
                                  }))
         })
     def put(self, request, pk):
+        # only admin and moderator can update a location
+        if not check_user_permission(request,
+                                     'admin') and not check_user_permission(
+                                         request, 'moderator'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
+
         try:
             location = Location.objects.get(pk=pk)
             serialized_location = LocationSerializer(location,
@@ -132,6 +142,12 @@ class LocationDetail(APIView):
                                  }))
         })
     def delete(self, request, pk):
+        # only admin can delete a location
+        if not check_user_permission(request, 'admin'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
+
         try:
             location = Location.objects.get(pk=pk)
             location.delete()

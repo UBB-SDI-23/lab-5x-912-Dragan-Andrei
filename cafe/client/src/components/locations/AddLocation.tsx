@@ -9,7 +9,8 @@ import AddIcon from "@mui/icons-material/Add";
 import "../../assets/css/locations/addLocation.css";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 import axios from "axios";
 import { BASE_URL_API } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
@@ -83,6 +84,7 @@ const AddLocation = () => {
   });
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // every time the localLocation state changes, validate the data
   useEffect(() => {
@@ -254,19 +256,15 @@ const AddLocation = () => {
 
     // send the post request
     try {
-      const response = await axios.post(`${BASE_URL_API}/locations/`, addedLocation);
-      if (response.status >= 200 && response.status < 300) {
-        navigate("/locations");
-        return;
-      }
-
-      // if the response is not a successful one, then something went wrong
-      setLocalError((prevError) => ({
-        ...prevError,
-        generic: "Something went wrong! Make sure you filled all the fields correctly.",
-      }));
+      const response = await axios.post(`${BASE_URL_API}/locations/`, addedLocation, {
+        headers: {
+          Authorization: `Bearer ${contextData.authTokens.access}`,
+        },
+      });
+      navigate("/locations");
+      return;
     } catch (error: any) {
-      if (error.response.data) {
+      if (error.response && error.response.data) {
         if (error.response.data.name) {
           setLocalError((prevError) => ({
             ...prevError,
@@ -308,6 +306,12 @@ const AddLocation = () => {
             description: error.response.data.description,
           }));
           setLocalLocation((prevLocation) => ({ ...prevLocation, description: "" }));
+        }
+        if (error.response.data.auth) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            generic: error.response.data.auth,
+          }));
         }
       } else {
         setLocalError((prevError) => ({

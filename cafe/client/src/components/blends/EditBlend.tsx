@@ -10,7 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import "../../assets/css/blends/addBlend.css";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 import axios from "axios";
 import { BASE_URL_API } from "../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -82,6 +83,7 @@ const EditBlend = () => {
   const id = Number(useParams<{ id: string }>().id);
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // function to get a blend based on id
   const getBlend = async (id: number) => {
@@ -227,19 +229,15 @@ const EditBlend = () => {
 
     // send the post request
     try {
-      const response = await axios.put(`${BASE_URL_API}/blends/${id}`, updatedBlend);
-      if (response.status >= 200 && response.status < 300) {
-        navigate("/blends");
-        return;
-      }
-
-      // if the response is not a successful one, then something went wrong
-      setLocalError((prevError) => ({
-        ...prevError,
-        generic: "Something went wrong! Make sure you filled all the fields correctly.",
-      }));
+      await axios.put(`${BASE_URL_API}/blends/${id}`, updatedBlend, {
+        headers: {
+          Authorization: `Bearer ${contextData.authTokens.access}`,
+        },
+      });
+      navigate("/blends");
+      return;
     } catch (error: any) {
-      if (error.response.data) {
+      if (error.response && error.response.data) {
         if (error.response.data.name) {
           setLocalError((prevError) => ({
             ...prevError,
@@ -267,6 +265,12 @@ const EditBlend = () => {
             level: error.response.data.level,
           }));
           setLocalBlend((prevBlend) => ({ ...prevBlend, level: "" }));
+        }
+        if (error.response.data.auth) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            generic: error.response.data.auth,
+          }));
         }
       } else {
         setLocalError((prevError) => ({

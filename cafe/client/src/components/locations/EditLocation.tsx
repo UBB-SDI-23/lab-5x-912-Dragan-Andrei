@@ -9,7 +9,8 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import "../../assets/css/locations/addLocation.css";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 import axios from "axios";
 import { BASE_URL_API } from "../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -86,6 +87,7 @@ const EditLocation = () => {
   const id = Number(useParams<{ id: string }>().id);
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // function to get a location based on id
   const getLocation = async (id: number) => {
@@ -278,19 +280,15 @@ const EditLocation = () => {
 
     // send the put request
     try {
-      const response = await axios.put(`${BASE_URL_API}/locations/${id}`, updatedLocation);
-      if (response.status >= 200 && response.status < 300) {
-        navigate("/locations");
-        return;
-      }
-
-      // if the response is not a successful one, then something went wrong
-      setLocalError((prevError) => ({
-        ...prevError,
-        generic: "Something went wrong! Make sure you filled all the fields correctly.",
-      }));
+      await axios.put(`${BASE_URL_API}/locations/${id}`, updatedLocation, {
+        headers: {
+          Authorization: `Bearer ${contextData.authTokens.access}`,
+        },
+      });
+      navigate("/locations");
+      return;
     } catch (error: any) {
-      if (error.response.data) {
+      if (error.response && error.response.data) {
         if (error.response.data.name) {
           setLocalError((prevError) => ({
             ...prevError,
@@ -332,6 +330,12 @@ const EditLocation = () => {
             description: error.response.data.description,
           }));
           setLocalLocation((prevLocation) => ({ ...prevLocation, description: "" }));
+        }
+        if (error.response.data.auth) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            generic: error.response.data.auth,
+          }));
         }
       } else {
         setLocalError((prevError) => ({

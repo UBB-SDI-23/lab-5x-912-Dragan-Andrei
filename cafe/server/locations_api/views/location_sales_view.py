@@ -8,6 +8,8 @@ from drf_yasg.utils import swagger_auto_schema
 from sales_api.models import Sale
 from sales_api.serializer import SaleSerializer
 
+from helpers.check_user_permission import check_user_permission
+
 
 class LocationCoffee(APIView):
 
@@ -28,6 +30,14 @@ class LocationCoffee(APIView):
                                  }))
         })
     def post(self, request, pk):
+        # only admin and moderator can create a new sale
+        if not check_user_permission(
+                request, 'moderator') and not check_user_permission(
+                    request, 'admin'):
+            return Response(
+                status=status.HTTP_401_UNAUTHORIZED,
+                data={"auth": "You are not authorized to perform this action"})
+
         location = Location.objects.filter(pk=pk).first()
         if not location:
             return Response({"error": f"Location with id {pk} not found"},
