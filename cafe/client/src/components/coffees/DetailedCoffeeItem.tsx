@@ -9,11 +9,11 @@ import Button from "@mui/material/Button";
 import "../../assets/css/coffees/detailedCoffee.css";
 
 // utils
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
 import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 // models
 import { Coffee } from "../../models/Coffee";
@@ -36,6 +36,7 @@ const DetailedCoffeeItem = () => {
   const id = Number(useParams<{ id: string }>().id);
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // function to get a coffee based on id
   const getCoffee = async (id: number) => {
@@ -84,42 +85,44 @@ const DetailedCoffeeItem = () => {
 
           {coffee.name && (
             <>
-              <Box
-                mt={2}
-                mb={8}
-                sx={{
-                  display: "flex",
-                }}
-              >
-                <Button
-                  className="edit-coffee-button"
-                  variant="contained"
+              {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+                <Box
+                  mt={2}
+                  mb={8}
                   sx={{
-                    boxShadow: 4,
-                    "&:hover": {
-                      boxShadow: 2,
-                    },
+                    display: "flex",
                   }}
-                  onClick={() => navigate(`edit`)}
                 >
-                  Edit
-                </Button>
+                  <Button
+                    className="edit-coffee-button"
+                    variant="contained"
+                    sx={{
+                      boxShadow: 4,
+                      "&:hover": {
+                        boxShadow: 2,
+                      },
+                    }}
+                    onClick={() => navigate(`edit`)}
+                  >
+                    Edit
+                  </Button>
 
-                <Button
-                  className="delete-coffee-button"
-                  onClick={() => setDeleteModal(true)}
-                  variant="outlined"
-                  sx={{
-                    ml: 3,
-                    boxShadow: 4,
-                    "&:hover": {
-                      boxShadow: 2,
-                    },
-                  }}
-                >
-                  DELETE
-                </Button>
-              </Box>
+                  <Button
+                    className="delete-coffee-button"
+                    onClick={() => setDeleteModal(true)}
+                    variant="outlined"
+                    sx={{
+                      ml: 3,
+                      boxShadow: 4,
+                      "&:hover": {
+                        boxShadow: 2,
+                      },
+                    }}
+                  >
+                    DELETE
+                  </Button>
+                </Box>
+              )}
 
               <Box sx={{ display: "flex" }}>
                 <Typography variant="h4">Price:</Typography>

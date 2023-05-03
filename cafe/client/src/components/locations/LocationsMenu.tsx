@@ -16,10 +16,11 @@ import LocationItem from "./LocationItem";
 import Pagination from "../Pagination";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 // images
 import supportImage from "../../assets/images/location.jpg";
@@ -47,6 +48,7 @@ const LocationsMenu = () => {
   const [totalEntries, setTotalEntries] = useState<number>(0);
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // function to get all locations
   const getLocations = async () => {
@@ -107,20 +109,23 @@ const LocationsMenu = () => {
               ))}
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="locations" />
-          <Button
-            className="add-location-button"
-            onClick={() => navigate("/locations/add")}
-            variant="contained"
-            sx={{
-              mt: 5,
-              boxShadow: 4,
-              "&:hover": {
-                boxShadow: 2,
-              },
-            }}
-          >
-            <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add location
-          </Button>
+
+          {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+            <Button
+              className="add-location-button"
+              onClick={() => navigate("/locations/add")}
+              variant="contained"
+              sx={{
+                mt: 5,
+                boxShadow: 4,
+                "&:hover": {
+                  boxShadow: 2,
+                },
+              }}
+            >
+              <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add location
+            </Button>
+          )}
         </Container>
         <Container className="locations-support-image">
           <Box mt={10} sx={{ textAlign: "center" }}>

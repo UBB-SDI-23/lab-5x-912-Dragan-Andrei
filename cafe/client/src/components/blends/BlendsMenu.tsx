@@ -16,10 +16,11 @@ import BlendItem from "./BlendItem";
 import Pagination from "../Pagination";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 // images
 import supportImage from "../../assets/images/blends.jpg";
@@ -46,6 +47,7 @@ const BlendsMenu = () => {
   const [totalEntries, setTotalEntries] = useState<number>(0);
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // function to get all blends
   const getBlends = async () => {
@@ -106,20 +108,23 @@ const BlendsMenu = () => {
               ))}
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="blends" />
-          <Button
-            className="add-blend-button"
-            onClick={() => navigate("/blends/add")}
-            variant="contained"
-            sx={{
-              mt: 5,
-              boxShadow: 4,
-              "&:hover": {
-                boxShadow: 2,
-              },
-            }}
-          >
-            <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add blend
-          </Button>
+
+          {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+            <Button
+              className="add-blend-button"
+              onClick={() => navigate("/blends/add")}
+              variant="contained"
+              sx={{
+                mt: 5,
+                boxShadow: 4,
+                "&:hover": {
+                  boxShadow: 2,
+                },
+              }}
+            >
+              <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add blend
+            </Button>
+          )}
         </Container>
         <Container className="blends-support-image">
           <Box mt={10} sx={{ textAlign: "center" }}>

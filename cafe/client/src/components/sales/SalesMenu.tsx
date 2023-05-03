@@ -14,10 +14,11 @@ import Pagination from "../Pagination";
 import SaleItem from "./SaleItem";
 
 // utils
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 // create a local custom interface for the sale object
 interface LocalSale {
@@ -40,6 +41,7 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
   const [totalEntries, setTotalEntries] = useState<number>(0);
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // function to get the paginated sales
   const getSales = async () => {
@@ -92,20 +94,22 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
               <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="sales" />
             </>
           )}
-          <Button
-            className="add-sale-button"
-            onClick={() => navigate(`/locations/${locationId}/add`)}
-            variant="contained"
-            sx={{
-              mt: 5,
-              boxShadow: 4,
-              "&:hover": {
-                boxShadow: 2,
-              },
-            }}
-          >
-            <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add a new sale
-          </Button>
+          {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+            <Button
+              className="add-sale-button"
+              onClick={() => navigate(`/locations/${locationId}/add`)}
+              variant="contained"
+              sx={{
+                mt: 5,
+                boxShadow: 4,
+                "&:hover": {
+                  boxShadow: 2,
+                },
+              }}
+            >
+              <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add a new sale
+            </Button>
+          )}
         </Container>
       </Container>
     </>

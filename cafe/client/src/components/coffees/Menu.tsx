@@ -18,10 +18,11 @@ import CoffeeItem from "./CoffeeItem";
 import Pagination from "../Pagination";
 
 // utils
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 // images
 import supportImage from "../../assets/images/coffees.jpg";
@@ -51,6 +52,7 @@ const Menu = () => {
   const [totalEntries, setTotalEntries] = useState<number>(0);
 
   const navigate = useNavigate();
+  const contextData = useContext<any>(AuthContext);
 
   // function to get all coffees
   const getCoffees = async () => {
@@ -126,20 +128,23 @@ const Menu = () => {
               ))}
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="coffees" />
-          <Button
-            className="add-coffee-button"
-            onClick={() => navigate("/coffees/add")}
-            variant="contained"
-            sx={{
-              mt: 5,
-              boxShadow: 4,
-              "&:hover": {
-                boxShadow: 2,
-              },
-            }}
-          >
-            <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add coffee
-          </Button>
+
+          {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+            <Button
+              className="add-coffee-button"
+              onClick={() => navigate("/coffees/add")}
+              variant="contained"
+              sx={{
+                mt: 5,
+                boxShadow: 4,
+                "&:hover": {
+                  boxShadow: 2,
+                },
+              }}
+            >
+              <ArrowForwardIcon sx={{ marginRight: "8px" }} /> Add coffee
+            </Button>
+          )}
         </Container>
         <Container className="coffees-support-image">
           <Box mt={10} sx={{ textAlign: "center" }}>

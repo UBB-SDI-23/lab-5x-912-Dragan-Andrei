@@ -5,7 +5,7 @@ import { useContext } from "react";
 
 const RegularRoutes = () => {
   const contextData = useContext<any>(AuthContext);
-  return !contextData.user || !contextData.user.is_active ? <Outlet /> : <Navigate to="/" />;
+  return !contextData.user ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default RegularRoutes;
