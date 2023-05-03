@@ -27,4 +27,4 @@ class Location(models.Model):
                                    validators=[postal_code_length])
     profit = models.FloatField()
     description = models.TextField(validators=[validate_no_profanity])
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

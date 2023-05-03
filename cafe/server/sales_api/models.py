@@ -19,7 +19,7 @@ class Sale(models.Model):
     revenue = models.FloatField(null=True, validators=[validate_positive])
     coffee_id = models.ForeignKey(Coffee, on_delete=models.CASCADE)
     location_id = models.ForeignKey(Location, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = (("coffee_id", "location_id"), )

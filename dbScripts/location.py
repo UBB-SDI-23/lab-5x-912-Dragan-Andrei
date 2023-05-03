@@ -36,15 +36,18 @@ with open('populateLocations.sql', 'w') as f:
             # generate a fake description
             no_words = 0
             description = ""
-            while no_words < 90:
+            while no_words < 45:
                 text = fake.text()
                 no_words += len(text.split())
                 description += text
 
+            # generate a user id to associate with the blend
+            user_id = fake.random_int(min=1, max=10000)
+
             values.append(
-                f'(\'{name}\', \'{address}\', \'{city}\', \'{postal_code}\', {profit}, \'{description}\')'
+                f'(\'{name}\', \'{address}\', \'{city}\', \'{postal_code}\', {profit}, \'{description}\', {user_id})'
             )
 
         print(
-            f'INSERT INTO locations_api_location (name, address, city, postal_code, profit, description) VALUES {", ".join(values)};',
+            f'INSERT INTO locations_api_location (name, address, city, postal_code, profit, description, user_id_id) VALUES {", ".join(values)};',
             file=f)

@@ -44,10 +44,13 @@ with open('populateCoffees.sql', 'w') as f:
             # generate a random blend_id
             blend_id = fake.random_int(min=1, max=1000000)
 
+            # generate a user id to associate with the blend
+            user_id = fake.random_int(min=1, max=10000)
+
             values.append(
-                f'(\'{name}\', {price}, {calories}, {quantity}, {vegan}, {blend_id})'
+                f'(\'{name}\', {price}, {calories}, {quantity}, {vegan}, {blend_id}, {user_id})'
             )
 
         print(
-            f'INSERT INTO coffees_api_coffee (name, price, calories, quantity, vegan, blend_id_id) VALUES {", ".join(values)};',
+            f'INSERT INTO coffees_api_coffee (name, price, calories, quantity, vegan, blend_id_id, user_id_id) VALUES {", ".join(values)};',
             file=f)
