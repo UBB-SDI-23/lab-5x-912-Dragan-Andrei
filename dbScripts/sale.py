@@ -47,13 +47,17 @@ with open('populateSales.sql', 'w') as f:
             # generate a random location_id
             location_id = fake.random_int(min=j * 1000 + 1, max=(j + 1) * 1000)
 
+            # generate a user id to associate with the blend
+            user_id = fake.random_int(min=1, max=10000)
+
             # add it to the batch of inserts
             values.append(
-                f'({sold_coffees}, {revenue}, {coffee_id}, {location_id})')
+                f'({sold_coffees}, {revenue}, {coffee_id}, {location_id}), {user_id}'
+            )
 
         # execute the batch of inserts
         print(
-            f'INSERT INTO sales_api_sale (sold_coffees, revenue, coffee_id_id, location_id_id) VALUES {", ".join(values)};',
+            f'INSERT INTO sales_api_sale (sold_coffees, revenue, coffee_id_id, location_id_id, user_id_id) VALUES {", ".join(values)};',
             file=f)
 
     # enable the unique constraint on coffee_id_id and location_id_id

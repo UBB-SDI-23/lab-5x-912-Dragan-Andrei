@@ -29,4 +29,4 @@ class Blend(models.Model):
                                          validators=[validate_no_profanity])
     level = models.IntegerField(validators=[validate_blend_level])
     in_stock = models.BooleanField()
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

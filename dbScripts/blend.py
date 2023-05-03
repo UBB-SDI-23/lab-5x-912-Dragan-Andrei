@@ -36,10 +36,13 @@ with open('populateBlends.sql', 'w') as f:
             # generate a fake in stock value
             in_stock = fake.boolean()
 
+            # generate a user id to associate with the blend
+            user_id = fake.random_int(min=1, max=10000)
+
             values.append(
-                f'(\'{name}\', \'{description}\', \'{country_of_origin}\', {level}, {in_stock})'
+                f'(\'{name}\', \'{description}\', \'{country_of_origin}\', {level}, {in_stock}, {user_id})'
             )
 
         print(
-            f'INSERT INTO blends_api_blend (name, description, country_of_origin, level, in_stock) VALUES {", ".join(values)};',
+            f'INSERT INTO blends_api_blend (name, description, country_of_origin, level, in_stock, user_id_id) VALUES {", ".join(values)};',
             file=f)

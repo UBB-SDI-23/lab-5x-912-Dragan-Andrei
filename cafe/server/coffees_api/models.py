@@ -37,7 +37,7 @@ class Coffee(models.Model):
                                  on_delete=models.CASCADE,
                                  default=1,
                                  related_name="coffees")
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
