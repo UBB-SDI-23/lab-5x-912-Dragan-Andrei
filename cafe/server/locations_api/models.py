@@ -1,6 +1,9 @@
 import better_profanity
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def postal_code_length(value):
@@ -24,3 +27,4 @@ class Location(models.Model):
                                    validators=[postal_code_length])
     profit = models.FloatField()
     description = models.TextField(validators=[validate_no_profanity])
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -2,6 +2,9 @@ import better_profanity
 from django.db import models
 from blends_api.models import Blend
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def validate_positive(value):
@@ -34,6 +37,7 @@ class Coffee(models.Model):
                                  on_delete=models.CASCADE,
                                  default=1,
                                  related_name="coffees")
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

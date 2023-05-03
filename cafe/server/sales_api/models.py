@@ -2,6 +2,9 @@ from django.db import models
 from coffees_api.models import Coffee
 from locations_api.models import Location
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def validate_positive(value):
@@ -16,6 +19,7 @@ class Sale(models.Model):
     revenue = models.FloatField(null=True, validators=[validate_positive])
     coffee_id = models.ForeignKey(Coffee, on_delete=models.CASCADE)
     location_id = models.ForeignKey(Location, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (("coffee_id", "location_id"), )

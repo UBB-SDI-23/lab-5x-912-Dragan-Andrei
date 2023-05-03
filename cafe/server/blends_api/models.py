@@ -1,6 +1,9 @@
 import better_profanity
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def validate_blend_level(value):
@@ -26,3 +29,4 @@ class Blend(models.Model):
                                          validators=[validate_no_profanity])
     level = models.IntegerField(validators=[validate_blend_level])
     in_stock = models.BooleanField()
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
