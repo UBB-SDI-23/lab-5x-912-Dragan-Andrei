@@ -52,7 +52,7 @@ with open('populateSales.sql', 'w') as f:
 
             # add it to the batch of inserts
             values.append(
-                f'({sold_coffees}, {revenue}, {coffee_id}, {location_id}), {user_id}'
+                f'({sold_coffees}, {revenue}, {coffee_id}, {location_id}, {user_id})'
             )
 
         # execute the batch of inserts

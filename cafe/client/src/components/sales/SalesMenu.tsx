@@ -5,6 +5,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Box from "@mui/material/Box";
 
 // css
 import "../../assets/css/sales/salesMenu.css";
@@ -12,6 +13,7 @@ import "../../assets/css/sales/salesMenu.css";
 // react components
 import Pagination from "../Pagination";
 import SaleItem from "./SaleItem";
+import UserItem from "../users/UserItem";
 
 // utils
 import { useState, useEffect, useContext } from "react";
@@ -29,6 +31,7 @@ interface LocalSale {
   coffee_id: number;
   coffee_name: string;
   coffees_sold_worldwide: number;
+  username: string;
 }
 
 const SalesMenu = ({ locationId }: { locationId: number }) => {
@@ -102,9 +105,12 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
                   </Typography>
                 ) : (
                   sales.map((sale) => (
-                    <ListItem key={sale.id} sx={{ width: "100%", padding: "8px 0" }}>
-                      <SaleItem sale={sale} />
-                    </ListItem>
+                    <Box key={sale.id}>
+                      <UserItem username={sale.username} />
+                      <ListItem key={sale.id} sx={{ width: "100%", padding: "0 0 32px 0" }}>
+                        <SaleItem sale={sale} />
+                      </ListItem>
+                    </Box>
                   ))
                 )}
               </List>

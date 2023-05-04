@@ -18,6 +18,7 @@ interface LocalLocation {
   profit: number;
   description: string;
   total_revenue: number;
+  username: string;
 }
 
 const LocationItem = ({ location }: { location: LocalLocation }) => {

@@ -10,7 +10,10 @@ from coffees_api.models import Coffee
 from coffees_api.serializer import CoffeeSerializer
 from coffees_api.coffee_pagination import CoffeePagination
 
-from helpers.check_user_permission import check_user_permission
+from helpers.check_user_permission import check_user_permission, get_user_id
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Coffees(APIView):
@@ -67,9 +70,12 @@ class Coffees(APIView):
         serialized_coffees = CoffeeSerializer(paginated_coffees, many=True)
 
         # check by how many coffees the blend is used
+        # also get the user's username
         for coffee in serialized_coffees.data:
             coffee['blend_count'] = Coffee.objects.filter(
                 blend_id=coffee['id']).count()
+            coffee['username'] = User.objects.get(
+                id=coffee['user_id']).username
 
         return paginator.get_paginated_response(serialized_coffees.data)
 
@@ -98,6 +104,7 @@ class Coffees(APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
 
+        request.data['user_id'] = get_user_id(request)
         serialized_coffee = CoffeeSerializer(data=request.data)
         if serialized_coffee.is_valid():
             serialized_coffee.save()

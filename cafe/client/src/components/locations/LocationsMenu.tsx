@@ -14,6 +14,7 @@ import "../../assets/css/locations/locationsMenu.css";
 import MainNavbar from "../MainNavbar";
 import LocationItem from "./LocationItem";
 import Pagination from "../Pagination";
+import UserItem from "../users/UserItem";
 
 // utils
 import { useState, useEffect, useContext } from "react";
@@ -35,6 +36,7 @@ interface LocalLocation {
   profit: number;
   description: string;
   total_revenue: number;
+  username: string;
 }
 
 const LocationsMenu = () => {
@@ -116,9 +118,12 @@ const LocationsMenu = () => {
               </Typography>
             ) : (
               locations.map((location) => (
-                <ListItem key={location.id} sx={{ width: "100%", padding: "16px 0" }} onClick={() => getLocationDetails(location.id)}>
-                  <LocationItem location={location} />
-                </ListItem>
+                <Box key={location.id}>
+                  <UserItem username={location.username} />
+                  <ListItem sx={{ width: "100%", padding: "0 0 40px 0" }} onClick={() => getLocationDetails(location.id)}>
+                    <LocationItem location={location} />
+                  </ListItem>
+                </Box>
               ))
             )}
           </List>

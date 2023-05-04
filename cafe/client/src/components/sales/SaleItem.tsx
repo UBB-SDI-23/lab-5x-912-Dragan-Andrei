@@ -14,6 +14,7 @@ interface LocalSale {
   coffee_id: number;
   coffee_name: string;
   coffees_sold_worldwide: number;
+  username: string;
 }
 
 const SaleItem = ({ sale }: { sale: LocalSale }) => {

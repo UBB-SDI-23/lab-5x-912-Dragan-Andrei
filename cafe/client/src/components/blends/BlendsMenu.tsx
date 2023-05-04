@@ -14,6 +14,7 @@ import "../../assets/css/blends/blendsMenu.css";
 import MainNavbar from "../MainNavbar";
 import BlendItem from "./BlendItem";
 import Pagination from "../Pagination";
+import UserItem from "../users/UserItem";
 
 // utils
 import { useState, useEffect, useContext } from "react";
@@ -34,6 +35,7 @@ interface LocalBlend {
   level: number;
   in_stock: boolean;
   used_by: number;
+  username: string;
 }
 
 const BlendsMenu = () => {
@@ -115,9 +117,12 @@ const BlendsMenu = () => {
               </Typography>
             ) : (
               blends.map((blend) => (
-                <ListItem key={blend.id} sx={{ width: "100%", padding: "16px 0" }} onClick={() => getBlendDetails(blend.id)}>
-                  <BlendItem blend={blend} />
-                </ListItem>
+                <Box key={blend.id}>
+                  <UserItem username={blend.username} />
+                  <ListItem sx={{ width: "100%", padding: "0 0 40px 0" }} onClick={() => getBlendDetails(blend.id)}>
+                    <BlendItem blend={blend} />
+                  </ListItem>
+                </Box>
               ))
             )}
           </List>
