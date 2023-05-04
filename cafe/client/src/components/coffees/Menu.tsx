@@ -16,6 +16,7 @@ import "../../assets/css/coffees/menu.css";
 import MainNavbar from "../MainNavbar";
 import CoffeeItem from "./CoffeeItem";
 import Pagination from "../Pagination";
+import UserItem from "../users/UserItem";
 
 // utils
 import { useState, useEffect, useContext } from "react";
@@ -37,6 +38,7 @@ interface LocalCoffee {
   vegan: boolean;
   blend_id: number;
   blend_count: number;
+  username: string;
 }
 
 const Menu = () => {
@@ -135,9 +137,12 @@ const Menu = () => {
               </Typography>
             ) : (
               coffees.map((coffee) => (
-                <ListItem key={coffee.id} sx={{ width: "100%", padding: "8px 0" }} onClick={() => getCoffeeDetails(coffee.id)}>
-                  <CoffeeItem coffee={coffee} />
-                </ListItem>
+                <Box key={coffee.id}>
+                  <UserItem username={coffee.username} />
+                  <ListItem sx={{ width: "100%", padding: "0 0 32px 0" }} onClick={() => getCoffeeDetails(coffee.id)}>
+                    <CoffeeItem coffee={coffee} />
+                  </ListItem>
+                </Box>
               ))
             )}
           </List>

@@ -10,6 +10,10 @@ from rest_framework import status
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 class Sales(APIView):
 
@@ -40,6 +44,7 @@ class Sales(APIView):
         serialized_sales = SaleSerializer(paginated_sales, many=True)
 
         # compute the total of sold coffees no matter the location
+        # also get the user's username
         for sale in serialized_sales.data:
             sale['coffees_sold_worldwide'] = 0
             worldwide_sales = Sale.objects.filter(coffee_id=sale['coffee_id'])
@@ -51,5 +56,8 @@ class Sales(APIView):
 
             # round the revenue
             sale['revenue'] = round(sale['revenue'], 2)
+
+            # get the username
+            sale['username'] = User.objects.get(id=sale['user_id']).username
 
         return paginator.get_paginated_response(serialized_sales.data)

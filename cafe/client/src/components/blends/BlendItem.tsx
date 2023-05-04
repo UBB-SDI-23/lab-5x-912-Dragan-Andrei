@@ -14,6 +14,7 @@ interface LocalBlend {
   level: number;
   in_stock: boolean;
   used_by: number;
+  username: string;
 }
 
 const BlendItem = ({ blend }: { blend: LocalBlend }) => {

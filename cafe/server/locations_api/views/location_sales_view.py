@@ -8,7 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 from sales_api.models import Sale
 from sales_api.serializer import SaleSerializer
 
-from helpers.check_user_permission import check_user_permission
+from helpers.check_user_permission import check_user_permission, get_user_id
 
 
 class LocationCoffee(APIView):
@@ -45,6 +45,7 @@ class LocationCoffee(APIView):
 
         for coffee in request.data:
             coffee['location_id'] = pk
+            coffee['user_id'] = get_user_id(request)
             serialized_sale = SaleSerializer(data=coffee)
             if serialized_sale.is_valid():
                 try:

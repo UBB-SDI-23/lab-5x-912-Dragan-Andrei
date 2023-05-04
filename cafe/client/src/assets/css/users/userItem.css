@@ -1,0 +1,17 @@
+.user-item {
+  color: #be9063 !important;
+  padding-bottom: 10px !important;
+  text-align: left !important;
+}
+
+.user-item span {
+  color: #333 !important;
+}
+
+.user-item:hover {
+  cursor: pointer !important;
+}
+
+.user-item:hover span {
+  text-decoration: underline !important;
+}

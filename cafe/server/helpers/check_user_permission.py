@@ -1,7 +1,7 @@
 import jwt, os
 from django.contrib.auth import get_user_model
 
-secret_key = os.environ.get('JWT_KEY')
+secret_key = os.environ.get('secret')
 User = get_user_model()
 
 
@@ -33,3 +33,29 @@ def check_user_permission(request, role):
         return False
 
     return False
+
+
+def get_username(request):
+    try:
+        decoded_token = jwt.decode(
+            request.headers['Authorization'].split(' ')[1],
+            secret_key,
+            algorithms=['HS256'])
+
+        username = decoded_token['username']
+        return username
+    except:
+        return None
+
+
+def get_user_id(request):
+    try:
+        decoded_token = jwt.decode(
+            request.headers['Authorization'].split(' ')[1],
+            secret_key,
+            algorithms=['HS256'])
+
+        user_id = decoded_token['user_id']
+        return user_id
+    except:
+        return None

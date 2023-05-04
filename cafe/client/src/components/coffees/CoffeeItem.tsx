@@ -15,6 +15,7 @@ interface LocalCoffee {
   vegan: boolean;
   blend_id: number;
   blend_count: number;
+  username: string;
 }
 
 const CoffeeItem = ({ coffee }: { coffee: LocalCoffee }) => {

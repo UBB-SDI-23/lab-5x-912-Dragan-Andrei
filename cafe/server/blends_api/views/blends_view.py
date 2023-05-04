@@ -11,7 +11,10 @@ from blends_api.blend_pagination import BlendPagination
 
 from coffees_api.models import Coffee
 
-from helpers.check_user_permission import check_user_permission
+from helpers.check_user_permission import check_user_permission, get_user_id
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Blends(APIView):
@@ -20,8 +23,39 @@ class Blends(APIView):
         operation_description="Get a list of all blends",
         responses={
             status.HTTP_200_OK:
-            openapi.Response(description="List of all blends",
-                             schema=BlendSerializer(many=True)),
+            openapi.Response(
+                description="List of all blends",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'count':
+                        openapi.Schema(type=openapi.TYPE_INTEGER),
+                        'page':
+                        openapi.Schema(type=openapi.TYPE_INTEGER),
+                        'results':
+                        openapi.Schema(
+                            type=openapi.TYPE_ARRAY,
+                            items=openapi.Schema(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    'id':
+                                    openapi.Schema(type=openapi.TYPE_INTEGER),
+                                    'name':
+                                    openapi.Schema(type=openapi.TYPE_STRING),
+                                    'description':
+                                    openapi.Schema(type=openapi.TYPE_STRING),
+                                    'country_of_origin':
+                                    openapi.Schema(type=openapi.TYPE_STRING),
+                                    'level':
+                                    openapi.Schema(type=openapi.TYPE_INTEGER),
+                                    'in_stock':
+                                    openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                                    'used_by':
+                                    openapi.Schema(type=openapi.TYPE_INTEGER),
+                                    'username':
+                                    openapi.Schema(type=openapi.TYPE_STRING)
+                                }))
+                    })),
             status.HTTP_400_BAD_REQUEST:
             openapi.Response(description="Error message",
                              schema=openapi.Schema(
@@ -32,31 +66,39 @@ class Blends(APIView):
                                  }))
         })
     def get(self, request):
-        # get the page number and page size from the query params
-        page = int(request.query_params.get('p', 1))
-        page_size = int(request.query_params.get('page_size', 10))
+        try:
+            # get the page number and page size from the query params
+            page = int(request.query_params.get('p', 1))
+            page_size = int(request.query_params.get('page_size', 10))
 
-        # calculate the offset and limit
-        offset = (page - 1) * page_size
-        limit = page_size
+            # calculate the offset and limit
+            offset = (page - 1) * page_size
+            limit = page_size
 
-        # add the offset and limit to the request object as query params
-        request.query_params._mutable = True
-        request.query_params['offset'] = offset
-        request.query_params['limit'] = limit
+            # add the offset and limit to the request object as query params
+            request.query_params._mutable = True
+            request.query_params['offset'] = offset
+            request.query_params['limit'] = limit
 
-        # get the blends
-        blends = Blend.objects.all().order_by('-id')
-        paginator = BlendPagination()
-        paginated_blends = paginator.paginate_queryset(blends, request)
-        serialized_blends = BlendSerializer(paginated_blends, many=True)
+            # get the blends
+            blends = Blend.objects.all().order_by('-id')
+            paginator = BlendPagination()
+            paginated_blends = paginator.paginate_queryset(blends, request)
+            serialized_blends = BlendSerializer(paginated_blends, many=True)
 
-        # see by how many other coffees the blend is used
-        for blend in serialized_blends.data:
-            blend['used_by'] = Coffee.objects.filter(
-                blend_id=blend['id']).count()
+            # see by how many other coffees the blend is used
+            # also get the user's username
+            for blend in serialized_blends.data:
+                blend['used_by'] = Coffee.objects.filter(
+                    blend_id=blend['id']).count()
+                blend['username'] = User.objects.get(
+                    id=blend['user_id']).username
 
-        return paginator.get_paginated_response(serialized_blends.data)
+            return paginator.get_paginated_response(serialized_blends.data)
+
+        except Exception as e:
+            return Response({"error": str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         operation_description="Create a new blend",
@@ -82,6 +124,8 @@ class Blends(APIView):
             return Response(
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
+
+        request.data['user_id'] = get_user_id(request)
         serialized_blends = BlendSerializer(data=request.data)
         if serialized_blends.is_valid():
             serialized_blends.save()

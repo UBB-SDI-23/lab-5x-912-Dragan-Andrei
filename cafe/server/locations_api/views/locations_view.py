@@ -11,7 +11,10 @@ from drf_yasg.utils import swagger_auto_schema
 
 from locations_api.location_pagination import LocationPagination
 
-from helpers.check_user_permission import check_user_permission
+from helpers.check_user_permission import check_user_permission, get_user_id
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Locations(APIView):
@@ -53,12 +56,16 @@ class Locations(APIView):
                                                   many=True)
 
         # compute the total revenue for each location
+        # also get the user's username
         for location in serialized_locations.data:
             location['total_revenue'] = 0
             sales = Sale.objects.filter(location_id=location['id'])
             for sale in sales:
                 location['total_revenue'] += sale.revenue
             location['total_revenue'] = round(location['total_revenue'], 2)
+
+            location['username'] = User.objects.get(
+                id=location['user_id']).username
 
         return paginator.get_paginated_response(serialized_locations.data)
 
@@ -87,6 +94,7 @@ class Locations(APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
 
+        request.data['user_id'] = get_user_id(request)
         serialized_locations = LocationSerializer(data=request.data)
         if serialized_locations.is_valid():
             serialized_locations.save()
