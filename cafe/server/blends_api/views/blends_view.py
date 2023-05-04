@@ -19,52 +19,6 @@ User = get_user_model()
 
 class Blends(APIView):
 
-    @swagger_auto_schema(
-        operation_description="Get a list of all blends",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(
-                description="List of all blends",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'count':
-                        openapi.Schema(type=openapi.TYPE_INTEGER),
-                        'page':
-                        openapi.Schema(type=openapi.TYPE_INTEGER),
-                        'results':
-                        openapi.Schema(
-                            type=openapi.TYPE_ARRAY,
-                            items=openapi.Schema(
-                                type=openapi.TYPE_OBJECT,
-                                properties={
-                                    'id':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER),
-                                    'name':
-                                    openapi.Schema(type=openapi.TYPE_STRING),
-                                    'description':
-                                    openapi.Schema(type=openapi.TYPE_STRING),
-                                    'country_of_origin':
-                                    openapi.Schema(type=openapi.TYPE_STRING),
-                                    'level':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER),
-                                    'in_stock':
-                                    openapi.Schema(type=openapi.TYPE_BOOLEAN),
-                                    'used_by':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER),
-                                    'username':
-                                    openapi.Schema(type=openapi.TYPE_STRING)
-                                }))
-                    })),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request):
         try:
             # get the page number and page size from the query params
@@ -100,22 +54,6 @@ class Blends(APIView):
             return Response({"error": str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_description="Create a new blend",
-        request_body=BlendSerializer,
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="Created blend",
-                             schema=BlendSerializer()),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def post(self, request):
         # only admin and moderator can create a new blend
         if not check_user_permission(

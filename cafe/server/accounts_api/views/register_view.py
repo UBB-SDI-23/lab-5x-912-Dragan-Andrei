@@ -22,46 +22,6 @@ User = get_user_model()
 
 class Register(APIView):
 
-    @swagger_auto_schema(
-        operation_description="Register a new user",
-        operation_id="register",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=['username', 'password'],
-            properties={
-                'username': openapi.Schema(type=openapi.TYPE_STRING),
-                'password': openapi.Schema(type=openapi.TYPE_STRING),
-            },
-        ),
-        responses={
-            201:
-            openapi.Response(
-                description="Created",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'confirmation_code':
-                        openapi.Schema(type=openapi.TYPE_STRING),
-                    },
-                ),
-            ),
-            400:
-            openapi.Response(
-                description="Bad Request",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'username':
-                        openapi.Schema(type=openapi.TYPE_STRING),
-                        'password':
-                        openapi.Schema(
-                            type=openapi.TYPE_ARRAY,
-                            items=openapi.Schema(type=openapi.TYPE_STRING)),
-                    },
-                ),
-            ),
-        },
-    )
     def post(self, request):
         username = request.data.get('username', None)
         password = request.data.get('password', None)

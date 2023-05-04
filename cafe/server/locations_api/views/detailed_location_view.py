@@ -15,52 +15,6 @@ from helpers.check_user_permission import check_user_permission
 
 class LocationDetail(APIView):
 
-    @swagger_auto_schema(
-        operation_description="Get a location by id",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(
-                description="Location",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'id':
-                        openapi.Schema(type=openapi.TYPE_INTEGER),
-                        'name':
-                        openapi.Schema(type=openapi.TYPE_STRING),
-                        'address':
-                        openapi.Schema(type=openapi.TYPE_STRING),
-                        'city':
-                        openapi.Schema(type=openapi.TYPE_STRING),
-                        'postal_code':
-                        openapi.Schema(type=openapi.TYPE_STRING),
-                        'profit':
-                        openapi.Schema(type=openapi.TYPE_NUMBER),
-                        'sales':
-                        openapi.Schema(
-                            type=openapi.TYPE_ARRAY,
-                            items=openapi.Schema(
-                                type=openapi.TYPE_OBJECT,
-                                properties={
-                                    'id':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER),
-                                    'coffee_id':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER),
-                                    'revenue':
-                                    openapi.Schema(type=openapi.TYPE_NUMBER),
-                                    'sold_coffees':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER)
-                                }))
-                    })),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request, pk):
         try:
             location = Location.objects.get(pk=pk)
@@ -88,22 +42,6 @@ class LocationDetail(APIView):
             return Response({'error': 'Location does not exist'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_description="Update a location by id",
-        request_body=LocationSerializer,
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="Updated location",
-                             schema=LocationSerializer()),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def put(self, request, pk):
         # only admin and moderator can update a location
         if not check_user_permission(request,
@@ -126,21 +64,6 @@ class LocationDetail(APIView):
             return Response({'error': 'Location does not exist'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_description="Delete a location by id",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="Deleted location",
-                             schema=LocationSerializer()),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def delete(self, request, pk):
         # only admin can delete a location
         if not check_user_permission(request, 'admin'):

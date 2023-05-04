@@ -17,29 +17,7 @@ User = get_user_model()
 
 
 class Coffees(APIView):
-    # everyone can see the all the coffees
-    @swagger_auto_schema(
-        operation_description="Get a list of all coffees",
-        manual_parameters=[
-            openapi.Parameter(
-                'min_price',
-                openapi.IN_QUERY,
-                'List of all coffess with price greater than min_price',
-                type=openapi.TYPE_STRING),
-        ],
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="List of all coffees",
-                             schema=CoffeeSerializer(many=True)),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
+
     def get(self, request):
         # get the page number and page size from the query params
         page = int(request.query_params.get('p', 1))
@@ -79,22 +57,6 @@ class Coffees(APIView):
 
         return paginator.get_paginated_response(serialized_coffees.data)
 
-    @swagger_auto_schema(
-        operation_description="Create a new coffee",
-        request_body=CoffeeSerializer,
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="Created coffee",
-                             schema=CoffeeSerializer()),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def post(self, request):
         # only admin and moderator can create a new coffee
         if not check_user_permission(

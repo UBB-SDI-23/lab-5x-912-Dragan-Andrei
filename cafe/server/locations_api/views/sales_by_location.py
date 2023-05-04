@@ -14,33 +14,6 @@ from sales_api.models import Sale
 
 class SalesByLocation(APIView):
 
-    @swagger_auto_schema(
-        operation_description=
-        "Get a list of locations and the average number of coffees sold per sale",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(
-                description=
-                "List of locations and the average number of coffees sold per sale",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_ARRAY,
-                    items=openapi.Schema(
-                        type=openapi.TYPE_OBJECT,
-                        properties={
-                            'location name':
-                            openapi.Schema(type=openapi.TYPE_STRING),
-                            'sold coffees per sale':
-                            openapi.Schema(type=openapi.TYPE_NUMBER)
-                        }))),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request):
         # get the page number and page size from the query params
         page = int(request.query_params.get('p', 1))

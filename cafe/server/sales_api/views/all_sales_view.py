@@ -17,22 +17,6 @@ User = get_user_model()
 
 class Sales(APIView):
 
-    @swagger_auto_schema(
-        operation_description="Get a list of all sales for a selected location",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(
-                description="List of all sales for a selected location",
-                schema=SaleSerializer(many=True)),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request):
         # get the location id from the query params
         location_id = request.query_params.get('location_id', None)

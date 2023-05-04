@@ -19,21 +19,6 @@ User = get_user_model()
 
 class Locations(APIView):
 
-    @swagger_auto_schema(
-        operation_description="Get a list of all locations",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="List of all locations",
-                             schema=LocationSerializer(many=True)),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request):
         # get the page number and page size from the query params
         page = int(request.query_params.get('p', 1))
@@ -69,22 +54,6 @@ class Locations(APIView):
 
         return paginator.get_paginated_response(serialized_locations.data)
 
-    @swagger_auto_schema(
-        operation_description="Create a new location",
-        request_body=LocationSerializer,
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="Created location",
-                             schema=LocationSerializer()),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def post(self, request):
         # only admin and moderator can create a new location
         if not check_user_permission(

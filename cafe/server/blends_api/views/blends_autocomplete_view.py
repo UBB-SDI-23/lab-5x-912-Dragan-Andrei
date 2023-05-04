@@ -13,28 +13,6 @@ from django.db import connection
 
 class BlendsAutocomplete(APIView):
 
-    @swagger_auto_schema(
-        operation_description=
-        "Get a list of the top 10 blends that match the query",
-        manual_parameters=[
-            openapi.Parameter('query',
-                              openapi.IN_QUERY,
-                              'Search query',
-                              type=openapi.TYPE_STRING),
-        ],
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="List of all blends",
-                             schema=BlendSerializer(many=True)),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request):
         query = request.query_params.get('query', None)
         if query:

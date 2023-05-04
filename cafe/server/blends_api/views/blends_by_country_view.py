@@ -13,24 +13,6 @@ from blends_api.blend_pagination import BlendPagination
 
 class BlendsCountry(APIView):
 
-    @swagger_auto_schema(
-        operation_description=
-        "Get a list of all countries sorted descending by the associated number of blends",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(
-                description=
-                "List of all countries sorted descending by the associated number of blends",
-                schema=BlendSerializer(many=True)),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request):
         # get statistic data
         cursor = connection.cursor()

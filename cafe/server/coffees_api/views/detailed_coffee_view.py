@@ -17,69 +17,6 @@ from helpers.check_user_permission import check_user_permission
 
 class CoffeeDetail(APIView):
 
-    @swagger_auto_schema(
-        operation_description="Get coffee by id",
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(
-                description="Coffee",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'id':
-                        openapi.Schema(type=openapi.TYPE_INTEGER),
-                        'name':
-                        openapi.Schema(type=openapi.TYPE_STRING),
-                        'price':
-                        openapi.Schema(type=openapi.TYPE_NUMBER),
-                        'calories':
-                        openapi.Schema(type=openapi.TYPE_INTEGER),
-                        'quantity':
-                        openapi.Schema(type=openapi.TYPE_NUMBER),
-                        'vegan':
-                        openapi.Schema(type=openapi.TYPE_BOOLEAN),
-                        'blend':
-                        openapi.Schema(
-                            type=openapi.TYPE_OBJECT,
-                            properties={
-                                'id':
-                                openapi.Schema(type=openapi.TYPE_INTEGER),
-                                'name':
-                                openapi.Schema(type=openapi.TYPE_STRING),
-                                'description':
-                                openapi.Schema(type=openapi.TYPE_STRING),
-                                'country_of_origin':
-                                openapi.Schema(type=openapi.TYPE_STRING),
-                                'level':
-                                openapi.Schema(type=openapi.TYPE_INTEGER),
-                                'in_stock':
-                                openapi.Schema(type=openapi.TYPE_BOOLEAN)
-                            }),
-                        'sales':
-                        openapi.Schema(
-                            type=openapi.TYPE_ARRAY,
-                            items=openapi.Schema(
-                                type=openapi.TYPE_OBJECT,
-                                properties={
-                                    'id':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER),
-                                    'location_id':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER),
-                                    'revenue':
-                                    openapi.Schema(type=openapi.TYPE_NUMBER),
-                                    'sold_coffees':
-                                    openapi.Schema(type=openapi.TYPE_INTEGER)
-                                }))
-                    })),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def get(self, request, pk):
         try:
             coffee = Coffee.objects.get(pk=pk)
@@ -117,22 +54,6 @@ class CoffeeDetail(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_description="Update a coffee by id",
-        request_body=CoffeeSerializer,
-        responses={
-            status.HTTP_200_OK:
-            openapi.Response(description="Updated coffee",
-                             schema=CoffeeSerializer()),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def put(self, request, pk):
         # only admin and moderator can update a coffee
         if not check_user_permission(request,
@@ -153,20 +74,6 @@ class CoffeeDetail(APIView):
             return Response({'error': 'Coffee does not exist'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_description="Delete a coffee by id",
-        responses={
-            status.HTTP_204_NO_CONTENT:
-            openapi.Response(description="Deleted coffee"),
-            status.HTTP_400_BAD_REQUEST:
-            openapi.Response(description="Error message",
-                             schema=openapi.Schema(
-                                 type=openapi.TYPE_OBJECT,
-                                 properties={
-                                     'error':
-                                     openapi.Schema(type=openapi.TYPE_STRING)
-                                 }))
-        })
     def delete(self, request, pk):
         # only admin can delete a coffee
         if not check_user_permission(request, 'admin'):
