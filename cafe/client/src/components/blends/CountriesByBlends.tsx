@@ -29,6 +29,7 @@ interface Country {
 const CountriesByBlends = () => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
   const [page, setPage] = useState<number>(1);
@@ -45,13 +46,18 @@ const CountriesByBlends = () => {
     url += "&p=" + page;
 
     setLastFetchCall((prev) => prev + 1);
-    const response = await axios.get(url);
-    const data = await response.data;
-    if (currentFetchCall === lastFetchCall) {
-      setCountries(data.results);
-      setTotalEntries(data.count);
+    try {
+      const response = await axios.get(url);
+      const data = await response.data;
+      if (currentFetchCall === lastFetchCall) {
+        setCountries(data.results);
+        setTotalEntries(data.count);
+      }
+      setLoading(false);
+    } catch (error) {
+      setError("There was an internal error! Try again later!");
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // everytime the page size changes, reset the page to 1 and fetch the countries if needed
@@ -74,12 +80,19 @@ const CountriesByBlends = () => {
             Our blends come from these countries!
           </Typography>
           <List className="stat-list">
-            {loading && (
-              <Typography variant="h2" ml="8px">
+            {loading ? (
+              <Typography variant="h2" ml="0px">
                 Loading...
               </Typography>
-            )}
-            {!loading &&
+            ) : error ? (
+              <Typography variant="h2" ml="0px">
+                {error}
+              </Typography>
+            ) : countries.length === 0 ? (
+              <Typography variant="h2" ml="0px">
+                There are no countries to show!
+              </Typography>
+            ) : (
               countries.map((country) => (
                 <ListItem key={country.country_of_origin} sx={{ width: "100%", padding: "16px 0" }}>
                   <Box className="stat-item">
@@ -95,7 +108,8 @@ const CountriesByBlends = () => {
                     </Typography>
                   </Box>
                 </ListItem>
-              ))}
+              ))
+            )}
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="countries" />
         </Container>

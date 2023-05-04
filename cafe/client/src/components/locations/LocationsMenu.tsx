@@ -40,6 +40,7 @@ interface LocalLocation {
 const LocationsMenu = () => {
   const [locations, setLocations] = useState<LocalLocation[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
   const [page, setPage] = useState<number>(1);
@@ -59,13 +60,18 @@ const LocationsMenu = () => {
     url += "&p=" + page;
 
     setLastFetchCall((prev) => prev + 1);
-    const response = await axios.get(url);
-    const data = await response.data;
-    if (currentFetchCall === lastFetchCall) {
-      setLocations(data.results);
-      setTotalEntries(data.count);
+    try {
+      const response = await axios.get(url);
+      const data = await response.data;
+      if (currentFetchCall === lastFetchCall) {
+        setLocations(data.results);
+        setTotalEntries(data.count);
+      }
+      setLoading(false);
+    } catch (error) {
+      setError("There was an internal error! Try again later!");
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // everytime the page size changes, reset the page to 1 and fetch the locations if needed
@@ -96,17 +102,25 @@ const LocationsMenu = () => {
             See how well our top locations performed!
           </Typography>
           <List className="locations-list">
-            {loading && (
-              <Typography variant="h2" ml="8px">
+            {loading ? (
+              <Typography variant="h2" ml="0px">
                 Loading...
               </Typography>
-            )}
-            {!loading &&
+            ) : error ? (
+              <Typography variant="h2" ml="0px">
+                {error}
+              </Typography>
+            ) : locations.length === 0 ? (
+              <Typography variant="h2" ml="0px">
+                There are no locations to show!
+              </Typography>
+            ) : (
               locations.map((location) => (
                 <ListItem key={location.id} sx={{ width: "100%", padding: "16px 0" }} onClick={() => getLocationDetails(location.id)}>
                   <LocationItem location={location} />
                 </ListItem>
-              ))}
+              ))
+            )}
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="locations" />
 

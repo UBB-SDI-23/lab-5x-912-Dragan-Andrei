@@ -123,21 +123,23 @@ const Login = () => {
         }));
       }
     } catch (error: any) {
-      if (error.response.data.username) {
-        setLocalError((prevError) => ({
-          ...prevError,
-          username: error.response.data.username,
-        }));
-      } else if (error.response.data.password) {
-        setLocalError((prevError) => ({
-          ...prevError,
-          password: error.response.data.password,
-        }));
-      } else if (error.response.data.detail) {
-        setLocalError((prevError) => ({
-          ...prevError,
-          generic: error.response.data.detail,
-        }));
+      if (error.response && error.response.data) {
+        if (error.response.data.username) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            username: error.response.data.username,
+          }));
+        } else if (error.response.data.password) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            password: error.response.data.password,
+          }));
+        } else if (error.response.data.detail) {
+          setLocalError((prevError) => ({
+            ...prevError,
+            generic: error.response.data.detail,
+          }));
+        }
       } else {
         setLocalError((prevError) => ({
           ...prevError,

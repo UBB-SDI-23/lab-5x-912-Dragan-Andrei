@@ -42,6 +42,7 @@ interface LocalCoffee {
 const Menu = () => {
   const [coffees, setCoffees] = useState<LocalCoffee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [minPrice, setMinPrice] = useState<string>("");
   const [isSort, setIsSort] = useState<Boolean>(false);
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
@@ -64,13 +65,18 @@ const Menu = () => {
     isSort && (url += "&sort=true");
 
     setLastFetchCall((prev) => prev + 1);
-    const response = await axios.get(url);
-    const data = await response.data;
-    if (currentFetchCall === lastFetchCall) {
-      setCoffees(data.results);
-      setTotalEntries(data.count);
+    try {
+      const response = await axios.get(url);
+      const data = await response.data;
+      if (currentFetchCall === lastFetchCall) {
+        setCoffees(data.results);
+        setTotalEntries(data.count);
+      }
+      setLoading(false);
+    } catch (error) {
+      setError("There was an internal error! Try again later!");
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // everytime the sort state / page size changes, reset the coffee pagination
@@ -115,17 +121,25 @@ const Menu = () => {
               </Box>
             </ListItem>
 
-            {loading && (
-              <Typography variant="h2" ml="8px">
+            {loading ? (
+              <Typography variant="h2" ml="0px">
                 Loading...
               </Typography>
-            )}
-            {!loading &&
+            ) : error ? (
+              <Typography variant="h2" ml="0px">
+                {error}
+              </Typography>
+            ) : coffees.length === 0 ? (
+              <Typography variant="h2" ml="0px">
+                There are no coffees to show!
+              </Typography>
+            ) : (
               coffees.map((coffee) => (
                 <ListItem key={coffee.id} sx={{ width: "100%", padding: "8px 0" }} onClick={() => getCoffeeDetails(coffee.id)}>
                   <CoffeeItem coffee={coffee} />
                 </ListItem>
-              ))}
+              ))
+            )}
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="coffees" />
 

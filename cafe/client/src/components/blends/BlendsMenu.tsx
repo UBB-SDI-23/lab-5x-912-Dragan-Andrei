@@ -39,6 +39,7 @@ interface LocalBlend {
 const BlendsMenu = () => {
   const [blends, setBlends] = useState<LocalBlend[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
   const [page, setPage] = useState<number>(1);
@@ -58,13 +59,18 @@ const BlendsMenu = () => {
     url += "&p=" + page;
 
     setLastFetchCall((prev) => prev + 1);
-    const response = await axios.get(url);
-    const data = await response.data;
-    if (currentFetchCall === lastFetchCall) {
-      setBlends(data.results);
-      setTotalEntries(data.count);
+    try {
+      const response = await axios.get(url);
+      const data = await response.data;
+      if (currentFetchCall === lastFetchCall) {
+        setBlends(data.results);
+        setTotalEntries(data.count);
+      }
+      setLoading(false);
+    } catch (error) {
+      setError("There was an internal error! Try again later!");
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // everytime the page size changes, reset the page to 1 and fetch the blends if needed
@@ -95,17 +101,25 @@ const BlendsMenu = () => {
             See from where our blends come from!
           </Typography>
           <List className="blends-list">
-            {loading && (
-              <Typography variant="h2" ml="8px">
+            {loading ? (
+              <Typography variant="h2" ml="0px">
                 Loading...
               </Typography>
-            )}
-            {!loading &&
+            ) : error ? (
+              <Typography variant="h2" ml="0px">
+                {error}
+              </Typography>
+            ) : blends.length === 0 ? (
+              <Typography variant="h2" ml="0px">
+                We don't have any blends for you!
+              </Typography>
+            ) : (
               blends.map((blend) => (
                 <ListItem key={blend.id} sx={{ width: "100%", padding: "16px 0" }} onClick={() => getBlendDetails(blend.id)}>
                   <BlendItem blend={blend} />
                 </ListItem>
-              ))}
+              ))
+            )}
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="blends" />
 

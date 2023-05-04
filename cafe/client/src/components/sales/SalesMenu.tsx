@@ -34,6 +34,7 @@ interface LocalSale {
 const SalesMenu = ({ locationId }: { locationId: number }) => {
   const [sales, setSales] = useState<LocalSale[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
   const [page, setPage] = useState<number>(1);
@@ -52,14 +53,18 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
     url += "&p=" + page;
 
     setLastFetchCall((prev) => prev + 1);
-    const response = await axios.get(url);
-    const data = await response.data;
-    if (currentFetchCall === lastFetchCall) {
-      setSales(data.results);
-      setTotalEntries(data.count);
+    try {
+      const response = await axios.get(url);
+      const data = await response.data;
+      if (currentFetchCall === lastFetchCall) {
+        setSales(data.results);
+        setTotalEntries(data.count);
+      }
+      setLoading(false);
+    } catch (error) {
+      setError("There was an internal error! Try again later!");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   // everytime the page size changes, reset the sale pagination
@@ -83,13 +88,25 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
           {totalEntries > 0 && (
             <>
               <List className="sales-list">
-                {loading && <Typography variant="h2">Loading...</Typography>}
-                {!loading &&
+                {loading ? (
+                  <Typography variant="h2" ml="0px">
+                    Loading...
+                  </Typography>
+                ) : error ? (
+                  <Typography variant="h2" ml="0px">
+                    {error}
+                  </Typography>
+                ) : sales.length === 0 ? (
+                  <Typography variant="h2" ml="0px">
+                    There are no coffees to show!
+                  </Typography>
+                ) : (
                   sales.map((sale) => (
                     <ListItem key={sale.id} sx={{ width: "100%", padding: "8px 0" }}>
                       <SaleItem sale={sale} />
                     </ListItem>
-                  ))}
+                  ))
+                )}
               </List>
               <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="sales" />
             </>
