@@ -44,6 +44,8 @@ import CountriesByBlends from "./components/blends/CountriesByBlends";
 import Register from "./components/users/Register";
 import Login from "./components/users/Login";
 import Confirmation from "./components/users/Confirmation";
+import Profile from "./components/users/Profile";
+import EditProfile from "./components/users/EditProfile";
 
 import NotFound from "./components/NotFound";
 
@@ -66,12 +68,16 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/blends/:id" element={<DetailedBlendItem />} />
             <Route path="/blends/country" element={<CountriesByBlends />} />
 
+            <Route path="/profile/:username" element={<Profile />} />
+
             <Route element={<RegularRoutes />}>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register/confirm/:code" element={<Confirmation />} />
             </Route>
-            <Route element={<UserRoutes />}></Route>
+            <Route element={<UserRoutes />}>
+              <Route path="/profile/:username/edit" element={<EditProfile />} />
+            </Route>
             <Route element={<ModeratorRoutes />}>
               <Route path="/coffees/add" element={<AddCoffee />} />
               <Route path="/coffees/:id/edit/" element={<EditCoffee />} />

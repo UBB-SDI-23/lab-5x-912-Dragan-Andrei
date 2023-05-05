@@ -45,11 +45,9 @@ export const AuthProvider = ({ children }: { children: any }) => {
         setUser(user);
         localStorage.setItem("authTokens", JSON.stringify(data));
       } else {
-        console.log("here was an error1");
         logoutUser();
       }
     } catch (error: any) {
-      console.log("here was an error2");
       logoutUser();
     }
   };

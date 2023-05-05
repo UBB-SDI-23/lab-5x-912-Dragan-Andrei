@@ -1,4 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+
+from .models import Profile
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -13,3 +16,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['is_staff'] = user.is_staff
         token['is_active'] = user.is_active
         return token
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = "__all__"

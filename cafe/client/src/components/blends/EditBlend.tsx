@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
 
 // css
 import "../../assets/css/blends/addBlend.css";
@@ -19,11 +20,9 @@ import BadWords from "bad-words";
 
 // react components
 import MainNavbar from "../MainNavbar";
-import { Box } from "@mui/material";
 
 // images
 import supportImage from "../../assets/images/create_blend.jpg";
-import EditLocation from "../locations/EditLocation";
 
 // create a new LocalBlend objecet model for the add blend form
 interface LocalBlend {
@@ -200,7 +199,7 @@ const EditBlend = () => {
     }
   };
 
-  // function that adds a new blend to the database
+  // update the blend
   const editBlend = async () => {
     // touch all the fields so that the errors show up
     setTouchedFields((prevTouched) => ({
@@ -227,7 +226,7 @@ const EditBlend = () => {
       in_stock: localBlend.in_stock,
     };
 
-    // send the post request
+    // send the put request
     try {
       await axios.put(`${BASE_URL_API}/blends/${id}`, updatedBlend, {
         headers: {
@@ -270,6 +269,13 @@ const EditBlend = () => {
           setLocalError((prevError) => ({
             ...prevError,
             generic: error.response.data.auth,
+          }));
+        }
+
+        if (error.response.data.error) {
+          setLocalError((prev) => ({
+            ...prev,
+            generic: error.response.data.error,
           }));
         }
       } else {
