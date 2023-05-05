@@ -46,6 +46,7 @@ import Login from "./components/users/Login";
 import Confirmation from "./components/users/Confirmation";
 import Profile from "./components/users/Profile";
 import EditProfile from "./components/users/EditProfile";
+import UsersMenu from "./components/users/UsersMenu";
 
 import NotFound from "./components/NotFound";
 
@@ -89,7 +90,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/blends/add" element={<AddBlend />} />
               <Route path="/blends/:id/edit" element={<EditBlend />} />
             </Route>
-            <Route element={<AdminRoutes />}></Route>
+            <Route element={<AdminRoutes />}>
+              <Route path="/users" element={<UsersMenu />} />
+            </Route>
 
             <Route path="*" element={<NotFound />} />
           </Routes>

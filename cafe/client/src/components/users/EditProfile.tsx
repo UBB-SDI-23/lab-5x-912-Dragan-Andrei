@@ -373,7 +373,6 @@ const EditProfile = () => {
                 select
                 label="Gender"
                 sx={{ margin: "12px 8px", width: "20%" }}
-                defaultValue={localProfile.gender ? localProfile.gender : "M"}
                 value={localProfile.gender}
                 onChange={(e) => setLocalProfile((prev) => ({ ...prev, gender: e.target.value }))}
                 className="gender-field"
