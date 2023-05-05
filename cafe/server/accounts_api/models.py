@@ -1,7 +1,5 @@
 from django.db import models
 import better_profanity
-from coffees_api.models import Coffee
-from locations_api.models import Location
 from django.core.exceptions import ValidationError
 
 

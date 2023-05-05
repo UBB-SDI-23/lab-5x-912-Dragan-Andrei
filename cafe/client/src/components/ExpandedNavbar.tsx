@@ -1,10 +1,12 @@
 // css
+import { Box } from "@mui/material";
 import "../assets/css/expandedNavbar.css";
 
 // utils
 import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   openNav: () => void;
@@ -13,25 +15,41 @@ interface NavbarProps {
 
 const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
   const contextData = useContext<any>(AuthContext);
+  const navigate = useNavigate();
 
   return (
     <section id="navbar">
       <div id="navbar_background"></div>
 
       <div id="navbar_links">
-        <Link to="/">Home</Link>
-        <Link to="/coffees">Menu</Link>
-        <Link to="/">About</Link>
-        <Link to="/locations">Locations</Link>
-        <Link to="/blends">Blends</Link>
+        <Link onClick={() => closeNav()} to="/">
+          Home
+        </Link>
+        <Link onClick={() => closeNav()} to="/coffees">
+          Menu
+        </Link>
+        <Link onClick={() => closeNav()} to="/locations">
+          Locations
+        </Link>
+        <Link onClick={() => closeNav()} to="/blends">
+          Blends
+        </Link>
+
+        {contextData.user && (
+          <Box onClick={() => navigate(`/profile/${contextData.user.username}`)}>
+            <Link onClick={() => closeNav()} to="/blends">
+              Profile
+            </Link>
+          </Box>
+        )}
 
         <div id="navbar-action-buttons">
           {!contextData.authTokens ? (
             <>
-              <Link id="action-button" to="/register">
+              <Link onClick={() => closeNav()} id="action-button" to="/register">
                 Register
               </Link>
-              <Link id="action-button" to="/login">
+              <Link onClick={() => closeNav()} id="action-button" to="/login">
                 Login
               </Link>
             </>

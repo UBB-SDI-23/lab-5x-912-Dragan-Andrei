@@ -1,0 +1,20 @@
+@media (max-width: 700px) {
+  .age-field {
+    width: calc(50% - 16px) !important;
+  }
+
+  .nationality-field {
+    margin-right: 0 !important;
+    width: calc(50% - 16px) !important;
+  }
+
+  .gender-field {
+    margin-left: 0 !important;
+    width: calc(50% - 16px) !important;
+  }
+
+  .flavour-field {
+    margin-right: 0 !important;
+    width: calc(50% - 16px) !important;
+  }
+}

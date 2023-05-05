@@ -15,6 +15,7 @@ import expandedLogo from "../assets/images/top_part_logo.png";
 import AuthContext from "../context/AuthContext";
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // react components
 import ExpandedNavbar from "./ExpandedNavbar";
@@ -22,6 +23,7 @@ import ExpandedNavbar from "./ExpandedNavbar";
 const MainNavbar = () => {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const contextData = useContext<any>(AuthContext);
+  const navigate = useNavigate();
 
   const openNav = () => {
     setIsNavbarOpen(true);
@@ -58,9 +60,15 @@ const MainNavbar = () => {
               <div id="navbar_links">
                 <Link to="/">Home</Link>
                 <Link to="/coffees">Menu</Link>
-                <Link to="/">About</Link>
                 <Link to="/locations">Locations</Link>
                 <Link to="/blends">Blends</Link>
+                {contextData.user && (
+                  <Box onClick={() => navigate(`/profile/${contextData.user.username}`)}>
+                    <Link onClick={() => closeNav()} to="/blends">
+                      Profile
+                    </Link>
+                  </Box>
+                )}
               </div>
               <div id="navbar-action-buttons">
                 {!contextData.authTokens ? (
