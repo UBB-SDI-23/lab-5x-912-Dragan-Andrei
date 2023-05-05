@@ -41,8 +41,8 @@ export const AuthProvider = ({ children }: { children: any }) => {
       if (localLastRefreshCall !== lastRefreshCall) return;
 
       if (user.is_active) {
-        setAuthTokens(data);
-        setUser(user);
+        setAuthTokens((prev: any) => data);
+        setUser((prev: any) => user);
         localStorage.setItem("authTokens", JSON.stringify(data));
       } else {
         logoutUser();

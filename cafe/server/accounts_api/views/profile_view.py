@@ -57,7 +57,6 @@ class DetailedProfile(APIView):
 
             # get the profile associated with the user
             profile = Profile.objects.get(user_id=user.id)
-            serialized_profile = ProfileSerializer(profile)
 
             # change only the fields that are provided
             serialized_profile = ProfileSerializer(profile,

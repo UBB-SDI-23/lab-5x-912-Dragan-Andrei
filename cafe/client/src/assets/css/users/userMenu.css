@@ -1,0 +1,28 @@
+.users-content-container {
+  display: flex !important;
+  max-width: 1600px !important;
+  padding-bottom: 40px !important;
+}
+
+.users-content {
+  width: 75% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+@media (max-width: 1000px) {
+  .users-content-container {
+    display: block !important;
+  }
+
+  .users-list {
+    max-width: 600px !important;
+    margin: 0 auto !important;
+  }
+
+  .users-content {
+    max-width: 700px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}

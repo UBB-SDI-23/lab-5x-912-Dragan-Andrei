@@ -62,6 +62,13 @@ const MainNavbar = () => {
                 <Link to="/coffees">Menu</Link>
                 <Link to="/locations">Locations</Link>
                 <Link to="/blends">Blends</Link>
+
+                {contextData.user && contextData.user.is_superuser && (
+                  <Link onClick={() => closeNav()} to="/users">
+                    Users
+                  </Link>
+                )}
+
                 {contextData.user && (
                   <Box onClick={() => navigate(`/profile/${contextData.user.username}`)}>
                     <Link onClick={() => closeNav()} to="/blends">
