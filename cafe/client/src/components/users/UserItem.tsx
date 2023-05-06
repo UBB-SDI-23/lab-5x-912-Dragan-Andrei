@@ -11,7 +11,7 @@ const UserItem = ({ username }: { username: string }) => {
   const navigate = useNavigate();
 
   return (
-    <Typography onClick={() => navigate(`../profile/${username}`)} className="user-item" variant="body1">
+    <Typography onClick={() => navigate(`../profile/${username}`)} className="only-user-item" variant="body1">
       Added by <span>{username}</span>
     </Typography>
   );
