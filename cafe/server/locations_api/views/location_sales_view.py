@@ -14,10 +14,10 @@ from helpers.check_user_permission import check_user_permission, get_user_id
 class LocationCoffee(APIView):
 
     def post(self, request, pk):
-        # only admin and moderator can create a new sale
         if not check_user_permission(
                 request, 'moderator') and not check_user_permission(
-                    request, 'admin'):
+                    request, 'admin') and not check_user_permission(
+                        request, 'regular'):
             return Response(
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})

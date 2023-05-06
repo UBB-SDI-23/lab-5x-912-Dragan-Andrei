@@ -12,7 +12,7 @@ from sales_api.serializer import SaleSerializer
 
 from sales_api.sales_pagination import SalePagination
 
-from helpers.check_user_permission import check_user_permission
+from helpers.check_user_permission import check_user_permission, get_username
 
 
 class CoffeeDetail(APIView):
@@ -56,14 +56,26 @@ class CoffeeDetail(APIView):
 
     def put(self, request, pk):
         # only admin and moderator can update a coffee
-        if not check_user_permission(request,
-                                     'admin') and not check_user_permission(
-                                         request, 'moderator'):
+        if not check_user_permission(
+                request, 'admin') and not check_user_permission(
+                    request, 'moderator') and not check_user_permission(
+                        request, 'regular'):
             return Response(
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
         try:
             coffee = Coffee.objects.get(pk=pk)
+
+            if not check_user_permission(
+                    request, 'admin') and not check_user_permission(
+                        request, 'moderator'
+                    ) and coffee.user_id.username != get_username(request):
+                return Response(
+                    status=status.HTTP_401_UNAUTHORIZED,
+                    data={
+                        "auth": "You are not authorized to perform this action"
+                    })
+
             serialized_coffee = CoffeeSerializer(coffee, data=request.data)
             if serialized_coffee.is_valid():
                 serialized_coffee.save()

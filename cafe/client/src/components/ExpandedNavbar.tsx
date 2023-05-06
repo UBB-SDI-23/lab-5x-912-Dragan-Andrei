@@ -36,9 +36,15 @@ const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
         </Link>
 
         {contextData.user && contextData.user.is_superuser && (
-          <Link onClick={() => closeNav()} to="/users">
-            Users
-          </Link>
+          <>
+            <Link onClick={() => closeNav()} to="/users">
+              Users
+            </Link>
+
+            <Link onClick={() => closeNav()} to="/scripts">
+              Scripts
+            </Link>
+          </>
         )}
 
         {contextData.user && (

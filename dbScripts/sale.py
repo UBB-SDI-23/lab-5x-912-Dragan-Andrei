@@ -19,6 +19,11 @@ with open('populateSales.sql', 'w') as f:
         'ALTER TABLE sales_api_sale DROP CONSTRAINT sales_api_sale_location_id_id_fk_locations_api_location_id;',
         file=f)
 
+    # disable user_id_id foreign key constraint
+    print(
+        'ALTER TABLE sales_api_sale DROP CONSTRAINT sales_api_sale_user_id_id_fk_accounts_api_user_id;',
+        file=f)
+
     # disable the index on coffee_id_id
     print('DROP INDEX sales_api_sale_coffee_id_id;', file=f)
 
@@ -71,6 +76,11 @@ with open('populateSales.sql', 'w') as f:
         file=f)
     print(
         'ALTER TABLE sales_api_sale ADD CONSTRAINT sales_api_sale_location_id_id_fk_locations_api_location_id FOREIGN KEY (location_id_id) REFERENCES locations_api_location (id);',
+        file=f)
+
+    # enable user_id_id foreign key constraint
+    print(
+        'ALTER TABLE sales_api_sale ADD CONSTRAINT sales_api_sale_user_id_id_fk_accounts_api_user_id FOREIGN KEY (user_id_id) REFERENCES auth_user (id);',
         file=f)
 
     # enable the index on coffee_id_id

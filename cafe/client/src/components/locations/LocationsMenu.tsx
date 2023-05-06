@@ -129,7 +129,7 @@ const LocationsMenu = () => {
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="locations" />
 
-          {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+          {contextData.user && contextData.user.is_active && (
             <Button
               className="add-location-button"
               onClick={() => navigate("/locations/add")}

@@ -128,7 +128,7 @@ const BlendsMenu = () => {
           </List>
           <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="blends" />
 
-          {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+          {contextData.user && contextData.user.is_active && (
             <Button
               className="add-blend-button"
               onClick={() => navigate("/blends/add")}

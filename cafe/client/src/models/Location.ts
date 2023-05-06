@@ -6,4 +6,5 @@ export interface Location {
   postal_code: string;
   profit: number;
   description: string;
+  user_id: number;
 }

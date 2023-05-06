@@ -55,10 +55,10 @@ class Locations(APIView):
         return paginator.get_paginated_response(serialized_locations.data)
 
     def post(self, request):
-        # only admin and moderator can create a new location
         if not check_user_permission(
                 request, 'moderator') and not check_user_permission(
-                    request, 'admin'):
+                    request, 'admin') and not check_user_permission(
+                        request, 'regular'):
             return Response(
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
