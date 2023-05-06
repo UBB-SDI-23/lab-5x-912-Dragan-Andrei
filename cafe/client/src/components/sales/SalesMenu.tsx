@@ -117,7 +117,7 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
               <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="sales" />
             </>
           )}
-          {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
+          {contextData.user && contextData.user.is_active && (
             <Button
               className="add-sale-button"
               onClick={() => navigate(`/locations/${locationId}/add`)}

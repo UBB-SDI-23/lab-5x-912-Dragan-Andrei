@@ -10,7 +10,7 @@ from coffees_api.serializer import CoffeeWithoutBlendIDSerializer
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-from helpers.check_user_permission import check_user_permission
+from helpers.check_user_permission import check_user_permission, get_username
 
 
 class BlendDetail(APIView):
@@ -32,16 +32,29 @@ class BlendDetail(APIView):
 
     def put(self, request, pk):
         # only admin and moderator can update a blend
-        if not check_user_permission(request,
-                                     'admin') and not check_user_permission(
-                                         request, 'moderator'):
+        if not check_user_permission(
+                request, 'admin') and not check_user_permission(
+                    request, 'moderator') and not check_user_permission(
+                        request, 'regular'):
             return Response(
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
 
         try:
             blend = Blend.objects.get(pk=pk)
+
+            if not check_user_permission(
+                    request, 'admin') and not check_user_permission(
+                        request, 'moderator'
+                    ) and blend.user_id.username != get_username(request):
+                return Response(
+                    status=status.HTTP_401_UNAUTHORIZED,
+                    data={
+                        "auth": "You are not authorized to perform this action"
+                    })
+
             serialized_blend = BlendSerializer(blend, data=request.data)
+
             if serialized_blend.is_valid():
                 serialized_blend.save()
                 return Response(serialized_blend.data)

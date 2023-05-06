@@ -107,45 +107,47 @@ const DetailedLocationItem = () => {
 
             {location.name && (
               <>
-                {contextData.user && contextData.user.is_active && (contextData.user.is_staff || contextData.user.is_superuser) && (
-                  <Box
-                    mt={2}
-                    mb={8}
-                    sx={{
-                      display: "flex",
-                    }}
-                  >
-                    <Button
-                      className="edit-location-button"
-                      variant="contained"
+                {contextData.user &&
+                  contextData.user.is_active &&
+                  (contextData.user.is_staff || contextData.user.is_superuser || contextData.user.user_id == location.user_id) && (
+                    <Box
+                      mt={2}
+                      mb={8}
                       sx={{
-                        boxShadow: 4,
-                        "&:hover": {
-                          boxShadow: 2,
-                        },
+                        display: "flex",
                       }}
-                      onClick={() => navigate(`edit`)}
                     >
-                      Edit
-                    </Button>
-                    {contextData.user.is_superuser && (
                       <Button
-                        className="delete-location-button"
-                        onClick={() => setDeleteModal(true)}
-                        variant="outlined"
+                        className="edit-location-button"
+                        variant="contained"
                         sx={{
-                          ml: 3,
                           boxShadow: 4,
                           "&:hover": {
                             boxShadow: 2,
                           },
                         }}
+                        onClick={() => navigate(`edit`)}
                       >
-                        DELETE
+                        Edit
                       </Button>
-                    )}
-                  </Box>
-                )}
+                      {contextData.user.is_superuser && (
+                        <Button
+                          className="delete-location-button"
+                          onClick={() => setDeleteModal(true)}
+                          variant="outlined"
+                          sx={{
+                            ml: 3,
+                            boxShadow: 4,
+                            "&:hover": {
+                              boxShadow: 2,
+                            },
+                          }}
+                        >
+                          DELETE
+                        </Button>
+                      )}
+                    </Box>
+                  )}
 
                 <Box sx={{ display: "flex" }}>
                   <Typography variant="h5" sx={{ fontWeight: "normal" }}>

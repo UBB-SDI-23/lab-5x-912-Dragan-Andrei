@@ -1,13 +1,14 @@
-import { Blend } from './Blend';
-import {Sale} from './Sale';
+import { Blend } from "./Blend";
+import { Sale } from "./Sale";
 
 export interface Coffee {
-    id: number;
-    name: string;
-    price: number;
-    calories: number;
-    quantity: number;
-    vegan: boolean;
-    blend: Blend;
-    sales: Sale[]; 
+  id: number;
+  name: string;
+  price: number;
+  calories: number;
+  quantity: number;
+  vegan: boolean;
+  blend: Blend;
+  user_id: number;
+  sales: Sale[];
 }

@@ -4,4 +4,5 @@ export interface Sale {
   revenue: number;
   coffee_id: number;
   location_id: number;
+  user_id: number;
 }

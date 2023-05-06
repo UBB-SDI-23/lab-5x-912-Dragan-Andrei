@@ -47,6 +47,7 @@ import Confirmation from "./components/users/Confirmation";
 import Profile from "./components/users/Profile";
 import EditProfile from "./components/users/EditProfile";
 import UsersMenu from "./components/users/UsersMenu";
+import AdminScripting from "./components/users/AdminScripting";
 
 import NotFound from "./components/NotFound";
 
@@ -78,8 +79,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             </Route>
             <Route element={<UserRoutes />}>
               <Route path="/profile/:username/edit" element={<EditProfile />} />
-            </Route>
-            <Route element={<ModeratorRoutes />}>
               <Route path="/coffees/add" element={<AddCoffee />} />
               <Route path="/coffees/:id/edit/" element={<EditCoffee />} />
 
@@ -90,8 +89,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/blends/add" element={<AddBlend />} />
               <Route path="/blends/:id/edit" element={<EditBlend />} />
             </Route>
+            <Route element={<ModeratorRoutes />}></Route>
             <Route element={<AdminRoutes />}>
               <Route path="/users" element={<UsersMenu />} />
+              <Route path="/scripts" element={<AdminScripting />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
