@@ -10,7 +10,7 @@ from helpers.check_user_permission import check_user_permission
 
 class ScriptingBlends(APIView):
 
-    def post(self, request):
+    def get(self, request):
         try:
             if not check_user_permission(request, 'admin'):
                 return Response(
