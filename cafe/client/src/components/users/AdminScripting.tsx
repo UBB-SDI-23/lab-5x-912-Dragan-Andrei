@@ -60,7 +60,10 @@ const AdminScripting = () => {
       setLoading((prev) => ({ ...prev, all: true }));
       setLocalError((prev) => ({ ...prev, [entity]: "" }));
 
-      await axios.delete(`${BASE_URL_API}/${entity}/admin/scripts/`, { headers: { Authorization: `Bearer ${contextData.authTokens.access}` } });
+      await axios.delete(`${BASE_URL_API}/${entity}/admin/scripts/`, {
+        headers: { Authorization: `Bearer ${contextData.authTokens.access}` },
+        timeout: 1200000,
+      });
 
       setLoading((prev) => ({ ...prev, [entity]: false }));
       setLoading((prev) => ({ ...prev, all: false }));
@@ -84,6 +87,7 @@ const AdminScripting = () => {
         {},
         {
           headers: { Authorization: `Bearer ${contextData.authTokens.access}` },
+          timeout: 1200000,
         }
       );
 
