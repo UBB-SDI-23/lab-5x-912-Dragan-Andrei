@@ -55,7 +55,6 @@ class CoffeeDetail(APIView):
                 status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):
-        # only admin and moderator can update a coffee
         if not check_user_permission(
                 request, 'admin') and not check_user_permission(
                     request, 'moderator') and not check_user_permission(
@@ -87,14 +86,27 @@ class CoffeeDetail(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        # only admin can delete a coffee
-        if not check_user_permission(request, 'admin'):
+        if not check_user_permission(
+                request, 'admin') and not check_user_permission(
+                    request, 'moderator') and not check_user_permission(
+                        request, 'regular'):
             return Response(
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
 
         try:
             coffee = Coffee.objects.get(pk=pk)
+
+            if not check_user_permission(
+                    request, 'admin') and not check_user_permission(
+                        request, 'moderator'
+                    ) and coffee.user_id.username != get_username(request):
+                return Response(
+                    status=status.HTTP_401_UNAUTHORIZED,
+                    data={
+                        "auth": "You are not authorized to perform this action"
+                    })
+
             coffee.delete()
             return Response(status=status.HTTP_200_OK)
         except:

@@ -43,7 +43,6 @@ class LocationDetail(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):
-        # only admin and moderator can update a location
         if not check_user_permission(
                 request, 'admin') and not check_user_permission(
                     request, 'moderator') and not check_user_permission(
@@ -77,14 +76,27 @@ class LocationDetail(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        # only admin can delete a location
-        if not check_user_permission(request, 'admin'):
+        if not check_user_permission(
+                request, 'admin') and not check_user_permission(
+                    request, 'moderator') and not check_user_permission(
+                        request, 'regular'):
             return Response(
                 status=status.HTTP_401_UNAUTHORIZED,
                 data={"auth": "You are not authorized to perform this action"})
 
         try:
             location = Location.objects.get(pk=pk)
+
+            if not check_user_permission(
+                    request, 'admin') and not check_user_permission(
+                        request, 'moderator'
+                    ) and location.user_id.username != get_username(request):
+                return Response(
+                    status=status.HTTP_401_UNAUTHORIZED,
+                    data={
+                        "auth": "You are not authorized to perform this action"
+                    })
+
             location.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except:

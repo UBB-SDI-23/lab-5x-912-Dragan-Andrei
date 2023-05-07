@@ -110,22 +110,21 @@ const DetailedCoffeeItem = () => {
                     >
                       Edit
                     </Button>
-                    {contextData.user.is_superuser && (
-                      <Button
-                        className="delete-coffee-button"
-                        onClick={() => setDeleteModal(true)}
-                        variant="outlined"
-                        sx={{
-                          ml: 3,
-                          boxShadow: 4,
-                          "&:hover": {
-                            boxShadow: 2,
-                          },
-                        }}
-                      >
-                        DELETE
-                      </Button>
-                    )}
+
+                    <Button
+                      className="delete-coffee-button"
+                      onClick={() => setDeleteModal(true)}
+                      variant="outlined"
+                      sx={{
+                        ml: 3,
+                        boxShadow: 4,
+                        "&:hover": {
+                          boxShadow: 2,
+                        },
+                      }}
+                    >
+                      DELETE
+                    </Button>
                   </Box>
                 )}
 

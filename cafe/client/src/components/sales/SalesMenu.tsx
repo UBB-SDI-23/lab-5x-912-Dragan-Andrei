@@ -88,35 +88,35 @@ const SalesMenu = ({ locationId }: { locationId: number }) => {
           <Typography className="sales-big-header" variant="h2" sx={{ mt: 12, mb: 4, color: "#be9063" }}>
             Sales This Month!
           </Typography>
-          {totalEntries > 0 && (
-            <>
-              <List className="sales-list">
-                {loading ? (
-                  <Typography variant="h2" ml="0px">
-                    Loading...
-                  </Typography>
-                ) : error ? (
-                  <Typography variant="h2" ml="0px">
-                    {error}
-                  </Typography>
-                ) : sales.length === 0 ? (
-                  <Typography variant="h2" ml="0px">
-                    There are no coffees to show!
-                  </Typography>
-                ) : (
-                  sales.map((sale) => (
-                    <Box key={sale.id}>
-                      <UserItem username={sale.username} />
-                      <ListItem key={sale.id} sx={{ width: "100%", padding: "0 0 32px 0" }}>
-                        <SaleItem sale={sale} />
-                      </ListItem>
-                    </Box>
-                  ))
-                )}
-              </List>
-              <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="sales" />
-            </>
-          )}
+
+          <>
+            <List className="sales-list">
+              {loading ? (
+                <Typography variant="h2" ml="0px">
+                  Loading...
+                </Typography>
+              ) : error ? (
+                <Typography variant="h2" ml="0px">
+                  {error}
+                </Typography>
+              ) : sales.length === 0 ? (
+                <Typography variant="h2" ml="0px">
+                  There are no sales to show!
+                </Typography>
+              ) : (
+                sales.map((sale) => (
+                  <Box key={sale.id}>
+                    <UserItem username={sale.username} />
+                    <ListItem key={sale.id} sx={{ width: "100%", padding: "0 0 32px 0" }}>
+                      <SaleItem sale={sale} />
+                    </ListItem>
+                  </Box>
+                ))
+              )}
+            </List>
+            <Pagination page={page} pageSize={pageSize} totalEntries={totalEntries} setPage={setPage} setPageSize={setPageSize} entityName="sales" />
+          </>
+
           {contextData.user && contextData.user.is_active && (
             <Button
               className="add-sale-button"
