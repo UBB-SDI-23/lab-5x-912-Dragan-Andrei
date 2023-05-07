@@ -30,6 +30,15 @@ with open('populateSales.sql', 'w') as f:
     # disable the index on location_id_id
     print('DROP INDEX sales_api_sale_location_id_id;', file=f)
 
+    # drop some more indexes
+    print('DROP INDEX idx_sales_location_sold_coffees;', file=f)
+
+    # drop some more indexes
+    print('DROP INDEX idx_sales_sold_coffees;', file=f)
+
+    # drop some more indexes
+    print('DROP INDEX sales_api_sale_user_id_id;', file=f)
+
     # generate new records to insert
     for i in range(10000):
         if (i % 1000 == 0):
@@ -91,4 +100,15 @@ with open('populateSales.sql', 'w') as f:
     # enable the index on location_id_id
     print(
         'CREATE INDEX sales_api_sale_location_id_id ON sales_api_sale (location_id_id);',
+        file=f)
+
+    # enable the indexes
+    print(
+        'CREATE INDEX idx_sales_location_sold_coffees ON sales_api_sale (location_id_id, sold_coffees);',
+        file=f)
+    print(
+        'CREATE INDEX idx_sales_sold_coffees ON sales_api_sale (sold_coffees);',
+        file=f)
+    print(
+        'CREATE INDEX sales_api_sale_user_id_id ON sales_api_sale (user_id_id);',
         file=f)

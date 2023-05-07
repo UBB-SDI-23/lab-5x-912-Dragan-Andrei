@@ -1,0 +1,1 @@
+TRUNCATE TABLE locations_api_location RESTART IDENTITY CASCADE;

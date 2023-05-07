@@ -7,6 +7,8 @@ from coffees_api.models import Blend
 
 from helpers.check_user_permission import check_user_permission
 
+import os
+
 
 class ScriptingBlends(APIView):
 
@@ -18,10 +20,9 @@ class ScriptingBlends(APIView):
                     status=status.HTTP_401_UNAUTHORIZED)
 
             # run the SQL script
-            with open('../../dbScripts/populateBlends.sql', 'r') as f:
-                sql_script = f.read()
-            cursor = connection.cursor()
-            cursor.execute(sql_script)
+            script_path = '../../dbScripts/populateBlends.sql'
+            os.environ['PGPASSWORD'] = '1234'
+            os.system(f'psql -U postgres -d cafe -f {script_path}')
 
             return Response(status=status.HTTP_200_OK)
         except:
@@ -37,7 +38,9 @@ class ScriptingBlends(APIView):
                     status=status.HTTP_401_UNAUTHORIZED)
 
             # delete all coffees
-            Blend.objects.all().delete()
+            script_path = '../../dbScripts/deleteBlends.sql'
+            os.environ['PGPASSWORD'] = '1234'
+            os.system(f'psql -U postgres -d cafe -f {script_path}')
 
             return Response(status=status.HTTP_200_OK)
         except:

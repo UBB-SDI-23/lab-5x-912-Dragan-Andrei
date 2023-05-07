@@ -7,6 +7,8 @@ from sales_api.models import Sale
 
 from helpers.check_user_permission import check_user_permission
 
+import os
+
 
 class ScriptingSales(APIView):
 
@@ -18,10 +20,9 @@ class ScriptingSales(APIView):
                     status=status.HTTP_401_UNAUTHORIZED)
 
             # run the SQL script
-            with open('../../dbScripts/populateSales.sql', 'r') as f:
-                sql_script = f.read()
-            cursor = connection.cursor()
-            cursor.execute(sql_script)
+            script_path = '../../dbScripts/populateSales.sql'
+            os.environ['PGPASSWORD'] = '1234'
+            os.system(f'psql -U postgres -d cafe -f {script_path}')
 
             return Response(status=status.HTTP_200_OK)
         except:
@@ -36,7 +37,9 @@ class ScriptingSales(APIView):
                     status=status.HTTP_401_UNAUTHORIZED)
 
             # delete all coffees
-            Sale.objects.all().delete()
+            script_path = '../../dbScripts/deleteSales.sql'
+            os.environ['PGPASSWORD'] = '1234'
+            os.system(f'psql -U postgres -d cafe -f {script_path}')
 
             return Response(status=status.HTTP_200_OK)
         except:
