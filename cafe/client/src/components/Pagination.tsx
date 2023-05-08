@@ -10,7 +10,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import "../assets/css/pagination.css";
 
 // utils
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import { BASE_URL_API } from "../utils/constants";
 
@@ -25,8 +26,9 @@ interface PaginationProps {
 }
 
 const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entityName }: PaginationProps) => {
-  const [defaultPageSize, setDefaultPageSize] = useState<number>(10);
+  const [defaultPageSize, setDefaultPageSize] = useState<number>(Number(localStorage.getItem("defaultPageSize")) || 10);
 
+  const contextData = useContext<any>(AuthContext);
   // function to handle page navigation
   const changePage = (value: number) => {
     if (value === -1 && page > 1) setPage((prev: number) => prev - 1);
@@ -37,22 +39,6 @@ const Pagination = ({ page, pageSize, totalEntries, setPage, setPageSize, entity
   const [startIdx, setStartIdx] = useState<number[]>([]);
   const [endIdx, setEndIdx] = useState<number[]>([]);
   const [interIdx, setInterIdx] = useState<number[]>([]);
-
-  // get the page size
-  const getDefaultPageSize = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL_API}/config/page-size`);
-      const data = await response.data;
-      setDefaultPageSize((prev) => data.page_size);
-      setPageSize(data.page_size);
-    } catch (error) {
-      // do nothing
-    }
-  };
-
-  useEffect(() => {
-    getDefaultPageSize();
-  }, []);
 
   useEffect(() => {
     if (Math.ceil(totalEntries / pageSize) >= 11) {

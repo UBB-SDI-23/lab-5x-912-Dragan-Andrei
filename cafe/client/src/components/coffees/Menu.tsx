@@ -50,7 +50,7 @@ const Menu = () => {
   const [lastFetchCall, setLastFetchCall] = useState<number>(0);
 
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(Number(localStorage.getItem("defaultPageSize")) || 10);
 
   const [totalEntries, setTotalEntries] = useState<number>(0);
 

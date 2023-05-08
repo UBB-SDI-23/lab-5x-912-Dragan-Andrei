@@ -128,6 +128,7 @@ const AdminScripting = () => {
         }
       );
       setConfigErrors((prev) => ({ ...prev, generic: "", success: "Settings were saved!" }));
+      localStorage.setItem("defaultPageSize", JSON.stringify(configSettings.pageSize));
     } catch (error: any) {
       setConfigErrors((prev) => ({ ...prev, generic: "There was an internal error! Try again later!" }));
     }

@@ -16,6 +16,24 @@ export const AuthProvider = ({ children }: { children: any }) => {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [lastRefreshCall, setLastRefreshCall] = useState<number>(0);
+  const [defaultPageSize, setDefaultPageSize] = useState<number>(10);
+
+  // get the page size
+  const getDefaultPageSize = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${BASE_URL_API}/config/page-size`);
+      const data = await response.data;
+      localStorage.setItem("defaultPageSize", JSON.stringify(data.page_size));
+    } catch (error) {
+      localStorage.setItem("defaultPageSize", JSON.stringify(10));
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getDefaultPageSize();
+  }, []);
 
   const logoutUser = () => {
     setAuthTokens(null);
@@ -72,5 +90,6 @@ export const AuthProvider = ({ children }: { children: any }) => {
     setUser: setUser,
     logoutUser: logoutUser,
   };
+
   return <AuthContext.Provider value={contextData}>{loading ? null : children}</AuthContext.Provider>;
 };
