@@ -70,7 +70,7 @@ const MainNavbar = () => {
                     </Link>
 
                     <Link onClick={() => closeNav()} to="/scripts">
-                      Scripts
+                      Config
                     </Link>
                   </>
                 )}

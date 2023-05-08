@@ -4,9 +4,10 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField/TextField";
 
 // utils
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BASE_URL_API } from "../../utils/constants";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
@@ -16,6 +17,7 @@ import MainNavbar from "../MainNavbar";
 
 // css
 import "../../assets/css/users/adminScripting.css";
+import { isNumber } from "lodash";
 
 interface localError {
   generic: string;
@@ -34,6 +36,20 @@ interface localLoading {
   all: boolean;
 }
 
+interface configSettings {
+  pageSize: string;
+}
+
+interface configErrors {
+  success: string;
+  generic: string;
+  pageSize: string;
+}
+
+interface touchedFields {
+  pageSize: boolean;
+}
+
 const AdminScripting = () => {
   const [loading, setLoading] = useState<localLoading>({
     generic: false,
@@ -42,6 +58,18 @@ const AdminScripting = () => {
     locations: false,
     sales: false,
     all: false,
+  });
+
+  const [configSettings, setConfigSettings] = useState<configSettings>({
+    pageSize: "",
+  });
+  const [configErrors, setConfigErrors] = useState<configErrors>({
+    success: "",
+    generic: "",
+    pageSize: "",
+  });
+  const [touchedFields, setTouchedFields] = useState<touchedFields>({
+    pageSize: false,
   });
 
   const contextData = useContext<any>(AuthContext);
@@ -53,6 +81,57 @@ const AdminScripting = () => {
     locations: "",
     sales: "",
   });
+
+  // get the page size
+  const getDefaultPageSize = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL_API}/config/page-size`);
+      const data = await response.data;
+      setConfigSettings((prev) => ({ ...prev, pageSize: data.page_size }));
+    } catch (error) {
+      setConfigErrors((prev) => ({ ...prev, generic: "There was an internal error! Try again later!" }));
+    }
+  };
+  useEffect(() => {
+    getDefaultPageSize();
+  }, []);
+
+  const validateConfig = () => {
+    if (!isNumber(Number(configSettings.pageSize)) || Number(configSettings.pageSize) <= 0) {
+      setConfigErrors((prev) => ({ ...prev, pageSize: "Page size must be a positive number!" }));
+      return;
+    } else {
+      setConfigErrors((prev) => ({ ...prev, pageSize: "" }));
+    }
+  };
+
+  useEffect(() => {
+    validateConfig();
+  }, [configSettings]);
+
+  const setPageSize = async () => {
+    touchedFields.pageSize = true;
+    configErrors.generic = "";
+    configErrors.pageSize = "";
+    configErrors.success = "";
+
+    validateConfig();
+
+    if (configErrors.pageSize) return;
+
+    try {
+      await axios.put(
+        `${BASE_URL_API}/config/page-size`,
+        { page_size: Number(configSettings.pageSize) },
+        {
+          headers: { Authorization: `Bearer ${contextData.authTokens.access}` },
+        }
+      );
+      setConfigErrors((prev) => ({ ...prev, generic: "", success: "Settings were saved!" }));
+    } catch (error: any) {
+      setConfigErrors((prev) => ({ ...prev, generic: "There was an internal error! Try again later!" }));
+    }
+  };
 
   const deleteEntity = async (entity: string) => {
     try {
@@ -103,7 +182,7 @@ const AdminScripting = () => {
       <Container sx={{ minHeight: "100vh" }}>
         <Container>
           <Typography variant="h1" sx={{ mt: 10, mb: 2 }}>
-            Run some scripts!
+            Config panel
           </Typography>
 
           {loading.generic && (
@@ -280,6 +359,55 @@ const AdminScripting = () => {
             >
               Populate sales
             </Button>
+
+            <Divider sx={{ mt: 4, mb: 2 }} />
+
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              {configErrors.generic && (
+                <Typography variant="body2" sx={{ color: "#e64545", mb: 4, marginLeft: "4px" }}>
+                  {configErrors.generic}
+                </Typography>
+              )}
+
+              {configErrors.success && (
+                <Typography variant="body2" sx={{ color: "#60f763", mb: 4, marginLeft: "4px" }}>
+                  {configErrors.success}
+                </Typography>
+              )}
+
+              <TextField
+                sx={{
+                  width: "175px",
+                }}
+                label="Default page size"
+                variant="outlined"
+                value={configSettings.pageSize}
+                onChange={(e) => setConfigSettings((prev) => ({ ...prev, pageSize: e.target.value }))}
+                error={configErrors.pageSize && touchedFields.pageSize ? true : false}
+                onBlur={(e) =>
+                  setTouchedFields((prevTouched) => ({
+                    ...prevTouched,
+                    pageSize: true,
+                  }))
+                }
+                helperText={configErrors.pageSize && touchedFields.pageSize && configErrors.pageSize}
+              />
+
+              <Button
+                onClick={() => setPageSize()}
+                disabled={loading.all}
+                className="full-button"
+                sx={{
+                  mt: 2,
+                  boxShadow: 4,
+                  "&:hover": {
+                    boxShadow: 2,
+                  },
+                }}
+              >
+                Save settings
+              </Button>
+            </Box>
           </Box>
         </Container>
       </Container>

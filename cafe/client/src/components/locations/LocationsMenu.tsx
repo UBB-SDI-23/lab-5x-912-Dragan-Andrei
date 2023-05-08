@@ -57,7 +57,6 @@ const LocationsMenu = () => {
   const getLocations = async () => {
     setLoading(true);
     const currentFetchCall = lastFetchCall;
-
     let url = `${BASE_URL_API}/locations?page_size=${pageSize}`;
     url += "&p=" + page;
 
@@ -78,7 +77,7 @@ const LocationsMenu = () => {
 
   // everytime the page size changes, reset the page to 1 and fetch the locations if needed
   useEffect(() => {
-    if (page === 1) getLocations();
+    if (page === 1 && pageSize) getLocations();
     else setPage(1);
   }, [pageSize]);
 

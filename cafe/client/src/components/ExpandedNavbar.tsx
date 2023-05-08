@@ -42,7 +42,7 @@ const ExpandedNavbar = ({ openNav, closeNav, ...otherProps }: NavbarProps) => {
             </Link>
 
             <Link onClick={() => closeNav()} to="/scripts">
-              Scripts
+              Config
             </Link>
           </>
         )}

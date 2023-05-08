@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'locations_api',
     'sales_api',
     'accounts_api',
+    'settings_api',
 ]
 
 REST_FRAMEWORK = {
