@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  server:
+    build: ./server
+    command: gunicorn cafe.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    env_file:
+      - ./server/.env
+    depends_on:
+      - db
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./server/.env.db
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - server
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email andrei.dragan@stud.ubbcluj.ro --agree-tos --no-eff-email -d eveiller.ignorelist.com
+    depends_on:
+      - nginx
+
+volumes:
+  postgres_data:
+  certbot:
+    driver: local
