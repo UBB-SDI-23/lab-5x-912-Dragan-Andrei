@@ -34,7 +34,6 @@ services:
     image: jrcs/letsencrypt-nginx-proxy-companion
     environment:
       - DEFAULT_EMAIL=andrei.dragan@stud.ubbcluj.ro
-      - ACME_CA_URI=https://acme-staging-v02.api.letsencrypt.org/directory
       - NGINX_PROXY_CONTAINER=nginx-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
