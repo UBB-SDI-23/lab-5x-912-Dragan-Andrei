@@ -32,7 +32,7 @@ services:
       - server
   nginx-proxy-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
-    env_file:
+    environment:
       - DEFAULT_EMAIL=andrei.dragan@stud.ubbcluj.ro
       - ACME_CA_URI=https://acme-staging-v02.api.letsencrypt.org/directory
       - NGINX_PROXY_CONTAINER=nginx-proxy
