@@ -28,9 +28,9 @@ services:
       - 80:80
       - 443:443
     environment:
-      - PROXY_CONNECT_TIMEOUT=300s
-      - PROXY_SEND_TIMEOUT=300s
-      - PROXY_READ_TIMEOUT=300s
+      - PROXY_CONNECT_TIMEOUT=1200s
+      - PROXY_SEND_TIMEOUT=1200s
+      - PROXY_READ_TIMEOUT=1200s
     volumes:
       - certs:/etc/nginx/certs
       - html:/usr/share/nginx/html
