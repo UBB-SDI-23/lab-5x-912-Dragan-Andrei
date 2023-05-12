@@ -21,10 +21,10 @@ class ScriptingSales(APIView):
 
             # run the SQL script
             os.system(
-                'docker cp dbScripts/populateSales.sql cafe_db_1:/dbScripts/populateSales.sql'
+                'docker cp dbScripts/populateSales.sql cafe_db_1:/populateSales.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/populateSales.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f populateSales.sql'
             )
 
             return Response(status=status.HTTP_200_OK)
@@ -40,10 +40,10 @@ class ScriptingSales(APIView):
                     status=status.HTTP_401_UNAUTHORIZED)
 
             os.system(
-                'docker cp dbScripts/deleteSales.sql cafe_db_1:/dbScripts/deleteSales.sql'
+                'docker cp dbScripts/deleteSales.sql cafe_db_1:/deleteSales.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/deleteSales.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f deleteSales.sql'
             )
 
             return Response(status=status.HTTP_200_OK)

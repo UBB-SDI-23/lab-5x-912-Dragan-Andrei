@@ -20,10 +20,10 @@ class ScriptingCoffees(APIView):
 
             # run the SQL script
             os.system(
-                'docker cp dbScripts/populateCoffees.sql cafe_db_1:/dbScripts/populateCoffees.sql'
+                'docker cp dbScripts/populateCoffees.sql cafe_db_1:/populateCoffees.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/populateCoffees.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f populateCoffees.sql'
             )
 
             return Response(status=status.HTTP_200_OK)
@@ -41,10 +41,10 @@ class ScriptingCoffees(APIView):
 
             # run the SQL script
             os.system(
-                'docker cp dbScripts/deleteCoffees.sql cafe_db_1:/dbScripts/deleteCoffees.sql'
+                'docker cp dbScripts/deleteCoffees.sql cafe_db_1:/deleteCoffees.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/deleteCoffees.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f deleteCoffees.sql'
             )
 
             return Response(status=status.HTTP_200_OK)

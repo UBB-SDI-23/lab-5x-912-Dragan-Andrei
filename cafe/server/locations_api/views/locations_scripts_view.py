@@ -19,10 +19,10 @@ class ScriptingLocations(APIView):
 
             # run the SQL script
             os.system(
-                'docker cp dbScripts/populateLocations.sql cafe_db_1:/dbScripts/populateLocations.sql'
+                'docker cp dbScripts/populateLocations.sql cafe_db_1:/populateLocations.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/populateLocations.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f populateLocations.sql'
             )
 
             return Response(status=status.HTTP_200_OK)
@@ -40,10 +40,10 @@ class ScriptingLocations(APIView):
 
             # run the SQL script
             os.system(
-                'docker cp dbScripts/deleteLocations.sql cafe_db_1:/dbScripts/deleteLocations.sql'
+                'docker cp dbScripts/deleteLocations.sql cafe_db_1:/deleteLocations.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/deleteLocations.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f deleteLocations.sql'
             )
 
             return Response(status=status.HTTP_200_OK)

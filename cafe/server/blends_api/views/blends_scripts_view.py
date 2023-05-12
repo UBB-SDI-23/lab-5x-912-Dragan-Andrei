@@ -22,10 +22,10 @@ class ScriptingBlends(APIView):
 
             # run the SQL script
             os.system(
-                'docker cp dbScripts/populateBlends.sql cafe_db_1:/dbScripts/populateBlends.sql'
+                'docker cp dbScripts/populateBlends.sql cafe_db_1:/populateBlends.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/populateBlends.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f populateBlends.sql'
             )
 
             return Response(status=status.HTTP_200_OK)
@@ -43,10 +43,10 @@ class ScriptingBlends(APIView):
 
             # run the SQL script
             os.system(
-                'docker cp dbScripts/deleteBlends.sql cafe_db_1:/dbScripts/deleteBlends.sql'
+                'docker cp dbScripts/deleteBlends.sql cafe_db_1:/deleteBlends.sql'
             )
             os.system(
-                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/deleteBlends.sql'
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f deleteBlends.sql'
             )
 
             return Response(status=status.HTTP_200_OK)
