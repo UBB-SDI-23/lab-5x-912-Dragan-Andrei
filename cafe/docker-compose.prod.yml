@@ -3,7 +3,9 @@ version: "3.8"
 services:
   server:
     build: ./server
-    command: gunicorn cafe.wsgi:application --bind 0.0.0.0:8000
+    command: >
+      gunicorn cafe.wsgi:application --bind 0.0.0.0:8000
+      --timeout 1200
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     expose:
