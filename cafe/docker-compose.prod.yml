@@ -27,8 +27,11 @@ services:
     ports:
       - 80:80
       - 443:443
+    environment:
+      - PROXY_CONNECT_TIMEOUT=300s
+      - PROXY_SEND_TIMEOUT=300s
+      - PROXY_READ_TIMEOUT=300s
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - certs:/etc/nginx/certs
       - html:/usr/share/nginx/html
       - vhost:/etc/nginx/vhost.d
