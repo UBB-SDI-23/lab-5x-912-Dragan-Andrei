@@ -12,5 +12,8 @@ ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
+RUN pip install docker
+RUN apk add docker
+
 # copy project
 COPY . .

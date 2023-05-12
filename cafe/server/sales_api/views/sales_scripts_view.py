@@ -20,9 +20,12 @@ class ScriptingSales(APIView):
                     status=status.HTTP_401_UNAUTHORIZED)
 
             # run the SQL script
-            script_path = '../../dbScripts/populateSales.sql'
-            os.environ['PGPASSWORD'] = '1234'
-            os.system(f'psql -U postgres -d cafe -f {script_path}')
+            os.system(
+                'docker cp dbScripts/populateSales.sql cafe_db_1:/dbScripts/populateSales.sql'
+            )
+            os.system(
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/populateSales.sql'
+            )
 
             return Response(status=status.HTTP_200_OK)
         except:
@@ -36,10 +39,12 @@ class ScriptingSales(APIView):
                     {'error': 'You are not authorized to perform this action'},
                     status=status.HTTP_401_UNAUTHORIZED)
 
-            # delete all coffees
-            script_path = '../../dbScripts/deleteSales.sql'
-            os.environ['PGPASSWORD'] = '1234'
-            os.system(f'psql -U postgres -d cafe -f {script_path}')
+            os.system(
+                'docker cp dbScripts/deleteSales.sql cafe_db_1:/dbScripts/deleteSales.sql'
+            )
+            os.system(
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/deleteSales.sql'
+            )
 
             return Response(status=status.HTTP_200_OK)
         except:

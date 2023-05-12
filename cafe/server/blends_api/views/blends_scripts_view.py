@@ -8,6 +8,7 @@ from coffees_api.models import Blend
 from helpers.check_user_permission import check_user_permission
 
 import os
+import subprocess
 
 
 class ScriptingBlends(APIView):
@@ -20,9 +21,12 @@ class ScriptingBlends(APIView):
                     status=status.HTTP_401_UNAUTHORIZED)
 
             # run the SQL script
-            script_path = '../../dbScripts/populateBlends.sql'
-            os.environ['PGPASSWORD'] = '1234'
-            os.system(f'psql -U postgres -d cafe -f {script_path}')
+            os.system(
+                'docker cp dbScripts/populateBlends.sql cafe_db_1:/dbScripts/populateBlends.sql'
+            )
+            os.system(
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/populateBlends.sql'
+            )
 
             return Response(status=status.HTTP_200_OK)
         except:
@@ -37,10 +41,13 @@ class ScriptingBlends(APIView):
                     {'error': 'You are not authorized to perform this action'},
                     status=status.HTTP_401_UNAUTHORIZED)
 
-            # delete all coffees
-            script_path = '../../dbScripts/deleteBlends.sql'
-            os.environ['PGPASSWORD'] = '1234'
-            os.system(f'psql -U postgres -d cafe -f {script_path}')
+            # run the SQL script
+            os.system(
+                'docker cp dbScripts/deleteBlends.sql cafe_db_1:/dbScripts/deleteBlends.sql'
+            )
+            os.system(
+                'docker exec cafe_db_1 psql -U postgres -d cafe -f dbScripts/deleteBlends.sql'
+            )
 
             return Response(status=status.HTTP_200_OK)
         except:
